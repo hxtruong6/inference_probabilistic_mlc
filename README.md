@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Python script is designed to evaluate the performance of multi-label classification models on various datasets using scikit-multiflow <https://scikit-multiflow.github.io/>.
+This Python script is designed to evaluate the performance of multi-label classification models on various datasets using [scikit-multiflow](https://scikit-multiflow.github.io).
 
 The script supports the evaluation of different base classifiers, prediction functions, and metric functions. The evaluated models include Logistic Regression, Stochastic Gradient Descent (SGD) Classifier, Random Forest Classifier, and AdaBoost Classifier.
 
@@ -28,7 +28,7 @@ The script supports the evaluation of different base classifiers, prediction fun
 
 3. **Configuration:** Modify the script to specify the models, datasets, and evaluation metrics you want to use.
 
-4. **Run the Script:** Execute the script (`python evaluate_models.py`) to train and evaluate models on the specified datasets.
+4. **Run the Script:** Execute the script (`python inference_evaluate_models.py`) to train and evaluate models on the specified datasets.
 
 5. **Review Results:** Check the generated CSV file (`evaluation_results.csv`) for detailed evaluation metrics.
 
