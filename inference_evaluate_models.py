@@ -1,35 +1,35 @@
 import os
 import time
+
 import numpy as np
+
+print(f"Numpy version: {np.__version__}")
+
 import pandas as pd
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
-from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.linear_model import LinearRegression, LogisticRegression, SGDClassifier
 
 import scipy.io.arff as arff
-import pandas as pd
-
 from probability_classifier_chains import ProbabilisticClassifierChainCustom
 
-# # Load the ARFF file
-# data = arff.loadarff('your_dataset.arff')
-# # Convert the ARFF data to a Pandas DataFrame
-# df = pd.DataFrame(data[0])
-
-# Now, df contains your data as a Pandas DataFrame
-# You can perform various data analysis tasks with df
-
+# Define a constant for seed
 SEED = 6
+DATASET_WHOLE_FILES = ["VirusGO_sparse", "Water-quality", "CHD_49"]
+DATASET_WHOLE_FILES_TARGET_AT_FIRST = ["Water-quality", "CHD_49"]
 
 
-# Create static class of EvaluationMetrics
 class EvaluationMetrics:
+    """A class for various evaluation metrics."""
+
     @staticmethod
     def _check_dimensions(Y_true, Y_pred):
+        """Check if the dimensions of Y_true and Y_pred are the same."""
         if Y_true.shape != Y_pred.shape:
             raise Exception("Y_true and Y_pred have different shapes")
 
     @staticmethod
     def get_loss(Y_true, Y_pred, loss_func):
+        """Get the loss using the specified loss function."""
         EvaluationMetrics._check_dimensions(Y_true, Y_pred)
         return loss_func(Y_true, Y_pred)
 
@@ -272,6 +272,8 @@ class EvaluationMetrics:
 
 
 class HandleMulanDatasetForMultiLabelArffFile:
+    """Class to handle Mulan datasets stored in ARFF files."""
+
     def __init__(
         self,
         path,
@@ -281,11 +283,12 @@ class HandleMulanDatasetForMultiLabelArffFile:
         is_test=False,
         train_index=None,
     ):
+        """Initialize the dataset handler."""
         self.path = path
         self.data = arff.loadarff(self.path)
         self.df = pd.DataFrame(self.data[0])
 
-        # just for some dataset need to split train test 0% on dataframes randomly
+        # Handle train-test split for some datasets
         if is_train:
             self.df = self.df.sample(frac=0.8, random_state=SEED)
             self.train_index = self.df.index
@@ -293,7 +296,6 @@ class HandleMulanDatasetForMultiLabelArffFile:
             self.df = self.df.drop(train_index)
 
         self.dataset_name = dataset_name
-
         y_split_index = self._get_Y_split_index()
 
         if target_at_first:
@@ -303,8 +305,8 @@ class HandleMulanDatasetForMultiLabelArffFile:
             self.X = self.df.iloc[:, :-y_split_index]
             self.Y = self.df.iloc[:, -y_split_index:].astype(int)
 
-    # Handle custom dataset name to get Y column which is multi-label
     def _get_Y_split_index(self):
+        """Get the index for splitting Y from X based on the dataset name."""
         if self.dataset_name == "emotions":
             return 6
         elif self.dataset_name == "corel5k":
@@ -330,8 +332,8 @@ class HandleMulanDatasetForMultiLabelArffFile:
             raise Exception("Dataset name is not supported")
 
 
-# Define a function to read datasets from JSON files in a folder using a generator function (yield)
 def read_datasets_from_folder(folder_path, dataset_names):
+    """Read datasets from a folder and yield train and test sets."""
     if not os.path.isdir(folder_path):
         raise Exception("Folder path is not valid")
 
@@ -342,7 +344,6 @@ def read_datasets_from_folder(folder_path, dataset_names):
             target_at_first,
             is_train=True,
         )
-
         df_test = HandleMulanDatasetForMultiLabelArffFile(
             os.path.join(folder_path, f"{filename}.arff"),
             filename,
@@ -350,27 +351,20 @@ def read_datasets_from_folder(folder_path, dataset_names):
             is_test=True,
             train_index=df_train.train_index,
         )
-
         return df_train, df_test
 
     for filename in dataset_names:
-        if filename == "VirusGO_sparse":
-            yield _get_result(filename)
-        elif filename == "Water-quality":
-            yield _get_result(filename, target_at_first=True)
-        elif filename == "CHD_49":
-            yield _get_result(filename, target_at_first=True)
-        # check is folder
+        if filename in DATASET_WHOLE_FILES:
+            yield _get_result(
+                filename,
+                target_at_first=(filename in DATASET_WHOLE_FILES_TARGET_AT_FIRST),
+            )
         elif os.path.isdir(os.path.join(folder_path, filename)):
-            # TODO: check if file exist and flexible with testing file
-
-            # Training data
+            # Handle individual datasets in subfolders
             print(f"Reading {filename} dataset...")
             df_train = HandleMulanDatasetForMultiLabelArffFile(
                 os.path.join(folder_path, filename, f"{filename}-train.arff"), filename
             )
-
-            # Testing data
             df_test = HandleMulanDatasetForMultiLabelArffFile(
                 os.path.join(folder_path, filename, f"{filename}-test.arff"), filename
             )
@@ -380,22 +374,19 @@ def read_datasets_from_folder(folder_path, dataset_names):
 
 
 def calculate_metrics(Y_true, Y_pred, metric_funcs):
-    try:
-        score_metrics = []
-
-        for metric in metric_funcs:
-            # print(f"\n{metric}\n")
-            # Check options in metric function
-            if "options" in metric:
-                metric_name, metric_func, options = (
-                    metric["name"],
-                    metric["func"],
-                    metric["options"],
-                )
-                score = f"{metric_func(Y_pred,Y_true, **options):.5f}"
+    """Calculate metrics based on the provided metric functions."""
+    score_metrics = []
+    for metric in metric_funcs:
+        metric_name, metric_func, options = (
+            metric["name"],
+            metric["func"],
+            metric.get("options", {}),
+        )
+        try:
+            if options:
+                score = f"{metric_func(Y_pred, Y_true, **options):.5f}"
             else:
-                metric_name, metric_func = metric["name"], metric["func"]
-                score = f"{metric_func(Y_pred,Y_true):.5f}"
+                score = f"{metric_func(Y_pred, Y_true):.5f}"
 
             score_metrics.append(
                 {
@@ -404,22 +395,14 @@ def calculate_metrics(Y_true, Y_pred, metric_funcs):
                     "Score": score,
                 }
             )
-
-        # print(f"score_metrics:\t{score_metrics}")
-    except Exception as e:
-        print("-" * 10)
-
-        print(f"Error: {e}")
-        print(f"Y_true:\t{Y_true.shape}\nY_pred:\t{Y_pred.shape}")
-        print(f"Metric: \t{metric}")
-
-        print("-" * 10)
+        except Exception as e:
+            print(f"Error calculating {metric_name} - {e}")
 
     return score_metrics
 
 
 def training_model(model, X_train, Y_train):
-    # ----------------- Fit -----------------
+    """Train the specified model on the training data."""
     start_time = time.time()
     print(f"⏳ Training {model.base_estimator.__class__.__name__} model...")
     model.fit(X_train, Y_train)
@@ -428,40 +411,12 @@ def training_model(model, X_train, Y_train):
     return model
 
 
-# Define a function to perform model evaluation on each dataset
-def evaluate_model(
-    model: ProbabilisticClassifierChainCustom,
-    X_test: pd.DataFrame,
-    Y_test: pd.DataFrame,
-    predict_funcs: list,
-    metric_funcs: list,
-) -> list:
-    """_summary_
+def evaluate_model(model, X_test, Y_test, predict_funcs, metric_funcs):
+    """Evaluate the model using various prediction and metric functions."""
+    print(f"{'-' * 50}\nPredicting {model.base_estimator.__class__.__name__} model...")
 
-    Args:
-        model (ProbabilisticClassifierChainCustom): _description_
-        X_test (pd.DataFrame): _description_
-        Y_test (pd.DataFrame): _description_
-        predict_funcs (list): [{'name': 'Hamming Loss', 'func': predict_HammingLoss}, ...}]
-        metric_funcs (list): [{'name': "Predict", 'func': "predict"}, {'name': "Predict Hamming Lost", 'func': 'predict_Hamming'}, ...]
-
-    Returns:
-        list: [{'predict_name': "Predict", 'score_metrics': [{'Metric Name': 'Hamming Loss', 'Metric Function': 'hamming_loss', 'Score': 0.0}, ...]}]
-    """
-
-    # ----------------- Predict -----------------
-    print(f"{'-'*50}\nPredicting {model.base_estimator.__class__.__name__} model...")
-    # [{'name': "Predict", 'score_metrics': [
-    # {'Metric Name': 'Hamming Loss', 'Metric Function': 'hamming_loss', 'Score': 0.0},
-    # {'Metric Name': 'Accuracy Score', 'Metric Function': 'accuracy_score', 'Score': 1.0},
-    # {'Metric Name': 'Precision Score', 'Metric Function': 'precision_score', 'Score': 1.0},
-    # {'Metric Name': 'Recall Score', 'Metric Function': 'recall_score', 'Score': 1.0},
-    # {'Metric Name': 'F1 Score', 'Metric Function': 'f1_score', 'Score': 1.0}]}
-    # ]
     loss_score_by_predict_func = []
-    # TODO: predict_HammingLoss, predict_Inf, predict_Mar, predict_Neg, predict_Pre, predict_Subset,...
     for predict_func in predict_funcs:
-        # Measure time for evaluation
         start_time = time.time()
 
         if predict_func["func"] == "predict":
@@ -469,46 +424,37 @@ def evaluate_model(
         else:
             Y_pred = getattr(model, predict_func["func"])(X_test)
 
-        end_time = time.time()
-        elapsed_time = end_time - start_time
+        elapsed_time = time.time() - start_time
         print(f"🤿 Elapsed predict time: {elapsed_time:.5f} seconds")
 
-        # print(f"🍓 Calculating metrics for {predict_func['name']}...")
         score_metrics = calculate_metrics(Y_test, Y_pred, metric_funcs)
-
-        # end_time2 = time.time()
-        # elapsed_time2 = end_time2 - end_time
-        # print(f"🍓 Elapsed calculate metrics time: {elapsed_time2:.5f} seconds")
-
         loss_score_by_predict_func.append(
             {"predict_name": predict_func["name"], "score_metrics": score_metrics}
         )
+
     return loss_score_by_predict_func
 
 
 def prepare_model_to_evaluate():
-    # TODO: add more models
-    pcc = [
+    """Prepare a list of models for evaluation."""
+    base_estimators = [
         LogisticRegression(random_state=SEED),
         SGDClassifier(loss="log_loss", random_state=SEED),
-        RandomForestClassifier(random_state=SEED),
-        AdaBoostClassifier(random_state=SEED),
+        # RandomForestClassifier(random_state=SEED),
+        # AdaBoostClassifier(random_state=SEED),
     ]
-
-    # Add more models here if you want to evaluate them
-    # Iterate all BOP methods per each classifier such as SGD, etc.
-    return [ProbabilisticClassifierChainCustom(model) for model in pcc]
+    return [ProbabilisticClassifierChainCustom(model) for model in base_estimators]
 
 
 def main():
+    """Main function to orchestrate the evaluation process."""
     # Define the list of models you want to evaluate
     evaluated_models = prepare_model_to_evaluate()
 
+    absolute_path = os.path.abspath(__file__)
     # Define the folder path containing JSON datasets and the output CSV file name
-    folder_path = (
-        "/Users/xuantruong/Documents/JAIST/scikit-multiflow/tests/evaluation/dataset"
-    )
-    output_csv = "/Users/xuantruong/Documents/JAIST/scikit-multiflow/tests/evaluation/result/evaluation_results.csv"
+    folder_path = os.path.join(absolute_path, "datasets")
+    output_csv = os.path.join(absolute_path, "result/evaluation_results.csv")
 
     dataset_names = [
         "emotions",
@@ -519,7 +465,7 @@ def main():
     ]
     # -----------------  MAIN -----------------
     # func is same name of the predict function in ProbabilisticClassifierChainCustom
-    predict_funcs = [
+    predict_functions = [
         {"name": "Predict Hamming Loss", "func": "predict_Hamming"},
         {"name": "Predict Subset", "func": "predict_Subset"},
         {"name": "Predict Pre", "func": "predict_Pre"},
@@ -530,29 +476,29 @@ def main():
         # {"name": "Predict Inf", "func": "predict_Inf"},
     ]
 
-    metric_funcs = [
+    metric_functions = [
         {"name": "Hamming Loss", "func": EvaluationMetrics.hamming_loss},
-        {"name": "Subset Accuracy", "func": EvaluationMetrics.subset_accuracy},
-        {
-            "name": "Precision Score",
-            "func": EvaluationMetrics.precision_score,
-        },
-        {
-            "name": "Negative Predictive Value",
-            "func": EvaluationMetrics.negative_predictive_value,
-        },
-        {
-            "name": "Recall Score",  #
-            "func": EvaluationMetrics.recall_score,
-        },
-        {
-            "name": "Markedness",
-            "func": EvaluationMetrics.f_markedness,
-        },
-        {
-            "name": "F-beta Score",
-            "func": EvaluationMetrics.f_beta_score,
-        },
+        # {"name": "Subset Accuracy", "func": EvaluationMetrics.subset_accuracy},
+        # {
+        #     "name": "Precision Score",
+        #     "func": EvaluationMetrics.precision_score,
+        # },
+        # {
+        #     "name": "Negative Predictive Value",
+        #     "func": EvaluationMetrics.negative_predictive_value,
+        # },
+        # {
+        #     "name": "Recall Score",  #
+        #     "func": EvaluationMetrics.recall_score,
+        # },
+        # {
+        #     "name": "Markedness",
+        #     "func": EvaluationMetrics.f_markedness,
+        # },
+        # {
+        #     "name": "F-beta Score",
+        #     "func": EvaluationMetrics.f_beta_score,
+        # },
         # TODO:add informedness
     ]
 
@@ -565,47 +511,35 @@ def main():
         "Score": [],
     }
 
-    # Iterate over the datasets and models, perform evaluation, and append the results to the DataFrame
-    for dataset in read_datasets_from_folder(folder_path, dataset_names):
-        print(f"{'-'*50}\n🐳 Dataset: {dataset[0].dataset_name}")
-        df_train, df_test = dataset
-
-        # convert df to numpy array
-        X_train, Y_train = df_train.X.to_numpy(), df_train.Y.to_numpy()
-        X_test, Y_test = df_test.X.to_numpy(), df_test.Y.to_numpy()
-        print(f"X_train:\t{X_train.shape}\nY_train:\t{Y_train.shape}")
+    # Iterate over datasets
+    for df_train, df_test in read_datasets_from_folder(folder_path, dataset_names):
+        print(f"\n🐳Evaluating on {df_train.dataset_name} dataset...")
 
         # For each dataset, iterate over the models and perform evaluation
         for model in evaluated_models:
-            trained_model = training_model(model, X_train, Y_train)
-
-            loss_score_by_predict_funcs = evaluate_model(
-                trained_model, X_test, Y_test, predict_funcs, metric_funcs
+            model = training_model(model, df_train.X, df_train.Y)
+            loss_score_by_predict_func = evaluate_model(
+                model, df_test.X, df_test.Y, predict_functions, metric_functions
             )
-            # Format of loss_score_by_predict_funcs: [
-            #   { 'predict_name': "Predict",
-            #       'score_metrics': [{'Metric Name': 'Hamming Loss', 'Metric Function': 'hamming_loss', 'Score': 0.0}, ...]
-            #   }
-            # ]
 
-            # Add the results to the DataFrame.
+            # Collect and append evaluation results to the DataFrame
             print("-" * 10)
-            for loss_score_by_predict_func in loss_score_by_predict_funcs:
-                print("❄️ Metric: ", loss_score_by_predict_func["predict_name"])
+            for result in loss_score_by_predict_func:
+                print("❄️ Metric: ", result["predict_name"])
 
-                for score_metric in loss_score_by_predict_func["score_metrics"]:
-                    data["Dataset"].append(dataset[0].dataset_name)
+                for score_metric in result["score_metrics"]:
+                    data["Dataset"].append(df_train.dataset_name)
                     data["Model"].append(model.base_estimator.__class__.__name__)
+                    data["Predict Function of Model"].append(result["predict_name"])
 
-                    data["Predict Function of Model"].append(
-                        loss_score_by_predict_func["predict_name"]
-                    )
                     data["Metric Function"].append(score_metric["Metric Name"])
                     data["Score"].append(score_metric["Score"])
 
-    results = pd.DataFrame(data)
+    result_df = pd.DataFrame(data)
 
-    results.to_csv(output_csv, index=False)
+    # Save the evaluation results to a CSV file
+    result_df.to_csv(output_csv, index=False)
+    print(f"\n✅Evaluation results saved to {output_csv}")
 
 
 if __name__ == "__main__":
@@ -637,30 +571,3 @@ if __name__ == "__main__":
 
     """
     main()
-
-    # TODO:
-    # [X] 5 datasets (<20 labels)
-    #   [X] emotions
-    #   [X] yeast
-    #   [X] scene
-    #   [] mediaMill
-    #   [] CAL500
-
-    # [] Models:
-    #   [X] LogisticRegression
-    #   [X] SGDClassifier
-    #   [] RandomForestClassifier
-    #   [] AdaBoostClassifier
-    # [] F-measure, Informedness
-    #   [] F-measure
-    #   [] Informedness
-    # [] Implement loss functions
-    #   [X] Hamming Loss
-    #   [X] Subset Accuracy
-    #   [X] Precision Score
-    #   [X] Recall Score
-    #   [X] Negative Predictive Value
-    #   [X] F1 Score
-    #   [X] F Beta Score
-    #   [ ] Informedness
-    #   [ ] Markedness

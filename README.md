@@ -34,9 +34,47 @@ The script supports the evaluation of different base classifiers, prediction fun
 
 ## Requirements
 
-- Python 3.6+ (Using python 3.8 currently)
+- Python 3.6+ -> <=3.9
 - numpy
 - scikit-multiflow
+
+## Installation
+
+**Note:** The installed version is really important!
+
+```bash
+conda create --name inference_prob_mlc python=3.8
+conda activate inference_prob_mlc
+pip install -U Cython
+pip install numpy==1.9.5 # New version of numpy is not compatible with scikit-multiflow. Error np.float deprecated
+pip install pandas==1.3.4
+python inference_evaluate_models.py
+
+```
+
+I still got issues with installing numpy < 1.20 to be compatible with scikit-multiflow due to MacM1 incompatible with older version of numpy.
+
+So I tried to you docker to run the script.
+
+```bash
+docker buildx create --name my-amd64-builder --platform linux/amd64
+# docker build -t inference_prob_mlc .
+docker buildx build --builder my-amd64-builder -t inference_prob_mlc .
+# docker buildx build --builder my-amd64-builder -t inference_prob_mlc . --force-rm --no-cache
+
+docker run -it inference_prob_mlc
+```
+
+<!-- ```bash
+conda create --name inference_prob_mlc python=3.9 # <= 3.9. Python 3.9 compatible with Mac M1 (macosx_11_0_arm64)
+conda activate inference_prob_mlc
+pip install -U Cython
+pip install numpy==1.9.5 $. New version of numpy is not compatible with scikit-multiflow. Error np.float deprecated
+# conda install -c conda-forge numpy==1.19.5
+pip install pandas==1.3.4
+python inference_evaluate_models.py
+
+``` -->
 
 ## License
 
