@@ -1,5 +1,6 @@
-# Base image with Python 3.8
-FROM python:3.8-slim
+# Base image with Python 3.6
+# FROM python:3.7
+FROM python:3.6
 
 # Set working directory
 WORKDIR /app
@@ -17,12 +18,18 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get install -y git
 
+RUN export PIP_DEFAULT_TIMEOUT=100
 RUN pip install Cython==0.29.15 distro
 RUN pip install numpy
 
 RUN pip install scikit-multiflow
-RUN pip uninstall numpy pandas scipy scikit-learn matplotlib -y
-RUN pip install scipy==1.8.* numpy==1.17.* pandas==1.2.* scikit-learn==0.24.* matplotlib==3.1.*
+# RUN pip uninstall numpy -y
+# RUN pip install numpy==1.19.5
+# RUN pip uninstall numpy pandas scipy scikit-learn matplotlib -y
+# RUN pip install scipy==1.8.* numpy==1.17.* pandas==1.2.* scikit-learn==0.24.* matplotlib==3.1.*
+
+# COPY requirements.txt /app
+# RUN pip install -r requirements.txt
 
 COPY . /app
 

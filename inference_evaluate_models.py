@@ -3,6 +3,10 @@ import time
 
 import numpy as np
 
+from skmultiflow.meta.classifier_chains_custom import ProbabilisticClassifierChainCustom
+
+# from probability_classifier_chains import ProbabilisticClassifierChainCustom
+
 print(f"Numpy version: {np.__version__}")
 
 import pandas as pd
@@ -10,7 +14,7 @@ from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression, SGDClassifier
 
 import scipy.io.arff as arff
-from probability_classifier_chains import ProbabilisticClassifierChainCustom
+
 
 # Define a constant for seed
 SEED = 6
@@ -305,6 +309,10 @@ class HandleMulanDatasetForMultiLabelArffFile:
             self.X = self.df.iloc[:, :-y_split_index]
             self.Y = self.df.iloc[:, -y_split_index:].astype(int)
 
+        # convert to numpy array
+        self.X = self.X.to_numpy()
+        self.Y = self.Y.to_numpy()
+
     def _get_Y_split_index(self):
         """Get the index for splitting Y from X based on the dataset name."""
         if self.dataset_name == "emotions":
@@ -335,7 +343,7 @@ class HandleMulanDatasetForMultiLabelArffFile:
 def read_datasets_from_folder(folder_path, dataset_names):
     """Read datasets from a folder and yield train and test sets."""
     if not os.path.isdir(folder_path):
-        raise Exception("Folder path is not valid")
+        raise Exception(f"Folder path is not valid - {folder_path}")
 
     def _get_result(filename, target_at_first=False):
         df_train = HandleMulanDatasetForMultiLabelArffFile(
@@ -439,7 +447,9 @@ def prepare_model_to_evaluate():
     """Prepare a list of models for evaluation."""
     base_estimators = [
         LogisticRegression(random_state=SEED),
-        SGDClassifier(loss="log_loss", random_state=SEED),
+        SGDClassifier(
+            loss="log_loss", random_state=SEED
+        ),  # Not support for scikit-learn < 1.0
         # RandomForestClassifier(random_state=SEED),
         # AdaBoostClassifier(random_state=SEED),
     ]
@@ -451,10 +461,11 @@ def main():
     # Define the list of models you want to evaluate
     evaluated_models = prepare_model_to_evaluate()
 
-    absolute_path = os.path.abspath(__file__)
+    absolute_dir = "/".join(os.path.abspath(__file__).split("/")[:-1])
     # Define the folder path containing JSON datasets and the output CSV file name
-    folder_path = os.path.join(absolute_path, "datasets")
-    output_csv = os.path.join(absolute_path, "result/evaluation_results.csv")
+    folder_path = os.path.join(absolute_dir, "datasets")
+    output_csv = os.path.join(absolute_dir, "result/evaluation_results.csv")
+    print(f"📂 Dataset folder path: {folder_path}")
 
     dataset_names = [
         "emotions",
@@ -478,7 +489,7 @@ def main():
 
     metric_functions = [
         {"name": "Hamming Loss", "func": EvaluationMetrics.hamming_loss},
-        # {"name": "Subset Accuracy", "func": EvaluationMetrics.subset_accuracy},
+        {"name": "Subset Accuracy", "func": EvaluationMetrics.subset_accuracy},
         # {
         #     "name": "Precision Score",
         #     "func": EvaluationMetrics.precision_score,
@@ -513,7 +524,7 @@ def main():
 
     # Iterate over datasets
     for df_train, df_test in read_datasets_from_folder(folder_path, dataset_names):
-        print(f"\n🐳Evaluating on {df_train.dataset_name} dataset...")
+        print(f"\n🐳 Evaluating on {df_train.dataset_name} dataset...")
 
         # For each dataset, iterate over the models and perform evaluation
         for model in evaluated_models:
