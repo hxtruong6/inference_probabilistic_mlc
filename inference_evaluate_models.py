@@ -5,7 +5,7 @@ from src.evaluation_metrics import EvaluationMetrics
 
 import numpy as np
 
-from skmultiflow.meta.classifier_chains_custom import ProbabilisticClassifierChainCustom
+from src.probability_classifier_chains import ProbabilisticClassifierChainCustom
 
 # from probability_classifier_chains import ProbabilisticClassifierChainCustom
 

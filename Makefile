@@ -5,3 +5,5 @@ docker-run:
 	docker run -it $(DOCKER_IMAGE_NAME)
 docker-exec:
 	docker run -it $(DOCKER_IMAGE_NAME) /bin/bash
+eval:
+	python inference_evaluate_models.py

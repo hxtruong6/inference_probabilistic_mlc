@@ -1,6 +1,7 @@
 # Base image with Python 3.6
 # FROM python:3.7
-FROM python:3.6
+FROM python:3.6 
+# same as the one used in the scikit-multiflow docker image but for some reason it does not work
 
 # Set working directory
 WORKDIR /app

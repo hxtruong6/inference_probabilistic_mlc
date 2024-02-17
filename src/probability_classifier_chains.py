@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 
-from skmultiflow.meta import ClassifierChain
+from skmultiflow.meta.classifier_chains import ClassifierChain
 
 
 def P(y, x, cc, payoff=np.prod):
@@ -46,7 +46,6 @@ def P(y, x, cc, payoff=np.prod):
         xy[D + j] = y[j]  # e.g., 1
         p[j] = P_j[y[j]]
         # e.g., 0.1 or, y[j] = 0 is predicted with probability p[j] = 0.9
-    # print(f"p = {p}")
 
     # The more labels we predict incorrectly, the higher the penalty of the payoff
     # p = [0.99055151 0.00709076 0.99999978]
@@ -129,14 +128,11 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         (i.e., all possible 2^L label combinations).
         """
         N, D = X.shape
-        # print(f"X.shape = {X.shape} N = {N} D = {D}")
 
         Yp = np.zeros((N, self.L))
 
-        # if marginal:
         P_margin_yi_1 = np.zeros((N, self.L))
 
-        # if pairwise:
         P_pair_wise = np.zeros((N, self.L, self.L + 1))
         P_pair_wise0 = np.zeros((N, 1))
         P_pair_wise1 = np.zeros((N, 1))
@@ -157,15 +153,12 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
             # initialize a $L \times (L+1)$ matrix which encodes the pairwise probability masses
             # (i.e., all possible 2^L label combinations) [0, 1, ..., 2^L-1]
             for b in range(2**self.L):
-                # print(f"b = {b}")
                 # put together a label vector
                 # e.g., b = 3, self.L = 3, y_ = [0, 0, 1] | b = 5, self.L = 3, y_ = [0, 1, 0]
                 y_ = np.array(list(map(int, np.binary_repr(b, width=self.L))))
 
-                # print(f"y_ = {y_}")
                 # ... and gauge a probability for it (given x)
                 w_ = P(y_, X[n], self)
-                # print(f"w_ = {round(w_, 3)}")
 
                 # All values of y_ are 0
                 if np.sum(y_) == 0:
@@ -194,19 +187,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
                 # P(y_1 = 1 | X) = P(y_1 = 1 | X, y_2 = 0) * P(y_2 = 0 | X) + P(y_1 = 1 | X, y_2 = 1) * P(y_2 = 1 | X)
 
-            # # iterate over all labels. self.L is number of labels
-            # for label_index in range(self.L):
-
-            #     for index in range(self.L):
-            #         P_margin_yi_1[n, label_index] += P([index], X[n], self)
-
-        # print(f"P_margin_yi_1 = {[[round(x, 3) for x in y] for y in P_margin_yi_1]}")
-
-        # print(
-        #     f"pair wise {[[[round(x, 3) for x in y] for y in z] for z in P_pair_wise]}"
-        # )
-        # print(f"Yp = {[[round(x, 3) for x in y] for y in w_max]}")
-
         self.predicted_store = (
             Yp,
             P_margin_yi_1,
@@ -225,8 +205,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
     def predict_Hamming(self, X):
         _, P_margin_yi_1, _ = self.predict(X, marginal=True)
-        # print(f"P_margin_yi_1 = {[[round(x, 3) for x in y] for y in P_margin_yi_1]}")
-
         return np.where(P_margin_yi_1 > 0.5, 1, 0)
 
     def predict_Subset(self, X):
@@ -244,9 +222,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
             max_index = np.argmax(P_margin_yi_1[n])
             Yp[n, max_index] = 1
 
-        # print(f"Yp = {Yp}")
-        # print(f"Y_prob = {Y_prob}")
-        # print([[round(x, 4) for x in y] for y in P_margin_yi_1])
         return Yp
 
     def predict_Neg(self, X):
@@ -255,9 +230,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         _, P_margin_yi_1, _ = self.predict(X, marginal=True)
         # Sort the marginal probability masses in asc order
         # and get the indices of the sorted array
-        # print(f"P_margin_yi_1 = {[round(y, 6) for x in P_margin_yi_1 for y in x]}")
         indices = np.argsort(P_margin_yi_1, axis=1)[:]
-        # print(f"indices = {indices}")
 
         # X.shape[0] is the number of instances
         P = np.ones((N, self.L))
@@ -277,7 +250,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         _, P_margin_yi_1, _ = self.predict(X, marginal=True)
         # Sort in descending order
         indices = np.argsort(P_margin_yi_1, axis=1)[:][:, ::-1]
-        # print(f"indices = {indices}")
 
         # Expectation of the marginal probability masses
         E = np.zeros((N, self.L))
@@ -290,25 +262,18 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
             s1 = np.sum(P_margin_yi_1, axis=1)[i]
             s2 = 0
-            # print(f"E = {E}")
             for _l in range(1, self.L - 1):
                 s2 = s2 + P_margin_yi_1[i, indices[i, _l]]
-                # print(f"l = {l}, s1 = {s1}, s2 = {s2}")
                 E[i][_l] = 1 - (1 / (self.L - _l)) * s1 + (1 / (self.L - _l) * _l) * s2
 
-        # TODO: convert to vectorized form
-        # print(f"E = {E}")
         l_optimal = np.argsort(E, axis=1)[:, ::-1]
-        # print(f"l_optimal = {l_optimal}")
         P = np.zeros((N, self.L))
 
         for i in range(N):
-            # print(f"l_optimal = {l_optimal[i]}")
             # Set l_optimal highest of the descending sorted marginal probability masses to 1
             for _l in range(l_optimal[i][0] + 1):
                 P[i][indices[i, _l]] = 1
 
-        # print(f"P_margin_yi_1 = {[[round(x, 5) for x in y] for y in P_margin_yi_1]}")
         return P
 
     def predict_Fmeasure(self, X, beta=1):
@@ -321,12 +286,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
             P_pair_wise_obj["P_pair_wise1"],
         )
 
-        # print(
-        #     f"P_pair_wise = {[[[round(x, 3) for x in y] for y in z] for z in P_pair_wise]}"
-        # )
-
         # E[0] , E[L-1], E[L]
-
         P = np.zeros((N, self.L))
 
         for i in range(N):  # for each instance
@@ -357,9 +317,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
                     np.argsort(q_f_measure[top_ranked_label])[::-1].tolist()
                 )
 
-                # print(
-                #     f"indices_q_f_measure_desc = {indices_q_f_measure_desc} |{indices_q_f_measure_desc[top_ranked_label]} \n {top_ranked_label} \n q_f_measure: {q_f_measure[top_ranked_label]}"
-                # )
                 # max q_f_measure
                 # q_f_measure_max = q_f_measure[i][top_ranked_label][indices_q_f_measure[i][0]]
 
@@ -369,11 +326,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
                         top_ranked_label
                     ][int(indices_q_f_measure_desc[top_ranked_label][i_])]
 
-            # print(f"\nexpectation_values = {expectation_values}")
-            # print(f"q_f_measure = {q_f_measure}")
-            # print(f"indices_q_f_measure_desc = {indices_q_f_measure_desc}")
-            # print(f"expectation_value_0 = {expectation_value_0}")
-
             # Determine ˆy which is ˆyl with the highest E(f (y, ˆyl) where l ∈ [K]0
             # Case 1: Expectation value of 0 > max(expectation_values)
             if expectation_value_0 > np.max(expectation_values):
@@ -382,7 +334,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
                 # Case 2: Expectation value of 0 <= max(expectation_values)
                 # max_expectation_value_index = L_optimal -> optimal top ranked label
                 L_optimal_index = np.argmax(expectation_values)
-                # print(f"max_expectation_value_index = {L_optimal_index}")
                 for _l in range(L_optimal_index + 1):
                     P[i][int(indices_q_f_measure_desc[L_optimal_index][_l])] = 1
 
@@ -396,10 +347,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
             P_pair_wise_obj["P_pair_wise"],
             P_pair_wise_obj["P_pair_wise0"],
             P_pair_wise_obj["P_pair_wise1"],
-        )
-
-        print(
-            f"P_pair_wise = {[[[round(x, 3) for x in y] for y in z] for z in P_pair_wise]}"
         )
 
         q_inf = np.zeros((N, self.L - 1))
@@ -417,7 +364,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
             # sort by descending order
             indices_q = np.argsort(q_inf[i])[::-1]
-            print(f"Index: {indices_q}")
 
             # E[0] = E[0] , E[1] = E[L] ,E[2] = E[L-1]
             E = np.zeros(3)
@@ -427,10 +373,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
             # sort E in descending order
             indices_E = np.argsort(E)[::-1]
-            print(f"E: {E} \t indices_E = {indices_E}")
             L_optimal = index_L[indices_E[0]]
-            print(f"indices_q: {indices_q}")
-            print(f"L_optimal = {L_optimal}")
 
             for _l in range(L_optimal):
                 # revised indices: L_optimal = 0 -> no relevant label, L_optimal = L -> L relevant labels, L_optimal = L-1 -> L-1 relevant labels
