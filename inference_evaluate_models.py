@@ -148,6 +148,10 @@ def main():
     absolute_dir = "/".join(os.path.abspath(__file__).split("/")[:-1])
     # Define the folder path containing JSON datasets and the output CSV file name
     folder_path = os.path.join(absolute_dir, "datasets")
+    # check if not exist, create a result folder
+    if not os.path.exists(os.path.join(absolute_dir, "result")):
+        os.makedirs(os.path.join(absolute_dir, "result"))
+
     output_csv = os.path.join(absolute_dir, "result/evaluation_results.csv")
     print(f"📂 Dataset folder path: {folder_path}")
 

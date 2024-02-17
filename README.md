@@ -47,7 +47,7 @@ conda create --name inference_prob_mlc python=3.10
 conda activate inference_prob_mlc
 
 # Install `setup.md` in root folder.
-pip install -r inference_prob_mlc/requirements.txt
+pip install -r requirements.txt
 python setup.py install
 # python inference_evaluate_models.py
 cd inference_prob_mlc

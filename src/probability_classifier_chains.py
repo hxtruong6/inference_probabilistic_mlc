@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 
-from skmultiflow.meta.classifier_chains import ClassifierChain
+from src.skmultiflow.meta.classifier_chains import ClassifierChain
 
 
 def P(y, x, cc, payoff=np.prod):

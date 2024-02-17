@@ -1,0 +1,13 @@
+Dataset,Model,Predict Function of Model,Metric Function,Score
+emotions,LogisticRegression,Predict Hamming Loss,Hamming Loss,0.22525
+emotions,LogisticRegression,Predict Hamming Loss,Subset Accuracy,0.22772
+emotions,LogisticRegression,Predict Subset,Hamming Loss,0.22855
+emotions,LogisticRegression,Predict Subset,Subset Accuracy,0.32673
+emotions,LogisticRegression,Predict Pre,Hamming Loss,0.26320
+emotions,LogisticRegression,Predict Pre,Subset Accuracy,0.14356
+emotions,SGDClassifier,Predict Hamming Loss,Hamming Loss,0.36139
+emotions,SGDClassifier,Predict Hamming Loss,Subset Accuracy,0.02475
+emotions,SGDClassifier,Predict Subset,Hamming Loss,0.36139
+emotions,SGDClassifier,Predict Subset,Subset Accuracy,0.02475
+emotions,SGDClassifier,Predict Pre,Hamming Loss,0.39026
+emotions,SGDClassifier,Predict Pre,Subset Accuracy,0.02475
