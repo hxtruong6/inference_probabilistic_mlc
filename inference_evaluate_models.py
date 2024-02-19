@@ -8,6 +8,7 @@ from src.evaluation_metrics import EvaluationMetrics
 import numpy as np
 
 from src.probability_classifier_chains import ProbabilisticClassifierChainCustom
+from src.utils import save_crosstab, save_result_df
 
 print(f"Numpy version: {np.__version__}")
 
@@ -121,9 +122,7 @@ def prepare_model_to_evaluate():
     """Prepare a list of models for evaluation."""
     base_estimators = [
         LogisticRegression(random_state=SEED, max_iter=10000),
-        # SGDClassifier(
-        #     loss="log_loss", random_state=SEED
-        # ),
+        SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10000),
         # RandomForestClassifier(random_state=SEED),
         # AdaBoostClassifier(random_state=SEED),
     ]
@@ -193,13 +192,7 @@ def main():
     ]
 
     # Create a DataFrame to store the evaluation results
-    data = {
-        "Dataset": [],
-        "Model": [],
-        "Predict Function of Model": [],
-        "Metric Function": [],
-        "Score": [],
-    }
+    data_obj = {}
 
     # Create a structure to store scores per dataset and metric
     scores_by_dataset = defaultdict(lambda: defaultdict(list))
@@ -207,6 +200,10 @@ def main():
     # Iterate over datasets
     for dataset_handler in read_datasets_from_folder(folder_path, dataset_names):
         print(f"\n🐳 Evaluating on {dataset_handler.dataset_name} dataset...")
+
+        dataset_name = dataset_handler.dataset_name
+        if dataset_name not in data_obj:
+            data_obj[dataset_name] = {}
 
         # Use cross-validation for more robust evaluation
         kfold_count = 0
@@ -226,6 +223,10 @@ def main():
 
             # For each dataset, iterate over the models and perform evaluation
             for model in evaluated_models:
+                model_name = model.base_estimator.__class__.__name__
+                if model_name not in data_obj[dataset_name]:
+                    data_obj[dataset_name][model_name] = {}
+
                 model = training_model(
                     model,
                     X_train,
@@ -241,38 +242,27 @@ def main():
                 for result in loss_score_by_predict_func:
                     print("❄️ Metric: ", result["predict_name"])
 
+                    predict_func_name = result["predict_name"]
+                    if predict_func_name not in data_obj[dataset_name][model_name]:
+                        data_obj[dataset_name][model_name][predict_func_name] = {}
+
                     for score_metric in result["score_metrics"]:
-                        data["Dataset"].append(dataset_handler.dataset_name)
-                        data["Model"].append(model.base_estimator.__class__.__name__)
-                        data["Predict Function of Model"].append(result["predict_name"])
 
-                        data["Metric Function"].append(score_metric["Metric Name"])
-                        data["Score"].append(score_metric["Score"])
+                        loss_func_name = score_metric["Metric Name"]
+                        if (
+                            loss_func_name
+                            not in data_obj[dataset_name][model_name][predict_func_name]
+                        ):
+                            data_obj[dataset_name][model_name][predict_func_name][
+                                loss_func_name
+                            ] = []
 
-                        # Store the scores in a dictionary for later use
-                        scores_by_dataset[dataset_handler.dataset_name][
-                            score_metric["Metric Name"]
-                        ].append(float(score_metric["Score"]))
+                        data_obj[dataset_name][model_name][predict_func_name][
+                            loss_func_name
+                        ].append(score_metric["Score"])
 
-    result_df = pd.DataFrame(data)
-
-    average_scores = {}
-    for dataset, metric_scores in scores_by_dataset.items():
-        average_scores[dataset] = {}
-        for metric, scores in metric_scores.items():
-            average_scores[dataset][metric] = sum(float(s) for s in scores) / len(
-                scores
-            )
-
-    print("Average Evaluation Scores:")
-    for dataset, scores in average_scores.items():
-        print(f"Dataset: {dataset}")
-        for metric, score in scores.items():
-            print(f"  {metric}: {score:.5f}")
-
-    # Save the evaluation results to a CSV file
-    result_df.to_csv(output_csv, index=False)
-    print(f"\n✅Evaluation results saved to {output_csv}")
+    result_df = save_result_df(data_obj, output_csv)
+    save_crosstab(result_df, output_csv)
 
 
 if __name__ == "__main__":

@@ -119,7 +119,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
     def predict(
         self, X, marginal=False, pairwise=False
-    ) -> (np.ndarray, np.ndarray, dict):
+    ) -> tuple[np.ndarray, np.ndarray, dict]:
         """Predict classes for the passed data.
 
         Parameters

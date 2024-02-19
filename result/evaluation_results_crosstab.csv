@@ -1,0 +1,10 @@
+Dataset,Base Model,Predict Func,Hamming Loss,Subset Accuracy,All
+CHD_49,LogisticRegression,Predict Hamming Loss,0.29399,0.19099,0.24248999999999998
+CHD_49,LogisticRegression,Predict Subset,0.2994,0.1982,0.2488
+CHD_49,SGDClassifier,Predict Hamming Loss,0.36336,0.1009,0.23213
+CHD_49,SGDClassifier,Predict Subset,0.36756,0.0973,0.23243
+emotions,LogisticRegression,Predict Hamming Loss,0.20486,0.27156,0.23821
+emotions,LogisticRegression,Predict Subset,0.21188,0.312,0.26194
+emotions,SGDClassifier,Predict Hamming Loss,0.34454,0.1433,0.24392000000000003
+emotions,SGDClassifier,Predict Subset,0.34454,0.1433,0.24392000000000003
+All,,,0.30376625,0.18219375000000002,0.24297999999999997
