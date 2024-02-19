@@ -1,6 +1,6 @@
 import os
 import time
-from src.arff_dataset import HandleMulanDatasetForMultiLabelArffFile
+from src.arff_dataset import MultiLabelArffDataset
 from src.evaluation_metrics import EvaluationMetrics
 
 import numpy as np
@@ -20,8 +20,15 @@ import scipy.io.arff as arff
 
 # Define a constant for seed
 SEED = 6
-DATASET_WHOLE_FILES = ["VirusGO_sparse", "Water-quality", "CHD_49"]
-DATASET_WHOLE_FILES_TARGET_AT_FIRST = ["Water-quality", "CHD_49"]
+DATASET_WHOLE_FILES = [
+    "VirusGO_sparse",
+    "Water-quality",
+    "CHD_49",
+    "emotions",
+    "scene",
+    "yeast",
+]
+DATASET_WHOLE_FILES_TARGET_AT_FIRST = ["Water-quality", "CHD_49", "yeast"]
 
 
 def read_datasets_from_folder(folder_path, dataset_names):
@@ -29,38 +36,13 @@ def read_datasets_from_folder(folder_path, dataset_names):
     if not os.path.isdir(folder_path):
         raise Exception(f"Folder path is not valid - {folder_path}")
 
-    def _get_result(filename, target_at_first=False):
-        df_train = HandleMulanDatasetForMultiLabelArffFile(
-            os.path.join(folder_path, f"{filename}.arff"),
-            filename,
-            target_at_first,
-            is_train=True,
-        )
-        df_test = HandleMulanDatasetForMultiLabelArffFile(
-            os.path.join(folder_path, f"{filename}.arff"),
-            filename,
-            target_at_first,
-            is_test=True,
-            train_index=df_train.train_index,
-        )
-        return df_train, df_test
-
     for filename in dataset_names:
         if filename in DATASET_WHOLE_FILES:
-            yield _get_result(
-                filename,
+            yield MultiLabelArffDataset(
+                path=os.path.join(folder_path, f"{filename}.arff"),
+                dataset_name=filename,
                 target_at_first=(filename in DATASET_WHOLE_FILES_TARGET_AT_FIRST),
             )
-        elif os.path.isdir(os.path.join(folder_path, filename)):
-            # Handle individual datasets in subfolders
-            print(f"Reading {filename} dataset...")
-            df_train = HandleMulanDatasetForMultiLabelArffFile(
-                os.path.join(folder_path, filename, f"{filename}-train.arff"), filename
-            )
-            df_test = HandleMulanDatasetForMultiLabelArffFile(
-                os.path.join(folder_path, filename, f"{filename}-test.arff"), filename
-            )
-            yield df_train, df_test
         else:
             raise Exception("Dataset name is not supported")
 
@@ -157,6 +139,7 @@ def main():
 
     dataset_names = [
         "emotions",
+        # "water-quality",
         # "yeast",
         # "scene",
         # "VirusGO_sparse"
@@ -211,28 +194,40 @@ def main():
     }
 
     # Iterate over datasets
-    for df_train, df_test in read_datasets_from_folder(folder_path, dataset_names):
-        print(f"\n🐳 Evaluating on {df_train.dataset_name} dataset...")
+    for dataset_handler in read_datasets_from_folder(folder_path, dataset_names):
+        print(f"\n🐳 Evaluating on {dataset_handler.dataset_name} dataset...")
 
-        # For each dataset, iterate over the models and perform evaluation
-        for model in evaluated_models:
-            model = training_model(model, df_train.X, df_train.Y)
-            loss_score_by_predict_func = evaluate_model(
-                model, df_test.X, df_test.Y, predict_functions, metric_functions
+        # Use cross-validation for more robust evaluation
+        for train_index, test_index in dataset_handler.get_cross_validation_folds():
+            print(f"🔁 Cross-validation fold {len(data['Dataset']) + 1}...")
+            X_train, X_test = (
+                dataset_handler.X[train_index],
+                dataset_handler.X[test_index],
+            )
+            y_train, y_test = (
+                dataset_handler.Y[train_index],
+                dataset_handler.Y[test_index],
             )
 
-            # Collect and append evaluation results to the DataFrame
-            print("-" * 10)
-            for result in loss_score_by_predict_func:
-                print("❄️ Metric: ", result["predict_name"])
+            # For each dataset, iterate over the models and perform evaluation
+            for model in evaluated_models:
+                model = training_model(model, X_train, y_train)
+                loss_score_by_predict_func = evaluate_model(
+                    model, X_test, y_test, predict_functions, metric_functions
+                )
 
-                for score_metric in result["score_metrics"]:
-                    data["Dataset"].append(df_train.dataset_name)
-                    data["Model"].append(model.base_estimator.__class__.__name__)
-                    data["Predict Function of Model"].append(result["predict_name"])
+                # Collect and append evaluation results to the DataFrame
+                print("-" * 10)
+                for result in loss_score_by_predict_func:
+                    print("❄️ Metric: ", result["predict_name"])
 
-                    data["Metric Function"].append(score_metric["Metric Name"])
-                    data["Score"].append(score_metric["Score"])
+                    for score_metric in result["score_metrics"]:
+                        data["Dataset"].append(dataset_handler.dataset_name)
+                        data["Model"].append(model.base_estimator.__class__.__name__)
+                        data["Predict Function of Model"].append(result["predict_name"])
+
+                        data["Metric Function"].append(score_metric["Metric Name"])
+                        data["Score"].append(score_metric["Score"])
 
     result_df = pd.DataFrame(data)
 

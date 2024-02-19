@@ -5,13 +5,17 @@ print(f"Numpy version: {np.__version__}")
 import pandas as pd
 
 import scipy.io.arff as arff
+from sklearn.model_selection import (
+    KFold,
+    StratifiedKFold,
+)  # Import for cross-validation
 
 
 # Define a constant for seed
 SEED = 6
 
 
-class HandleMulanDatasetForMultiLabelArffFile:
+class MultiLabelArffDataset:
     """Class to handle Mulan datasets stored in ARFF files."""
 
     def __init__(
@@ -19,21 +23,11 @@ class HandleMulanDatasetForMultiLabelArffFile:
         path,
         dataset_name,
         target_at_first=False,
-        is_train=False,
-        is_test=False,
-        train_index=None,
     ):
         """Initialize the dataset handler."""
         self.path = path
         self.data = arff.loadarff(self.path)
         self.df = pd.DataFrame(self.data[0])
-
-        # Handle train-test split for some datasets
-        if is_train:
-            self.df = self.df.sample(frac=0.8, random_state=SEED)
-            self.train_index = self.df.index
-        elif is_test:
-            self.df = self.df.drop(train_index)
 
         self.dataset_name = dataset_name
         y_split_index = self._get_Y_split_index()
@@ -74,3 +68,18 @@ class HandleMulanDatasetForMultiLabelArffFile:
 
         else:
             raise Exception("Dataset name is not supported")
+
+    def get_cross_validation_folds(self, n_splits=5, shuffle=True, random_state=SEED):
+        """Provides cross-validation folds for the dataset.
+
+        Args:
+            n_splits: Number of folds for cross-validation.
+            shuffle:  Whether to shuffle the data before splitting.
+            random_state: Random seed for reproducibility.
+
+        Yields:
+            Tuple of (train_index, test_index) for each fold.
+        """
+        skf = KFold(n_splits=n_splits, shuffle=shuffle, random_state=random_state)
+        for train_index, test_index in skf.split(self.X, self.Y):  # Key Change here
+            yield train_index, test_index
