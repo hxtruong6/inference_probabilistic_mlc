@@ -1,3 +1,4 @@
+import uuid
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 
@@ -108,7 +109,13 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         super().__init__(
             base_estimator=base_estimator, order=order, random_state=random_state
         )
-        self.predicted_store = None
+        self.store_key = None
+        self.predicted_store = {}
+
+    def set_store_key(self, key):
+        print(f"🐠 - Set store key: {key}")
+        self.store_key = key
+        self.predicted_store[key] = None
 
     def predict(
         self, X, marginal=False, pairwise=False
@@ -139,10 +146,16 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         P_pair_wise0 = np.zeros((N, 1))
         P_pair_wise1 = np.zeros((N, 1))
 
-        if self.predicted_store is not None:
-            return self.predicted_store
+        if (
+            self.predicted_store is not None
+            and self.store_key is not None
+            and self.store_key in self.predicted_store
+            and self.predicted_store[self.store_key] is not None
+        ):
+            print(f"🐠 Cached [{self.store_key}]")
+            return self.predicted_store[self.store_key]
 
-        print("🐠 Predict func is called. Pre-calculate!")
+        print(f"🐠 Predicting... [{self.store_key}]")
 
         # for each instance
         for n in range(N):
@@ -189,16 +202,19 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
                 # P(y_1 = 1 | X) = P(y_1 = 1 | X, y_2 = 0) * P(y_2 = 0 | X) + P(y_1 = 1 | X, y_2 = 1) * P(y_2 = 1 | X)
 
-        self.predicted_store = (
-            Yp,
-            P_margin_yi_1,
-            {
-                "P_pair_wise": P_pair_wise,
-                "P_pair_wise0": P_pair_wise0,
-                "P_pair_wise1": P_pair_wise1,
-            },
-        )
-        return self.predicted_store
+        self.predicted_store = {
+            self.store_key: (
+                Yp,
+                P_margin_yi_1,
+                {
+                    "P_pair_wise": P_pair_wise,
+                    "P_pair_wise0": P_pair_wise0,
+                    "P_pair_wise1": P_pair_wise1,
+                },
+            )
+        }
+
+        return self.predicted_store[self.store_key]
         # return Yp, marginal probability masses and pairwise probability masses
         # for each instance X[n] (we might need to choose some appropriate data structure)
 

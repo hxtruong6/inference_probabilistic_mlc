@@ -1,13 +1,13 @@
+from collections import defaultdict
 import os
 import time
+from uuid import uuid4
 from src.arff_dataset import MultiLabelArffDataset
 from src.evaluation_metrics import EvaluationMetrics
 
 import numpy as np
 
 from src.probability_classifier_chains import ProbabilisticClassifierChainCustom
-
-# from probability_classifier_chains import ProbabilisticClassifierChainCustom
 
 print(f"Numpy version: {np.__version__}")
 
@@ -75,14 +75,18 @@ def calculate_metrics(Y_true, Y_pred, metric_funcs):
     return score_metrics
 
 
-def training_model(model, X_train, Y_train):
+def training_model(model, X_train, Y_train, predicted_store_key=uuid4()):
     """Train the specified model on the training data."""
-    start_time = time.time()
-    print(f"⏳ Training {model.base_estimator.__class__.__name__} model...")
-    model.fit(X_train, Y_train)
+    try:
+        start_time = time.time()
+        print(f"⏳ Training {model.base_estimator.__class__.__name__} model...")
+        model.set_store_key(predicted_store_key)
+        model.fit(X_train, Y_train)
 
-    print(f"🤿 Elapsed training time: {time.time() - start_time:.5f} seconds")
-    return model
+        print(f"🤿 Elapsed training time: {time.time() - start_time:.5f} seconds")
+        return model
+    except Exception as e:
+        print(f"Error training model - {e}")
 
 
 def evaluate_model(model, X_test, Y_test, predict_funcs, metric_funcs):
@@ -99,9 +103,13 @@ def evaluate_model(model, X_test, Y_test, predict_funcs, metric_funcs):
             Y_pred = getattr(model, predict_func["func"])(X_test)
 
         elapsed_time = time.time() - start_time
-        print(f"🤿 Elapsed predict time: {elapsed_time:.5f} seconds")
+        print(
+            f"🤿 Elapsed predict time: {elapsed_time:.5f} seconds - [{predict_func['name']}]"
+        )
 
+        print("📊 Calculating metrics...")
         score_metrics = calculate_metrics(Y_test, Y_pred, metric_funcs)
+
         loss_score_by_predict_func.append(
             {"predict_name": predict_func["name"], "score_metrics": score_metrics}
         )
@@ -112,10 +120,10 @@ def evaluate_model(model, X_test, Y_test, predict_funcs, metric_funcs):
 def prepare_model_to_evaluate():
     """Prepare a list of models for evaluation."""
     base_estimators = [
-        LogisticRegression(random_state=SEED),
-        SGDClassifier(
-            loss="log_loss", random_state=SEED
-        ),  # Not support for scikit-learn < 1.0
+        LogisticRegression(random_state=SEED, max_iter=10000),
+        # SGDClassifier(
+        #     loss="log_loss", random_state=SEED
+        # ),
         # RandomForestClassifier(random_state=SEED),
         # AdaBoostClassifier(random_state=SEED),
     ]
@@ -139,18 +147,18 @@ def main():
 
     dataset_names = [
         "emotions",
-        # "water-quality",
+        # "Water-quality",
         # "yeast",
         # "scene",
         # "VirusGO_sparse"
-        # "CHD_49"
+        "CHD_49",
     ]
     # -----------------  MAIN -----------------
     # func is same name of the predict function in ProbabilisticClassifierChainCustom
     predict_functions = [
         {"name": "Predict Hamming Loss", "func": "predict_Hamming"},
         {"name": "Predict Subset", "func": "predict_Subset"},
-        {"name": "Predict Pre", "func": "predict_Pre"},
+        # {"name": "Predict Pre", "func": "predict_Pre"},
         # {"name": "Predict Neg", "func": "predict_Neg"},
         # {"name": "Predict Recall", "func": "predict_Recall"},
         # {"name": "Predict Mar", "func": "predict_Mar"},
@@ -193,13 +201,20 @@ def main():
         "Score": [],
     }
 
+    # Create a structure to store scores per dataset and metric
+    scores_by_dataset = defaultdict(lambda: defaultdict(list))
+
     # Iterate over datasets
     for dataset_handler in read_datasets_from_folder(folder_path, dataset_names):
         print(f"\n🐳 Evaluating on {dataset_handler.dataset_name} dataset...")
 
         # Use cross-validation for more robust evaluation
-        for train_index, test_index in dataset_handler.get_cross_validation_folds():
-            print(f"🔁 Cross-validation fold {len(data['Dataset']) + 1}...")
+        kfold_count = 0
+        for train_index, test_index in dataset_handler.get_cross_validation_folds(
+            n_splits=5, random_state=SEED
+        ):
+            kfold_count += 1
+            print(f"\n🔁 Cross-validation fold {kfold_count}...")
             X_train, X_test = (
                 dataset_handler.X[train_index],
                 dataset_handler.X[test_index],
@@ -211,7 +226,12 @@ def main():
 
             # For each dataset, iterate over the models and perform evaluation
             for model in evaluated_models:
-                model = training_model(model, X_train, y_train)
+                model = training_model(
+                    model,
+                    X_train,
+                    y_train,
+                    predicted_store_key=f"{dataset_handler.dataset_name}_kfold_{kfold_count}",
+                )
                 loss_score_by_predict_func = evaluate_model(
                     model, X_test, y_test, predict_functions, metric_functions
                 )
@@ -229,7 +249,26 @@ def main():
                         data["Metric Function"].append(score_metric["Metric Name"])
                         data["Score"].append(score_metric["Score"])
 
+                        # Store the scores in a dictionary for later use
+                        scores_by_dataset[dataset_handler.dataset_name][
+                            score_metric["Metric Name"]
+                        ].append(float(score_metric["Score"]))
+
     result_df = pd.DataFrame(data)
+
+    average_scores = {}
+    for dataset, metric_scores in scores_by_dataset.items():
+        average_scores[dataset] = {}
+        for metric, scores in metric_scores.items():
+            average_scores[dataset][metric] = sum(float(s) for s in scores) / len(
+                scores
+            )
+
+    print("Average Evaluation Scores:")
+    for dataset, scores in average_scores.items():
+        print(f"Dataset: {dataset}")
+        for metric, score in scores.items():
+            print(f"  {metric}: {score:.5f}")
 
     # Save the evaluation results to a CSV file
     result_df.to_csv(output_csv, index=False)

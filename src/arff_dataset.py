@@ -1,15 +1,9 @@
-import numpy as np
-
-print(f"Numpy version: {np.__version__}")
-
 import pandas as pd
-
 import scipy.io.arff as arff
 from sklearn.model_selection import (
     KFold,
     StratifiedKFold,
-)  # Import for cross-validation
-
+)
 
 # Define a constant for seed
 SEED = 6
@@ -81,5 +75,5 @@ class MultiLabelArffDataset:
             Tuple of (train_index, test_index) for each fold.
         """
         skf = KFold(n_splits=n_splits, shuffle=shuffle, random_state=random_state)
-        for train_index, test_index in skf.split(self.X, self.Y):  # Key Change here
+        for train_index, test_index in skf.split(self.X, self.Y):
             yield train_index, test_index
