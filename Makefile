@@ -1,5 +1,6 @@
 # Write command to build docker and run it
 DOCKER_IMAGE_NAME = inference_prob_mlc
+TIME = $(shell date +%Y%m%d%H%M%S)
 docker-run:
 	docker build -t $(DOCKER_IMAGE_NAME) .
 	docker run -it $(DOCKER_IMAGE_NAME)

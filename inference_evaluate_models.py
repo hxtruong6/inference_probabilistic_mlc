@@ -32,6 +32,7 @@ DATASET_WHOLE_FILES = [
     "yeast",
 ]
 DATASET_WHOLE_FILES_TARGET_AT_FIRST = ["Water-quality", "CHD_49", "yeast"]
+KFOLD_SPLIT_NUMBER = 10
 
 
 def read_datasets_from_folder(folder_path, dataset_names):
@@ -110,7 +111,7 @@ def evaluate_model(model, X_test, Y_test, predict_funcs, metric_funcs):
             f"🤿 Elapsed predict time: {elapsed_time:.5f} seconds - [{predict_func['name']}]"
         )
 
-        print("📊 Calculating metrics...")
+        # print("📊 Calculating metrics...")
         score_metrics = calculate_metrics(Y_test, Y_pred, metric_funcs)
 
         loss_score_by_predict_func.append(
@@ -124,9 +125,9 @@ def prepare_model_to_evaluate():
     """Prepare a list of models for evaluation."""
     base_estimators = [
         LogisticRegression(random_state=SEED, max_iter=10000),
-        # SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10000),
-        # RandomForestClassifier(random_state=SEED),
-        # AdaBoostClassifier(random_state=SEED),
+        SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10000),
+        RandomForestClassifier(random_state=SEED),
+        AdaBoostClassifier(random_state=SEED),
     ]
     return [ProbabilisticClassifierChainCustom(model) for model in base_estimators]
 
@@ -174,9 +175,9 @@ def evaluate_kfold(
         )
 
         # Collect and append evaluation results to the DataFrame
-        print("-" * 10)
+        # print("-" * 10)
         for result in loss_score_by_predict_func:
-            print("❄️ Metric: ", result["predict_name"])
+            # print("❄️ Metric: ", result["predict_name"])
 
             predict_func_name = result["predict_name"]
             if predict_func_name not in fold_results[dataset_name][model_name]:
@@ -212,54 +213,53 @@ def main():
     if not os.path.exists(os.path.join(absolute_dir, "result")):
         os.makedirs(os.path.join(absolute_dir, "result"))
 
-    output_csv = os.path.join(absolute_dir, "result/evaluation_results.csv")
     print(f"📂 Dataset folder path: {folder_path}")
 
     dataset_names = [
         "emotions",
         # "Water-quality",
-        # "yeast",
         # "scene",
-        # "VirusGO_sparse"
+        # "VirusGO_sparse",
         # "CHD_49",
+        # "yeast",
     ]
     # -----------------  MAIN -----------------
     # func is same name of the predict function in ProbabilisticClassifierChainCustom
     predict_functions = [
         {"name": "Predict Hamming Loss", "func": "predict_Hamming"},
         {"name": "Predict Subset", "func": "predict_Subset"},
-        # {"name": "Predict Pre", "func": "predict_Pre"},
-        # {"name": "Predict Neg", "func": "predict_Neg"},
-        # {"name": "Predict Recall", "func": "predict_Recall"},
-        # {"name": "Predict Mar", "func": "predict_Mar"},
-        # {"name": "Predict Fmeasure", "func": "predict_Fmeasure"},
+        {"name": "Predict Pre", "func": "predict_Precision"},
+        {"name": "Predict Neg", "func": "predict_Neg"},
+        {"name": "Predict Recall", "func": "predict_Recall"},
+        {"name": "Predict Mar", "func": "predict_Mar"},
+        {"name": "Predict Fmeasure", "func": "predict_Fmeasure"},
         # {"name": "Predict Inf", "func": "predict_Inf"},
     ]
 
     metric_functions = [
         {"name": "Hamming Loss", "func": EvaluationMetrics.hamming_loss},
         {"name": "Subset Accuracy", "func": EvaluationMetrics.subset_accuracy},
-        # {
-        #     "name": "Precision Score",
-        #     "func": EvaluationMetrics.precision_score,
-        # },
-        # {
-        #     "name": "Negative Predictive Value",
-        #     "func": EvaluationMetrics.negative_predictive_value,
-        # },
-        # {
-        #     "name": "Recall Score",  #
-        #     "func": EvaluationMetrics.recall_score,
-        # },
-        # {
-        #     "name": "Markedness",
-        #     "func": EvaluationMetrics.f_markedness,
-        # },
-        # {
-        #     "name": "F-beta Score",
-        #     "func": EvaluationMetrics.f_beta_score,
-        # },
-        # TODO:add informedness
+        {
+            "name": "Precision Score",
+            "func": EvaluationMetrics.precision_score,
+        },
+        {
+            "name": "Negative Predictive Value",
+            "func": EvaluationMetrics.negative_predictive_value,
+        },
+        {
+            "name": "Recall Score",  #
+            "func": EvaluationMetrics.recall_score,
+        },
+        {
+            "name": "Markedness",
+            "func": EvaluationMetrics.f_markedness,
+        },
+        {
+            "name": "F-beta Score",
+            "func": EvaluationMetrics.f_beta_score,
+        },
+        # TODO: add informedness
     ]
 
     # Create a DataFrame to store the evaluation results
@@ -268,6 +268,8 @@ def main():
     # Iterate over datasets
     for dataset_handler in read_datasets_from_folder(folder_path, dataset_names):
         print(f"\n🐳 Evaluating on {dataset_handler.dataset_name} dataset...")
+
+        t1 = time.time()
 
         job_results = Parallel(n_jobs=-1)(
             delayed(evaluate_kfold)(
@@ -282,7 +284,7 @@ def main():
             # Use cross-validation for more robust evaluation
             for kfold_index, (train_index, test_index) in enumerate(
                 dataset_handler.get_cross_validation_folds(
-                    n_splits=5, random_state=SEED
+                    n_splits=KFOLD_SPLIT_NUMBER, random_state=SEED
                 )
             )
         )
@@ -303,10 +305,13 @@ def main():
                             ][predict_func["name"]][metric_func["name"]],
                         )
 
-    print(f"Fold results: {dataset_results}")
+        output_csv = os.path.join(
+            absolute_dir, "result", f"result_{dataset_handler.dataset_name}.csv"
+        )
+        result_df = save_result_df(dataset_results, output_csv)
+        save_crosstab(result_df, output_csv)
 
-    result_df = save_result_df(dataset_results, output_csv)
-    save_crosstab(result_df, output_csv)
+        print(f"\n ==== 🦈 Dataset evaluation time: {time.time() - t1:.5f} seconds \n")
 
 
 if __name__ == "__main__":

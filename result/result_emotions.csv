@@ -1,0 +1,197 @@
+Dataset,Model,Predict Function of Model,Metric Function,Score
+emotions,LogisticRegression,Predict Hamming Loss,Hamming Loss,0.79521
+emotions,LogisticRegression,Predict Hamming Loss,Subset Accuracy,0.26661
+emotions,LogisticRegression,Predict Hamming Loss,Precision Score,0.61439
+emotions,LogisticRegression,Predict Hamming Loss,Negative Predictive Value,0.84011
+emotions,LogisticRegression,Predict Hamming Loss,Recall Score,0.58673
+emotions,LogisticRegression,Predict Hamming Loss,Markedness,0.79309
+emotions,LogisticRegression,Predict Hamming Loss,F-beta Score,0.57209
+emotions,LogisticRegression,Predict Subset,Hamming Loss,0.79262
+emotions,LogisticRegression,Predict Subset,Subset Accuracy,0.31876
+emotions,LogisticRegression,Predict Subset,Precision Score,0.64598
+emotions,LogisticRegression,Predict Subset,Negative Predictive Value,0.86504
+emotions,LogisticRegression,Predict Subset,Recall Score,0.6904
+emotions,LogisticRegression,Predict Subset,Markedness,0.75721
+emotions,LogisticRegression,Predict Subset,F-beta Score,0.64249
+emotions,LogisticRegression,Predict Pre,Hamming Loss,0.76482
+emotions,LogisticRegression,Predict Pre,Subset Accuracy,0.16537
+emotions,LogisticRegression,Predict Pre,Precision Score,0.7287
+emotions,LogisticRegression,Predict Pre,Negative Predictive Value,0.77204
+emotions,LogisticRegression,Predict Pre,Recall Score,0.42144
+emotions,LogisticRegression,Predict Pre,Markedness,0.75037
+emotions,LogisticRegression,Predict Pre,F-beta Score,0.51533
+emotions,LogisticRegression,Predict Neg,Hamming Loss,0.31141
+emotions,LogisticRegression,Predict Neg,Subset Accuracy,0.0
+emotions,LogisticRegression,Predict Neg,Precision Score,0.31141
+emotions,LogisticRegression,Predict Neg,Negative Predictive Value,1.0
+emotions,LogisticRegression,Predict Neg,Recall Score,1.0
+emotions,LogisticRegression,Predict Neg,Markedness,0.65571
+emotions,LogisticRegression,Predict Neg,F-beta Score,0.46378
+emotions,LogisticRegression,Predict Recall,Hamming Loss,0.31141
+emotions,LogisticRegression,Predict Recall,Subset Accuracy,0.0
+emotions,LogisticRegression,Predict Recall,Precision Score,0.31141
+emotions,LogisticRegression,Predict Recall,Negative Predictive Value,1.0
+emotions,LogisticRegression,Predict Recall,Recall Score,1.0
+emotions,LogisticRegression,Predict Recall,Markedness,0.65571
+emotions,LogisticRegression,Predict Recall,F-beta Score,0.46378
+emotions,LogisticRegression,Predict Mar,Hamming Loss,0.68802
+emotions,LogisticRegression,Predict Mar,Subset Accuracy,0.0
+emotions,LogisticRegression,Predict Mar,Precision Score,0.00056
+emotions,LogisticRegression,Predict Mar,Negative Predictive Value,0.68915
+emotions,LogisticRegression,Predict Mar,Recall Score,0.00169
+emotions,LogisticRegression,Predict Mar,Markedness,0.84401
+emotions,LogisticRegression,Predict Mar,F-beta Score,0.00085
+emotions,LogisticRegression,Predict Fmeasure,Hamming Loss,0.78449
+emotions,LogisticRegression,Predict Fmeasure,Subset Accuracy,0.2548
+emotions,LogisticRegression,Predict Fmeasure,Precision Score,0.64511
+emotions,LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.88294
+emotions,LogisticRegression,Predict Fmeasure,Recall Score,0.77103
+emotions,LogisticRegression,Predict Fmeasure,Markedness,0.76403
+emotions,LogisticRegression,Predict Fmeasure,F-beta Score,0.67332
+emotions,SGDClassifier,Predict Hamming Loss,Hamming Loss,0.64633
+emotions,SGDClassifier,Predict Hamming Loss,Subset Accuracy,0.09763
+emotions,SGDClassifier,Predict Hamming Loss,Precision Score,0.41181
+emotions,SGDClassifier,Predict Hamming Loss,Negative Predictive Value,0.75518
+emotions,SGDClassifier,Predict Hamming Loss,Recall Score,0.44456
+emotions,SGDClassifier,Predict Hamming Loss,Markedness,0.60214
+emotions,SGDClassifier,Predict Hamming Loss,F-beta Score,0.39884
+emotions,SGDClassifier,Predict Subset,Hamming Loss,0.64633
+emotions,SGDClassifier,Predict Subset,Subset Accuracy,0.09763
+emotions,SGDClassifier,Predict Subset,Precision Score,0.41181
+emotions,SGDClassifier,Predict Subset,Negative Predictive Value,0.75518
+emotions,SGDClassifier,Predict Subset,Recall Score,0.44456
+emotions,SGDClassifier,Predict Subset,Markedness,0.60214
+emotions,SGDClassifier,Predict Subset,F-beta Score,0.39884
+emotions,SGDClassifier,Predict Pre,Hamming Loss,0.66626
+emotions,SGDClassifier,Predict Pre,Subset Accuracy,0.06073
+emotions,SGDClassifier,Predict Pre,Precision Score,0.43302
+emotions,SGDClassifier,Predict Pre,Negative Predictive Value,0.71291
+emotions,SGDClassifier,Predict Pre,Recall Score,0.22806
+emotions,SGDClassifier,Predict Pre,Markedness,0.57297
+emotions,SGDClassifier,Predict Pre,F-beta Score,0.29011
+emotions,SGDClassifier,Predict Neg,Hamming Loss,0.31141
+emotions,SGDClassifier,Predict Neg,Subset Accuracy,0.0
+emotions,SGDClassifier,Predict Neg,Precision Score,0.31141
+emotions,SGDClassifier,Predict Neg,Negative Predictive Value,1.0
+emotions,SGDClassifier,Predict Neg,Recall Score,1.0
+emotions,SGDClassifier,Predict Neg,Markedness,0.65571
+emotions,SGDClassifier,Predict Neg,F-beta Score,0.46378
+emotions,SGDClassifier,Predict Recall,Hamming Loss,0.31141
+emotions,SGDClassifier,Predict Recall,Subset Accuracy,0.0
+emotions,SGDClassifier,Predict Recall,Precision Score,0.31141
+emotions,SGDClassifier,Predict Recall,Negative Predictive Value,1.0
+emotions,SGDClassifier,Predict Recall,Recall Score,1.0
+emotions,SGDClassifier,Predict Recall,Markedness,0.65571
+emotions,SGDClassifier,Predict Recall,F-beta Score,0.46378
+emotions,SGDClassifier,Predict Mar,Hamming Loss,0.57851
+emotions,SGDClassifier,Predict Mar,Subset Accuracy,0.0
+emotions,SGDClassifier,Predict Mar,Precision Score,0.1068
+emotions,SGDClassifier,Predict Mar,Negative Predictive Value,0.79538
+emotions,SGDClassifier,Predict Mar,Recall Score,0.32367
+emotions,SGDClassifier,Predict Mar,Markedness,0.78926
+emotions,SGDClassifier,Predict Mar,F-beta Score,0.15707
+emotions,SGDClassifier,Predict Fmeasure,Hamming Loss,0.64633
+emotions,SGDClassifier,Predict Fmeasure,Subset Accuracy,0.09763
+emotions,SGDClassifier,Predict Fmeasure,Precision Score,0.41181
+emotions,SGDClassifier,Predict Fmeasure,Negative Predictive Value,0.75518
+emotions,SGDClassifier,Predict Fmeasure,Recall Score,0.44456
+emotions,SGDClassifier,Predict Fmeasure,Markedness,0.60214
+emotions,SGDClassifier,Predict Fmeasure,F-beta Score,0.39884
+emotions,RandomForestClassifier,Predict Hamming Loss,Hamming Loss,0.8187
+emotions,RandomForestClassifier,Predict Hamming Loss,Subset Accuracy,0.32884
+emotions,RandomForestClassifier,Predict Hamming Loss,Precision Score,0.6798
+emotions,RandomForestClassifier,Predict Hamming Loss,Negative Predictive Value,0.8552
+emotions,RandomForestClassifier,Predict Hamming Loss,Recall Score,0.61764
+emotions,RandomForestClassifier,Predict Hamming Loss,Markedness,0.81811
+emotions,RandomForestClassifier,Predict Hamming Loss,F-beta Score,0.61981
+emotions,RandomForestClassifier,Predict Subset,Hamming Loss,0.81983
+emotions,RandomForestClassifier,Predict Subset,Subset Accuracy,0.35246
+emotions,RandomForestClassifier,Predict Subset,Precision Score,0.70223
+emotions,RandomForestClassifier,Predict Subset,Negative Predictive Value,0.86631
+emotions,RandomForestClassifier,Predict Subset,Recall Score,0.66207
+emotions,RandomForestClassifier,Predict Subset,Markedness,0.80283
+emotions,RandomForestClassifier,Predict Subset,F-beta Score,0.65279
+emotions,RandomForestClassifier,Predict Pre,Hamming Loss,0.77257
+emotions,RandomForestClassifier,Predict Pre,Subset Accuracy,0.16525
+emotions,RandomForestClassifier,Predict Pre,Precision Score,0.75195
+emotions,RandomForestClassifier,Predict Pre,Negative Predictive Value,0.77669
+emotions,RandomForestClassifier,Predict Pre,Recall Score,0.43189
+emotions,RandomForestClassifier,Predict Pre,Markedness,0.76432
+emotions,RandomForestClassifier,Predict Pre,F-beta Score,0.52967
+emotions,RandomForestClassifier,Predict Neg,Hamming Loss,0.31141
+emotions,RandomForestClassifier,Predict Neg,Subset Accuracy,0.0
+emotions,RandomForestClassifier,Predict Neg,Precision Score,0.31141
+emotions,RandomForestClassifier,Predict Neg,Negative Predictive Value,1.0
+emotions,RandomForestClassifier,Predict Neg,Recall Score,1.0
+emotions,RandomForestClassifier,Predict Neg,Markedness,0.65571
+emotions,RandomForestClassifier,Predict Neg,F-beta Score,0.46378
+emotions,RandomForestClassifier,Predict Recall,Hamming Loss,0.31141
+emotions,RandomForestClassifier,Predict Recall,Subset Accuracy,0.0
+emotions,RandomForestClassifier,Predict Recall,Precision Score,0.31141
+emotions,RandomForestClassifier,Predict Recall,Negative Predictive Value,1.0
+emotions,RandomForestClassifier,Predict Recall,Recall Score,1.0
+emotions,RandomForestClassifier,Predict Recall,Markedness,0.65571
+emotions,RandomForestClassifier,Predict Recall,F-beta Score,0.46378
+emotions,RandomForestClassifier,Predict Mar,Hamming Loss,0.68859
+emotions,RandomForestClassifier,Predict Mar,Subset Accuracy,0.0
+emotions,RandomForestClassifier,Predict Mar,Precision Score,0.0
+emotions,RandomForestClassifier,Predict Mar,Negative Predictive Value,0.68859
+emotions,RandomForestClassifier,Predict Mar,Recall Score,0.0
+emotions,RandomForestClassifier,Predict Mar,Markedness,0.84429
+emotions,RandomForestClassifier,Predict Mar,F-beta Score,0.0
+emotions,RandomForestClassifier,Predict Fmeasure,Hamming Loss,0.79845
+emotions,RandomForestClassifier,Predict Fmeasure,Subset Accuracy,0.31701
+emotions,RandomForestClassifier,Predict Fmeasure,Precision Score,0.67543
+emotions,RandomForestClassifier,Predict Fmeasure,Negative Predictive Value,0.89349
+emotions,RandomForestClassifier,Predict Fmeasure,Recall Score,0.78863
+emotions,RandomForestClassifier,Predict Fmeasure,Markedness,0.78446
+emotions,RandomForestClassifier,Predict Fmeasure,F-beta Score,0.69656
+emotions,AdaBoostClassifier,Predict Hamming Loss,Hamming Loss,0.74877
+emotions,AdaBoostClassifier,Predict Hamming Loss,Subset Accuracy,0.13825
+emotions,AdaBoostClassifier,Predict Hamming Loss,Precision Score,0.5363
+emotions,AdaBoostClassifier,Predict Hamming Loss,Negative Predictive Value,0.77874
+emotions,AdaBoostClassifier,Predict Hamming Loss,Recall Score,0.4118
+emotions,AdaBoostClassifier,Predict Hamming Loss,Markedness,0.76461
+emotions,AdaBoostClassifier,Predict Hamming Loss,F-beta Score,0.43707
+emotions,AdaBoostClassifier,Predict Subset,Hamming Loss,0.6825
+emotions,AdaBoostClassifier,Predict Subset,Subset Accuracy,0.13666
+emotions,AdaBoostClassifier,Predict Subset,Precision Score,0.48904
+emotions,AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.81869
+emotions,AdaBoostClassifier,Predict Subset,Recall Score,0.66551
+emotions,AdaBoostClassifier,Predict Subset,Markedness,0.65386
+emotions,AdaBoostClassifier,Predict Subset,F-beta Score,0.54387
+emotions,AdaBoostClassifier,Predict Pre,Hamming Loss,0.74171
+emotions,AdaBoostClassifier,Predict Pre,Subset Accuracy,0.12483
+emotions,AdaBoostClassifier,Predict Pre,Precision Score,0.65938
+emotions,AdaBoostClassifier,Predict Pre,Negative Predictive Value,0.75818
+emotions,AdaBoostClassifier,Predict Pre,Recall Score,0.36707
+emotions,AdaBoostClassifier,Predict Pre,Markedness,0.70878
+emotions,AdaBoostClassifier,Predict Pre,F-beta Score,0.45616
+emotions,AdaBoostClassifier,Predict Neg,Hamming Loss,0.31141
+emotions,AdaBoostClassifier,Predict Neg,Subset Accuracy,0.0
+emotions,AdaBoostClassifier,Predict Neg,Precision Score,0.31141
+emotions,AdaBoostClassifier,Predict Neg,Negative Predictive Value,1.0
+emotions,AdaBoostClassifier,Predict Neg,Recall Score,1.0
+emotions,AdaBoostClassifier,Predict Neg,Markedness,0.65571
+emotions,AdaBoostClassifier,Predict Neg,F-beta Score,0.46378
+emotions,AdaBoostClassifier,Predict Recall,Hamming Loss,0.31141
+emotions,AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0
+emotions,AdaBoostClassifier,Predict Recall,Precision Score,0.31141
+emotions,AdaBoostClassifier,Predict Recall,Negative Predictive Value,1.0
+emotions,AdaBoostClassifier,Predict Recall,Recall Score,1.0
+emotions,AdaBoostClassifier,Predict Recall,Markedness,0.65571
+emotions,AdaBoostClassifier,Predict Recall,F-beta Score,0.46378
+emotions,AdaBoostClassifier,Predict Mar,Hamming Loss,0.68859
+emotions,AdaBoostClassifier,Predict Mar,Subset Accuracy,0.0
+emotions,AdaBoostClassifier,Predict Mar,Precision Score,0.0
+emotions,AdaBoostClassifier,Predict Mar,Negative Predictive Value,0.68859
+emotions,AdaBoostClassifier,Predict Mar,Recall Score,0.0
+emotions,AdaBoostClassifier,Predict Mar,Markedness,0.84429
+emotions,AdaBoostClassifier,Predict Mar,F-beta Score,0.0
+emotions,AdaBoostClassifier,Predict Fmeasure,Hamming Loss,0.44462
+emotions,AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.0
+emotions,AdaBoostClassifier,Predict Fmeasure,Precision Score,0.35868
+emotions,AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.95692
+emotions,AdaBoostClassifier,Predict Fmeasure,Recall Score,0.97805
+emotions,AdaBoostClassifier,Predict Fmeasure,Markedness,0.6578
+emotions,AdaBoostClassifier,Predict Fmeasure,F-beta Score,0.51133
