@@ -3,15 +3,3 @@ emotions,LogisticRegression,Predict Hamming Loss,Hamming Loss,0.20486
 emotions,LogisticRegression,Predict Hamming Loss,Subset Accuracy,0.27156
 emotions,LogisticRegression,Predict Subset,Hamming Loss,0.21188
 emotions,LogisticRegression,Predict Subset,Subset Accuracy,0.312
-emotions,SGDClassifier,Predict Hamming Loss,Hamming Loss,0.34454
-emotions,SGDClassifier,Predict Hamming Loss,Subset Accuracy,0.1433
-emotions,SGDClassifier,Predict Subset,Hamming Loss,0.34454
-emotions,SGDClassifier,Predict Subset,Subset Accuracy,0.1433
-CHD_49,LogisticRegression,Predict Hamming Loss,Hamming Loss,0.29399
-CHD_49,LogisticRegression,Predict Hamming Loss,Subset Accuracy,0.19099
-CHD_49,LogisticRegression,Predict Subset,Hamming Loss,0.2994
-CHD_49,LogisticRegression,Predict Subset,Subset Accuracy,0.1982
-CHD_49,SGDClassifier,Predict Hamming Loss,Hamming Loss,0.36336
-CHD_49,SGDClassifier,Predict Hamming Loss,Subset Accuracy,0.1009
-CHD_49,SGDClassifier,Predict Subset,Hamming Loss,0.36756
-CHD_49,SGDClassifier,Predict Subset,Subset Accuracy,0.0973
