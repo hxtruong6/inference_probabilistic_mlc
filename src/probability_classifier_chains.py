@@ -109,13 +109,13 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         super().__init__(
             base_estimator=base_estimator, order=order, random_state=random_state
         )
-        self.store_key = None
+        self.store_key: str | None = None
         self.predicted_store = {}
 
     def set_store_key(self, key):
         print(f"🐠 - Set store key: {key}")
         self.store_key = key
-        self.predicted_store[key] = None
+        self.predicted_store[key] = None  # type: ignore
 
     def predict(
         self, X, marginal=False, pairwise=False

@@ -2,13 +2,15 @@ from collections import defaultdict
 import os
 import time
 from uuid import uuid4
+
+from joblib import Parallel, delayed
 from src.arff_dataset import MultiLabelArffDataset
 from src.evaluation_metrics import EvaluationMetrics
 
 import numpy as np
 
 from src.probability_classifier_chains import ProbabilisticClassifierChainCustom
-from src.utils import save_crosstab, save_result_df
+from src.utils import add_key_if_missing, save_crosstab, save_result_df
 
 print(f"Numpy version: {np.__version__}")
 
@@ -76,7 +78,7 @@ def calculate_metrics(Y_true, Y_pred, metric_funcs):
     return score_metrics
 
 
-def training_model(model, X_train, Y_train, predicted_store_key=uuid4()):
+def training_model(model, X_train, Y_train, predicted_store_key=uuid4().__str__):
     """Train the specified model on the training data."""
     try:
         start_time = time.time()
@@ -122,11 +124,80 @@ def prepare_model_to_evaluate():
     """Prepare a list of models for evaluation."""
     base_estimators = [
         LogisticRegression(random_state=SEED, max_iter=10000),
-        SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10000),
+        # SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10000),
         # RandomForestClassifier(random_state=SEED),
         # AdaBoostClassifier(random_state=SEED),
     ]
     return [ProbabilisticClassifierChainCustom(model) for model in base_estimators]
+
+
+def evaluate_kfold(
+    dataset_handler,
+    evaluated_models,
+    predict_functions,
+    metric_functions,
+    train_index,
+    test_index,
+    kfold_index,
+):
+    """Evaluates all models on a single k-fold split."""
+    print(
+        f"\n🔁 Cross-validation fold: {kfold_index} ..."
+    )  # Replace with fold indicator
+    dataset_name = dataset_handler.dataset_name
+    fold_results = defaultdict(dict)
+    fold_results[dataset_name] = {}
+
+    X_train, X_test = (
+        dataset_handler.X[train_index],
+        dataset_handler.X[test_index],
+    )
+    y_train, y_test = (
+        dataset_handler.Y[train_index],
+        dataset_handler.Y[test_index],
+    )
+
+    # For each dataset, iterate over the models and perform evaluation
+    for model in evaluated_models:
+        model_name = model.base_estimator.__class__.__name__
+        if model_name not in fold_results[dataset_name]:
+            fold_results[dataset_name][model_name] = {}
+
+        model = training_model(
+            model,
+            X_train,
+            y_train,
+            predicted_store_key=f"{dataset_handler.dataset_name}_kfold_{kfold_index}",
+        )
+        loss_score_by_predict_func = evaluate_model(
+            model, X_test, y_test, predict_functions, metric_functions
+        )
+
+        # Collect and append evaluation results to the DataFrame
+        print("-" * 10)
+        for result in loss_score_by_predict_func:
+            print("❄️ Metric: ", result["predict_name"])
+
+            predict_func_name = result["predict_name"]
+            if predict_func_name not in fold_results[dataset_name][model_name]:
+                fold_results[dataset_name][model_name][predict_func_name] = {}
+
+            for score_metric in result["score_metrics"]:
+
+                loss_func_name = score_metric["Metric Name"]
+                if (
+                    loss_func_name
+                    not in fold_results[dataset_name][model_name][predict_func_name]
+                ):
+                    fold_results[dataset_name][model_name][predict_func_name][
+                        loss_func_name
+                    ] = []
+
+                fold_results[dataset_name][model_name][predict_func_name][
+                    loss_func_name
+                ] = score_metric["Score"]
+
+    return fold_results
 
 
 def main():
@@ -150,7 +221,7 @@ def main():
         # "yeast",
         # "scene",
         # "VirusGO_sparse"
-        "CHD_49",
+        # "CHD_49",
     ]
     # -----------------  MAIN -----------------
     # func is same name of the predict function in ProbabilisticClassifierChainCustom
@@ -192,76 +263,49 @@ def main():
     ]
 
     # Create a DataFrame to store the evaluation results
-    data_obj = {}
-
-    # Create a structure to store scores per dataset and metric
-    scores_by_dataset = defaultdict(lambda: defaultdict(list))
+    dataset_results = {}
 
     # Iterate over datasets
     for dataset_handler in read_datasets_from_folder(folder_path, dataset_names):
         print(f"\n🐳 Evaluating on {dataset_handler.dataset_name} dataset...")
 
-        dataset_name = dataset_handler.dataset_name
-        if dataset_name not in data_obj:
-            data_obj[dataset_name] = {}
-
-        # Use cross-validation for more robust evaluation
-        kfold_count = 0
-        for train_index, test_index in dataset_handler.get_cross_validation_folds(
-            n_splits=5, random_state=SEED
-        ):
-            kfold_count += 1
-            print(f"\n🔁 Cross-validation fold {kfold_count}...")
-            X_train, X_test = (
-                dataset_handler.X[train_index],
-                dataset_handler.X[test_index],
+        job_results = Parallel(n_jobs=-1)(
+            delayed(evaluate_kfold)(
+                dataset_handler,
+                evaluated_models,
+                predict_functions,
+                metric_functions,
+                train_index,
+                test_index,
+                kfold_index,
             )
-            y_train, y_test = (
-                dataset_handler.Y[train_index],
-                dataset_handler.Y[test_index],
+            # Use cross-validation for more robust evaluation
+            for kfold_index, (train_index, test_index) in enumerate(
+                dataset_handler.get_cross_validation_folds(
+                    n_splits=5, random_state=SEED
+                )
             )
+        )
 
-            # For each dataset, iterate over the models and perform evaluation
+        dataset_results[dataset_handler.dataset_name] = {}
+        for fold_result in job_results:
             for model in evaluated_models:
-                model_name = model.base_estimator.__class__.__name__
-                if model_name not in data_obj[dataset_name]:
-                    data_obj[dataset_name][model_name] = {}
+                for predict_func in predict_functions:
+                    for metric_func in metric_functions:
+                        add_key_if_missing(
+                            dataset_results,
+                            dataset_handler.dataset_name,
+                            model.base_estimator.__class__.__name__,
+                            predict_func["name"],
+                            metric_func["name"],
+                            fold_result[dataset_handler.dataset_name][
+                                model.base_estimator.__class__.__name__
+                            ][predict_func["name"]][metric_func["name"]],
+                        )
 
-                model = training_model(
-                    model,
-                    X_train,
-                    y_train,
-                    predicted_store_key=f"{dataset_handler.dataset_name}_kfold_{kfold_count}",
-                )
-                loss_score_by_predict_func = evaluate_model(
-                    model, X_test, y_test, predict_functions, metric_functions
-                )
+    print(f"Fold results: {dataset_results}")
 
-                # Collect and append evaluation results to the DataFrame
-                print("-" * 10)
-                for result in loss_score_by_predict_func:
-                    print("❄️ Metric: ", result["predict_name"])
-
-                    predict_func_name = result["predict_name"]
-                    if predict_func_name not in data_obj[dataset_name][model_name]:
-                        data_obj[dataset_name][model_name][predict_func_name] = {}
-
-                    for score_metric in result["score_metrics"]:
-
-                        loss_func_name = score_metric["Metric Name"]
-                        if (
-                            loss_func_name
-                            not in data_obj[dataset_name][model_name][predict_func_name]
-                        ):
-                            data_obj[dataset_name][model_name][predict_func_name][
-                                loss_func_name
-                            ] = []
-
-                        data_obj[dataset_name][model_name][predict_func_name][
-                            loss_func_name
-                        ].append(score_metric["Score"])
-
-    result_df = save_result_df(data_obj, output_csv)
+    result_df = save_result_df(dataset_results, output_csv)
     save_crosstab(result_df, output_csv)
 
 
