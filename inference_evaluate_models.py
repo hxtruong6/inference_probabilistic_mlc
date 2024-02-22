@@ -168,7 +168,7 @@ def evaluate_kfold(
             model,
             X_train,
             y_train,
-            predicted_store_key=f"{dataset_handler.dataset_name}_kfold_{kfold_index}",
+            predicted_store_key=f"{dataset_handler.dataset_name}_{model_name}_kfold_{kfold_index}",
         )
         loss_score_by_predict_func = evaluate_model(
             model, X_test, y_test, predict_functions, metric_functions
@@ -216,9 +216,9 @@ def main():
     print(f"📂 Dataset folder path: {folder_path}")
 
     dataset_names = [
-        "emotions",
+        # "emotions",
         # "Water-quality",
-        # "scene",
+        "scene",
         # "VirusGO_sparse",
         # "CHD_49",
         # "yeast",
@@ -265,53 +265,60 @@ def main():
     # Create a DataFrame to store the evaluation results
     dataset_results = {}
 
-    # Iterate over datasets
-    for dataset_handler in read_datasets_from_folder(folder_path, dataset_names):
-        print(f"\n🐳 Evaluating on {dataset_handler.dataset_name} dataset...")
+    try:
 
-        t1 = time.time()
+        # Iterate over datasets
+        for dataset_handler in read_datasets_from_folder(folder_path, dataset_names):
+            print(f"\n🐳 Evaluating on {dataset_handler.dataset_name} dataset...")
 
-        job_results = Parallel(n_jobs=-1)(
-            delayed(evaluate_kfold)(
-                dataset_handler,
-                evaluated_models,
-                predict_functions,
-                metric_functions,
-                train_index,
-                test_index,
-                kfold_index,
-            )
-            # Use cross-validation for more robust evaluation
-            for kfold_index, (train_index, test_index) in enumerate(
-                dataset_handler.get_cross_validation_folds(
-                    n_splits=KFOLD_SPLIT_NUMBER, random_state=SEED
+            t1 = time.time()
+
+            job_results = Parallel(n_jobs=-1)(
+                delayed(evaluate_kfold)(
+                    dataset_handler,
+                    evaluated_models,
+                    predict_functions,
+                    metric_functions,
+                    train_index,
+                    test_index,
+                    kfold_index,
+                )
+                # Use cross-validation for more robust evaluation
+                for kfold_index, (train_index, test_index) in enumerate(
+                    dataset_handler.get_cross_validation_folds(
+                        n_splits=KFOLD_SPLIT_NUMBER, random_state=SEED
+                    )
                 )
             )
-        )
 
-        dataset_results[dataset_handler.dataset_name] = {}
-        for fold_result in job_results:
-            for model in evaluated_models:
-                for predict_func in predict_functions:
-                    for metric_func in metric_functions:
-                        add_key_if_missing(
-                            dataset_results,
-                            dataset_handler.dataset_name,
-                            model.base_estimator.__class__.__name__,
-                            predict_func["name"],
-                            metric_func["name"],
-                            fold_result[dataset_handler.dataset_name][
-                                model.base_estimator.__class__.__name__
-                            ][predict_func["name"]][metric_func["name"]],
-                        )
+            dataset_results[dataset_handler.dataset_name] = {}
+            for fold_result in job_results:
+                for model in evaluated_models:
+                    for predict_func in predict_functions:
+                        for metric_func in metric_functions:
+                            add_key_if_missing(
+                                dataset_results,
+                                dataset_handler.dataset_name,
+                                model.base_estimator.__class__.__name__,
+                                predict_func["name"],
+                                metric_func["name"],
+                                fold_result[dataset_handler.dataset_name][
+                                    model.base_estimator.__class__.__name__
+                                ][predict_func["name"]][metric_func["name"]],
+                            )
 
-        output_csv = os.path.join(
-            absolute_dir, "result", f"result_{dataset_handler.dataset_name}.csv"
-        )
-        result_df = save_result_df(dataset_results, output_csv)
-        save_crosstab(result_df, output_csv)
+            output_csv = os.path.join(
+                absolute_dir, "result", f"result_{dataset_handler.dataset_name}.csv"
+            )
+            result_df = save_result_df(dataset_results, output_csv)
+            save_crosstab(result_df, output_csv)
 
-        print(f"\n ==== 🦈 Dataset evaluation time: {time.time() - t1:.5f} seconds \n")
+            print(
+                f"\n ==== 🦈 Dataset evaluation time: {time.time() - t1:.5f} seconds \n"
+            )
+    except Exception as e:
+        print(f"\n Dataset: {dataset_names} \n Error: {e}")
+        raise e
 
 
 if __name__ == "__main__":
