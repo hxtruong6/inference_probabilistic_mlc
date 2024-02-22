@@ -264,9 +264,9 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         return np.ones((X.shape[0], self.L))
 
     def predict_Mar(self, X):
-        
+
         # Revised small things here on 20/02 .....
-        
+
         """Predicts the label combination with the highest marginal probability."""
         N, _ = X.shape
         _, P_margin_yi_1, _ = self.predict(X, marginal=True)
@@ -285,8 +285,10 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
             s1 = np.sum(P_margin_yi_1, axis=1)[i]
             s2 = 0
             for _l in range(1, self.L):
-                s2 = s2 + P_margin_yi_1[i, indices[i, _l-1]]
-                E[i][_l] = 1 - (1 / (self.L - _l)) * s1 + (1 / ((self.L - _l) * _l)) * s2
+                s2 = s2 + P_margin_yi_1[i, indices[i, _l - 1]]
+                E[i][_l] = (
+                    1 - (1 / (self.L - _l)) * s1 + (1 / ((self.L - _l) * _l)) * s2
+                )
 
         l_optimal = np.argsort(E, axis=1)[:, ::-1]
         P = np.zeros((N, self.L))

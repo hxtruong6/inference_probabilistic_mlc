@@ -52,11 +52,13 @@ class EvaluationMetrics:
         precision = np.zeros(n_samples)
         for index in range(n_samples):
             if np.sum(y_true[index]) + np.sum(y_pred[index]) == 0:
-               precision[index] = 1         
+                precision[index] = 1
             elif np.sum(y_pred[index]) == 0 and np.sum(y_true[index]) > 0:
                 precision[index] = 0
             else:
-                precision[index] = np.dot(y_true[index], y_pred[index])/np.sum(y_pred[index])
+                precision[index] = np.dot(y_true[index], y_pred[index]) / np.sum(
+                    y_pred[index]
+                )
         # # Calculate True Positives and False Positives
         # true_positives = np.sum((y_true == 1) & (y_pred == 1))
         # false_positives = np.sum((y_true == 0) & (y_pred == 1))
@@ -94,16 +96,18 @@ class EvaluationMetrics:
                 if np.sum(y_pred[index]) == 0:
                     recall[index] = 1
                 elif np.sum(y_pred[index]) == n_labels:
-                    recall[index] = 1 
-                else: 
-                    recall[index] = 0 
+                    recall[index] = 1
+                else:
+                    recall[index] = 0
             else:
-                recall[index] = np.dot(y_true[index], y_pred[index])/np.sum(y_true[index])
-            
+                recall[index] = np.dot(y_true[index], y_pred[index]) / np.sum(
+                    y_true[index]
+                )
+
         # # Calculate True Positives and False Negatives
         # true_positives = np.sum((y_true == 1) & (y_pred == 1))
         # false_negatives = np.sum((y_true == 1) & (y_pred == 0))
-        
+
         # # Calculate Recall
         # recall = (
         #     true_positives / (true_positives + false_negatives)
@@ -155,10 +159,12 @@ class EvaluationMetrics:
                 if np.sum(y_true[index]) == n_labels:
                     npv[index] = 1
                 else:
-                    npv[index] = 1 
+                    npv[index] = 1
             else:
-                npv[index] = np.dot(1- y_true[index], 1- y_pred[index])/np.sum(1 - y_pred[index])
-                
+                npv[index] = np.dot(1 - y_true[index], 1 - y_pred[index]) / np.sum(
+                    1 - y_pred[index]
+                )
+
         # # Calculate True Negatives and False Negatives
         # true_negatives = np.sum((y_true == 0) & (y_pred == 0))
         # false_negatives = np.sum((y_true == 1) & (y_pred == 0))
@@ -190,13 +196,15 @@ class EvaluationMetrics:
         f1 = np.zeros(n_samples)
         for index in range(n_samples):
             if np.sum(y_true[index]) + np.sum(y_pred[index]) == 0:
-               f1[index] = 1
+                f1[index] = 1
             else:
-                f1[index] = (2*np.dot(y_true[index], y_pred[index]))/(np.sum(y_true[index]) + np.sum(y_pred[index]))
+                f1[index] = (2 * np.dot(y_true[index], y_pred[index])) / (
+                    np.sum(y_true[index]) + np.sum(y_pred[index])
+                )
         # # Calculate Precision and Recall
         # precision = EvaluationMetrics.precision_score(y_true, y_pred)
         # f1 = EvaluationMetrics.recall_score(y_true, y_pred)
-        
+
         # # Calculate F1 score
         # f1 = (
         #     2 * precision * recall / (precision + recall)
@@ -226,9 +234,11 @@ class EvaluationMetrics:
         f_beta = np.zeros(n_samples)
         for index in range(n_samples):
             if np.sum(y_true[index]) + np.sum(y_pred[index]) == 0:
-               f_beta[index] = 1
+                f_beta[index] = 1
             else:
-                f_beta[index] = ((1 + beta**2) *np.dot(y_true[index], y_pred[index]))/((beta**2)*np.sum(y_true[index]) + np.sum(y_pred[index]))
+                f_beta[index] = (
+                    (1 + beta**2) * np.dot(y_true[index], y_pred[index])
+                ) / ((beta**2) * np.sum(y_true[index]) + np.sum(y_pred[index]))
 
         # # Calculate Precision and Recall
         # precision = EvaluationMetrics.precision_score(y_true, y_pred)
@@ -292,19 +302,23 @@ class EvaluationMetrics:
                 if np.sum(Y_true[index]) == n_labels:
                     npv[index] = 1
                 else:
-                    npv[index] = 1 
+                    npv[index] = 1
             else:
-                npv[index] = np.dot(1- Y_true[index], 1- Y_pred[index])/np.sum(1 - Y_pred[index])
+                npv[index] = np.dot(1 - Y_true[index], 1 - Y_pred[index]) / np.sum(
+                    1 - Y_pred[index]
+                )
 
             if np.sum(Y_true[index]) + np.sum(Y_pred[index]) == 0:
-               precision[index] = 1         
+                precision[index] = 1
             elif np.sum(Y_pred[index]) == 0 and np.sum(Y_true[index]) > 0:
                 precision[index] = 1
             else:
-                precision[index] = np.dot(Y_true[index], Y_pred[index])/np.sum(Y_pred[index])
-                
+                precision[index] = np.dot(Y_true[index], Y_pred[index]) / np.sum(
+                    Y_pred[index]
+                )
+
         f_mar = np.zeros(n_samples)
-        for index in range(n_samples):          
+        for index in range(n_samples):
             f_mar[index] = 0.5 * (npv[index] + precision[index])
 
         # sum_not_y_true_and_not_y_pred = np.sum((1 - Y_true) * (1 - Y_pred), axis=0)
