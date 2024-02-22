@@ -229,7 +229,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         predictions, _, _ = self.predict(X)
         return predictions
 
-    def predict_Pre(self, X):
+    def predict_Precision(self, X):
         """Predicts the label combination with the highest precision."""
         N, D = X.shape
 
@@ -243,19 +243,20 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         return Yp
 
     def predict_Neg(self, X):
-        """Predicts the label combination with the highest negative correlation."""
-        N, _ = X.shape
-        _, P_margin_yi_1, _ = self.predict(X, marginal=True)
-        # Sort the marginal probability masses in asc order
-        # and get the indices of the sorted array
-        indices = np.argsort(P_margin_yi_1, axis=1)[:]
+        return np.ones((X.shape[0], self.L))
+        # """Predicts the label combination with the highest negative correlation."""
+        # N, _ = X.shape
+        # _, P_margin_yi_1, _ = self.predict(X, marginal=True)
+        # # Sort the marginal probability masses in asc order
+        # # and get the indices of the sorted array
+        # indices = np.argsort(P_margin_yi_1, axis=1)[:]
 
-        # X.shape[0] is the number of instances
-        P = np.ones((N, self.L))
-        # Set the smallest probability mass to 0 and the rest to 1
-        P[np.arange(N)[:, None], indices[:, :1]] = 0
+        # # X.shape[0] is the number of instances
+        # P = np.ones((N, self.L))
+        # # Set the smallest probability mass to 0 and the rest to 1
+        # P[np.arange(N)[:, None], indices[:, :1]] = 0
 
-        return P
+        # return P
 
     def predict_Recall(self, X):
         # The hightest marginal probability.
@@ -263,6 +264,9 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         return np.ones((X.shape[0], self.L))
 
     def predict_Mar(self, X):
+        
+        # Revised small things here on 20/02 .....
+        
         """Predicts the label combination with the highest marginal probability."""
         N, _ = X.shape
         _, P_margin_yi_1, _ = self.predict(X, marginal=True)
@@ -270,28 +274,27 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         indices = np.argsort(P_margin_yi_1, axis=1)[:][:, ::-1]
 
         # Expectation of the marginal probability masses
-        E = np.zeros((N, self.L))
+        E = np.zeros((N, self.L + 1))
 
         # Find the optimal l for each instance of expectation
         for i in range(N):
             # E_0
             E[i][0] = 2 - (1 / self.L) * np.sum(P_margin_yi_1, axis=1)[i]
-            E[i][self.L - 1] = 1 + (1 / self.L) * np.sum(P_margin_yi_1, axis=1)[i]
+            E[i][self.L] = 1 + (1 / self.L) * np.sum(P_margin_yi_1, axis=1)[i]
 
             s1 = np.sum(P_margin_yi_1, axis=1)[i]
             s2 = 0
-            for _l in range(1, self.L - 1):
-                s2 = s2 + P_margin_yi_1[i, indices[i, _l]]
-                E[i][_l] = 1 - (1 / (self.L - _l)) * s1 + (1 / (self.L - _l) * _l) * s2
+            for _l in range(1, self.L):
+                s2 = s2 + P_margin_yi_1[i, indices[i, _l-1]]
+                E[i][_l] = 1 - (1 / (self.L - _l)) * s1 + (1 / ((self.L - _l) * _l)) * s2
 
         l_optimal = np.argsort(E, axis=1)[:, ::-1]
         P = np.zeros((N, self.L))
 
         for i in range(N):
             # Set l_optimal highest of the descending sorted marginal probability masses to 1
-            for _l in range(l_optimal[i][0] + 1):
+            for _l in range(l_optimal[i][0]):
                 P[i][indices[i, _l]] = 1
-
         return P
 
     def predict_Fmeasure(self, X, beta=1):
