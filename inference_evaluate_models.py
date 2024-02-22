@@ -218,9 +218,9 @@ def main():
     dataset_names = [
         # "emotions",
         # "Water-quality",
-        "scene",
+        # "scene",
         # "VirusGO_sparse",
-        # "CHD_49",
+        "CHD_49",
         # "yeast",
     ]
     # -----------------  MAIN -----------------
