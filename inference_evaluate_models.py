@@ -59,9 +59,9 @@ def calculate_metrics(Y_true, Y_pred, metric_funcs):
         )
         try:
             if options:
-                score = f"{metric_func(Y_pred, Y_true, **options):.5f}"
+                score = f"{metric_func(Y_true, Y_pred, **options):.5f}"
             else:
-                score = f"{metric_func(Y_pred, Y_true):.5f}"
+                score = f"{metric_func(Y_true, Y_pred):.5f}"
 
             score_metrics.append(
                 {
