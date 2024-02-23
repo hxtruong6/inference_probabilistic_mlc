@@ -8,3 +8,5 @@ docker-exec:
 	docker run -it $(DOCKER_IMAGE_NAME) /bin/bash
 eval:
 	python inference_evaluate_models.py
+dataset_chest_xray:
+	python src/chest_xray_dataset.py
