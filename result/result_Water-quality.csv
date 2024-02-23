@@ -1,0 +1,99 @@
+Dataset,Model,Predict Function of Model,Metric Function,Score
+Water-quality,LogisticRegression,Predict Hamming Loss,Hamming Loss,0.70613
+Water-quality,LogisticRegression,Predict Hamming Loss,Subset Accuracy,0.01698
+Water-quality,LogisticRegression,Predict Hamming Loss,Precision Score,0.63629
+Water-quality,LogisticRegression,Predict Hamming Loss,Negative Predictive Value,0.72545
+Water-quality,LogisticRegression,Predict Hamming Loss,Recall Score,0.42565
+Water-quality,LogisticRegression,Predict Hamming Loss,Markedness,0.68747
+Water-quality,LogisticRegression,Predict Hamming Loss,F-beta Score,0.47475
+Water-quality,LogisticRegression,Predict Subset,Hamming Loss,0.68915
+Water-quality,LogisticRegression,Predict Subset,Subset Accuracy,0.01604
+Water-quality,LogisticRegression,Predict Subset,Precision Score,0.50242
+Water-quality,LogisticRegression,Predict Subset,Negative Predictive Value,0.7047
+Water-quality,LogisticRegression,Predict Subset,Recall Score,0.32369
+Water-quality,LogisticRegression,Predict Subset,Markedness,0.73469
+Water-quality,LogisticRegression,Predict Subset,F-beta Score,0.35399
+Water-quality,LogisticRegression,Predict Pre,Hamming Loss,0.66678
+Water-quality,LogisticRegression,Predict Pre,Subset Accuracy,0.01132
+Water-quality,LogisticRegression,Predict Pre,Precision Score,0.70377
+Water-quality,LogisticRegression,Predict Pre,Negative Predictive Value,0.66393
+Water-quality,LogisticRegression,Predict Pre,Recall Score,0.15671
+Water-quality,LogisticRegression,Predict Pre,Markedness,0.68385
+Water-quality,LogisticRegression,Predict Pre,F-beta Score,0.24526
+Water-quality,LogisticRegression,Predict Neg,Hamming Loss,0.36233
+Water-quality,LogisticRegression,Predict Neg,Subset Accuracy,0.0
+Water-quality,LogisticRegression,Predict Neg,Precision Score,0.36233
+Water-quality,LogisticRegression,Predict Neg,Negative Predictive Value,1.0
+Water-quality,LogisticRegression,Predict Neg,Recall Score,1.0
+Water-quality,LogisticRegression,Predict Neg,Markedness,0.68116
+Water-quality,LogisticRegression,Predict Neg,F-beta Score,0.51248
+Water-quality,LogisticRegression,Predict Recall,Hamming Loss,0.36233
+Water-quality,LogisticRegression,Predict Recall,Subset Accuracy,0.0
+Water-quality,LogisticRegression,Predict Recall,Precision Score,0.36233
+Water-quality,LogisticRegression,Predict Recall,Negative Predictive Value,1.0
+Water-quality,LogisticRegression,Predict Recall,Recall Score,1.0
+Water-quality,LogisticRegression,Predict Recall,Markedness,0.68116
+Water-quality,LogisticRegression,Predict Recall,F-beta Score,0.51248
+Water-quality,LogisticRegression,Predict Mar,Hamming Loss,0.63511
+Water-quality,LogisticRegression,Predict Mar,Subset Accuracy,0.00566
+Water-quality,LogisticRegression,Predict Mar,Precision Score,0.02466
+Water-quality,LogisticRegression,Predict Mar,Negative Predictive Value,0.65667
+Water-quality,LogisticRegression,Predict Mar,Recall Score,0.04623
+Water-quality,LogisticRegression,Predict Mar,Markedness,0.81755
+Water-quality,LogisticRegression,Predict Mar,F-beta Score,0.03091
+Water-quality,LogisticRegression,Predict Fmeasure,Hamming Loss,0.69508
+Water-quality,LogisticRegression,Predict Fmeasure,Subset Accuracy,0.00755
+Water-quality,LogisticRegression,Predict Fmeasure,Precision Score,0.61357
+Water-quality,LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.73134
+Water-quality,LogisticRegression,Predict Fmeasure,Recall Score,0.48489
+Water-quality,LogisticRegression,Predict Fmeasure,Markedness,0.67245
+Water-quality,LogisticRegression,Predict Fmeasure,F-beta Score,0.51192
+Water-quality,AdaBoostClassifier,Predict Hamming Loss,Hamming Loss,0.69946
+Water-quality,AdaBoostClassifier,Predict Hamming Loss,Subset Accuracy,0.01226
+Water-quality,AdaBoostClassifier,Predict Hamming Loss,Precision Score,0.594
+Water-quality,AdaBoostClassifier,Predict Hamming Loss,Negative Predictive Value,0.74523
+Water-quality,AdaBoostClassifier,Predict Hamming Loss,Recall Score,0.53923
+Water-quality,AdaBoostClassifier,Predict Hamming Loss,Markedness,0.6715
+Water-quality,AdaBoostClassifier,Predict Hamming Loss,F-beta Score,0.53439
+Water-quality,AdaBoostClassifier,Predict Subset,Hamming Loss,0.6936
+Water-quality,AdaBoostClassifier,Predict Subset,Subset Accuracy,0.01321
+Water-quality,AdaBoostClassifier,Predict Subset,Precision Score,0.58402
+Water-quality,AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.72881
+Water-quality,AdaBoostClassifier,Predict Subset,Recall Score,0.4656
+Water-quality,AdaBoostClassifier,Predict Subset,Markedness,0.67765
+Water-quality,AdaBoostClassifier,Predict Subset,F-beta Score,0.47919
+Water-quality,AdaBoostClassifier,Predict Pre,Hamming Loss,0.66705
+Water-quality,AdaBoostClassifier,Predict Pre,Subset Accuracy,0.01037
+Water-quality,AdaBoostClassifier,Predict Pre,Precision Score,0.70566
+Water-quality,AdaBoostClassifier,Predict Pre,Negative Predictive Value,0.66408
+Water-quality,AdaBoostClassifier,Predict Pre,Recall Score,0.15842
+Water-quality,AdaBoostClassifier,Predict Pre,Markedness,0.68487
+Water-quality,AdaBoostClassifier,Predict Pre,F-beta Score,0.24766
+Water-quality,AdaBoostClassifier,Predict Neg,Hamming Loss,0.36233
+Water-quality,AdaBoostClassifier,Predict Neg,Subset Accuracy,0.0
+Water-quality,AdaBoostClassifier,Predict Neg,Precision Score,0.36233
+Water-quality,AdaBoostClassifier,Predict Neg,Negative Predictive Value,1.0
+Water-quality,AdaBoostClassifier,Predict Neg,Recall Score,1.0
+Water-quality,AdaBoostClassifier,Predict Neg,Markedness,0.68116
+Water-quality,AdaBoostClassifier,Predict Neg,F-beta Score,0.51248
+Water-quality,AdaBoostClassifier,Predict Recall,Hamming Loss,0.36233
+Water-quality,AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0
+Water-quality,AdaBoostClassifier,Predict Recall,Precision Score,0.36233
+Water-quality,AdaBoostClassifier,Predict Recall,Negative Predictive Value,1.0
+Water-quality,AdaBoostClassifier,Predict Recall,Recall Score,1.0
+Water-quality,AdaBoostClassifier,Predict Recall,Markedness,0.68116
+Water-quality,AdaBoostClassifier,Predict Recall,F-beta Score,0.51248
+Water-quality,AdaBoostClassifier,Predict Mar,Hamming Loss,0.63632
+Water-quality,AdaBoostClassifier,Predict Mar,Subset Accuracy,0.00566
+Water-quality,AdaBoostClassifier,Predict Mar,Precision Score,0.03329
+Water-quality,AdaBoostClassifier,Predict Mar,Negative Predictive Value,0.6653
+Water-quality,AdaBoostClassifier,Predict Mar,Recall Score,0.06227
+Water-quality,AdaBoostClassifier,Predict Mar,Markedness,0.81816
+Water-quality,AdaBoostClassifier,Predict Mar,F-beta Score,0.042
+Water-quality,AdaBoostClassifier,Predict Fmeasure,Hamming Loss,0.40499
+Water-quality,AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.0
+Water-quality,AdaBoostClassifier,Predict Fmeasure,Precision Score,0.37626
+Water-quality,AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.96383
+Water-quality,AdaBoostClassifier,Predict Fmeasure,Recall Score,0.97792
+Water-quality,AdaBoostClassifier,Predict Fmeasure,Markedness,0.67005
+Water-quality,AdaBoostClassifier,Predict Fmeasure,F-beta Score,0.52398

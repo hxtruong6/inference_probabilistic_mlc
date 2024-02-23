@@ -125,8 +125,8 @@ def prepare_model_to_evaluate():
     """Prepare a list of models for evaluation."""
     base_estimators = [
         LogisticRegression(random_state=SEED, max_iter=10000),
-        SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10000),
-        RandomForestClassifier(random_state=SEED),
+        # SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10000),
+        # RandomForestClassifier(random_state=SEED),
         AdaBoostClassifier(random_state=SEED),
     ]
     return [ProbabilisticClassifierChainCustom(model) for model in base_estimators]
@@ -217,10 +217,10 @@ def main():
 
     dataset_names = [
         # "emotions",
-        # "Water-quality",
+        "Water-quality",
         # "scene",
         # "VirusGO_sparse",
-        "CHD_49",
+        # "CHD_49",
         # "yeast",
     ]
     # -----------------  MAIN -----------------
