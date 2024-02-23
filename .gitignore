@@ -2,3 +2,4 @@
 __pycache__/
 *.so
 .DS_Store
+datasets/NIH
