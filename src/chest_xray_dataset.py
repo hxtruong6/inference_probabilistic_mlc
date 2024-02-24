@@ -1,3 +1,5 @@
+import numpy as np
+import pandas as pd
 import skimage
 import torch
 import torchxrayvision as xrv
@@ -26,67 +28,96 @@ def extract_features(model, dataset, device):
     return features  # List of dictionaries with 'features' and 'labels'
 
 
+def filter_testset(dataset):
+    test_csv_path = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017__testset.csv"
+    test_df = pd.read_csv(test_csv_path)
+
+    # Only keep images in the test set
+    dataset.csv = dataset.csv[dataset.csv["Image Index"].isin(test_df["Image Index"])]
+
+    print(
+        f"\U0001F4A1 Test set size: {len(test_df)}"
+        f" - Filtered dataset size: {len(dataset.csv)}"
+    )
+
+
+def load_dataset():
+    imgpath = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/images-224"
+    # count files in imgpath
+    print(
+        f"\U0001F4A1 Number of files in {imgpath}: {len(skimage.io.ImageCollection(imgpath + '/*.png'))}"
+    )
+
+    # Load Dataset using TorchXRayVision
+    dataset = xrv.datasets.NIH_Dataset(
+        imgpath=imgpath,  # Update with your NIH dataset path
+        csvpath="/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017_fixed.csv",
+        transform=transforms.Compose(
+            [
+                xrv.datasets.XRayCenterCrop(),  # Preprocessing specific to X-rays
+                xrv.datasets.XRayResizer(224),
+            ]
+        ),
+        # pathology_masks=True,
+        # pathology_masks_csv="/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017.csv",
+    )
+    print(dataset.csvpath)
+    print(dataset.bbox_list_path)
+    print(dataset.pathologies)
+    print(dataset.csv.head())
+
+    print(f"\U0001F4A1 Dataset size: {len(dataset)}")
+    # # Filtering out non-existent image files from CSV (if any)
+    # # filter_testset(dataset)
+    # print(f"\U0001F4A1 After filtering - Dataset size: {len(dataset)}")
+
+    return dataset
+
+
 def main():
     torch.manual_seed(SEED)
-
-    imgpath = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/images-224"
-    csvpath = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017.csv"
-
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(f"\U0001F4BB Using device: {device}")
 
-    # Load Dataset using TorchXRayVision
-    # dataset = xrv.datasets.NIH_Dataset(
-    #     imgpath=imgpath,  # Update with your NIH dataset path
-    #     csvpath=csvpath,
-    #     transform=transforms.Compose(
-    #         [
-    #             xrv.datasets.XRayCenterCrop(),  # Preprocessing specific to X-rays
-    #             xrv.datasets.XRayResizer(224),
-    #             # transforms.ToTensor(),
-    #         ]
-    #     ),
-    # )
-
-    img = skimage.io.imread(imgpath + "/00000013_008.png")
-    img = xrv.datasets.normalize(img, 255)  # convert 8-bit image to [-1024, 1024] range
-    img = img[None, ...]  # Make single color channel
-
-    transform = torchvision.transforms.Compose(
-        [
-            xrv.datasets.XRayCenterCrop(),
-            xrv.datasets.XRayResizer(224),
-        ]
-    )
-
-    img = transform(img)
-    img = torch.from_numpy(img)
+    dataset = load_dataset()
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=2, shuffle=False)
 
     # Load a pre-trained model
-    model = xrv.models.DenseNet(weights="densenet121-res224-nih")  # NIH chest X-ray8
+    model = xrv.models.DenseNet(
+        weights="densenet121-res224-nih",
+        # apply_sigmoid=True,
+    )  # NIH chest X-ray8
+    model.features = torch.nn.Sequential(
+        *list(model.classifier.children())[:-1],
+        torch.nn.AvgPool2d((7, 7)),
+        torch.nn.Flatten(),
+    )
 
-    feat_vec = model.features(img[None, ...])
+    extract_features = []
 
-    print(feat_vec.shape)
-    # print(feat_vec[:5, :5, :5])
+    for i, data in enumerate(dataloader):
+        if i == 2:
+            break
+        img = data["img"]
+        # print(img.shape)
+        feat_vec = model.features(img)
+        # print(feat_vec.shape)
 
-    # get labels
-    outputs = model(img[None, ...])
-    print(outputs.shape)
-    print(dict(zip(model.pathologies, outputs[0])))
+        # outputs = model(img)
+        # print(outputs.shape)
+        # print(dict(zip(model.pathologies, outputs[0].detach().numpy())))
 
-    # print("\U0001F4A1 Extracting features...")
-    # all_features = extract_features(model, dataset, device)
+        extract_features.append(
+            {
+                "idx": data["idx"].detach().numpy(),
+                "features": feat_vec.detach().numpy(),
+                "labels": data["lab"].detach().numpy(),
+            }
+        )
 
-    # # Access extracted features and labels
-    # for data in all_features:
-    #     print(
-    #         f"Features shape: {data['features'].shape} Labels shape: {data['labels'].shape}"
-    #     )
+    # get only 8 label. check index of label in dataset.pathologies by order then drop the rest column index.
 
-    #     # Example: Print first 5 labels and features
-    #     print(data["labels"][:5])
-    #     print(data["features"][:5])
+    print(extract_features[0])
 
 
 if __name__ == "__main__":
