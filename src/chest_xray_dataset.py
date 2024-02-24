@@ -28,48 +28,48 @@ def extract_features(model, dataset, device):
     return features  # List of dictionaries with 'features' and 'labels'
 
 
-def filter_testset(dataset):
-    test_csv_path = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017__testset.csv"
-    test_df = pd.read_csv(test_csv_path)
-
-    # Only keep images in the test set
-    dataset.csv = dataset.csv[dataset.csv["Image Index"].isin(test_df["Image Index"])]
-
-    print(
-        f"\U0001F4A1 Test set size: {len(test_df)}"
-        f" - Filtered dataset size: {len(dataset.csv)}"
-    )
-
-
-def load_dataset():
+def load_dataloader():
     imgpath = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/images-224"
-    # count files in imgpath
-    print(
-        f"\U0001F4A1 Number of files in {imgpath}: {len(skimage.io.ImageCollection(imgpath + '/*.png'))}"
+    csvpath = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017.csv"
+
+    # Image loading and preprocessing
+    data_transform = transforms.Compose(
+        [
+            transforms.Resize(256),  # Resize to match ResNet18 input
+            transforms.CenterCrop(224),  # Crop for ResNet18
+            transforms.ToTensor(),  # Convert to PyTorch Tensor
+            transforms.Normalize(
+                mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+            ),  # Standard ImageNet normalization
+        ]
     )
 
-    # Load Dataset using TorchXRayVision
-    dataset = xrv.datasets.NIH_Dataset(
-        imgpath=imgpath,  # Update with your NIH dataset path
-        csvpath="/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017_fixed.csv",
-        transform=transforms.Compose(
-            [
-                xrv.datasets.XRayCenterCrop(),  # Preprocessing specific to X-rays
-                xrv.datasets.XRayResizer(224),
-            ]
-        ),
-        # pathology_masks=True,
-        # pathology_masks_csv="/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017.csv",
+    dataset = torchvision.datasets.ImageFolder(
+        root=image_folder, transform=data_transform
     )
-    print(dataset.csvpath)
-    print(dataset.bbox_list_path)
-    print(dataset.pathologies)
-    print(dataset.csv.head())
+    dataloader = torch.utils.data.DataLoader(
+        dataset, batch_size=4, shuffle=False
+    )  # Adjust batch size as needed
 
-    print(f"\U0001F4A1 Dataset size: {len(dataset)}")
-    # # Filtering out non-existent image files from CSV (if any)
-    # # filter_testset(dataset)
-    # print(f"\U0001F4A1 After filtering - Dataset size: {len(dataset)}")
+    # # Load Dataset using TorchXRayVision
+    # dataset = xrv.datasets.NIH_Dataset(
+    #     imgpath=imgpath,
+    #     # csvpath=csvpath,
+    #     transform=transforms.Compose(
+    #         [
+    #             xrv.datasets.XRayCenterCrop(),  # Preprocessing specific to X-rays
+    #             xrv.datasets.XRayResizer(224),
+    #         ]
+    #     ),
+    # )
+    # print(dataset.csvpath)
+    # print(dataset.pathologies)
+    # print(dataset.csv.head())
+
+    # print(f"\U0001F4A1 Dataset size: {len(dataset)}")
+    # # # Filtering out non-existent image files from CSV (if any)
+    # # # filter_testset(dataset)
+    # # print(f"\U0001F4A1 After filtering - Dataset size: {len(dataset)}")
 
     return dataset
 
@@ -79,8 +79,9 @@ def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(f"\U0001F4BB Using device: {device}")
 
-    dataset = load_dataset()
-    dataloader = torch.utils.data.DataLoader(dataset, batch_size=2, shuffle=False)
+    dataloader = load_dataloader()
+
+    print(f"\U0001F4A1 Dataloader size: {len(dataloader)}")
 
     # Load a pre-trained model
     model = xrv.models.DenseNet(
@@ -98,6 +99,7 @@ def main():
     for i, data in enumerate(dataloader):
         if i == 2:
             break
+
         img = data["img"]
         # print(img.shape)
         feat_vec = model.features(img)

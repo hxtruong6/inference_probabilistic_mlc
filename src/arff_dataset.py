@@ -14,9 +14,11 @@ class MultiLabelArffDataset:
 
     def __init__(
         self,
-        path,
-        dataset_name,
+        path=None,
+        dataset_name=None,
         target_at_first=False,
+        X=None,
+        Y=None,
     ):
         """Initialize the dataset handler."""
         self.path = path
@@ -33,9 +35,13 @@ class MultiLabelArffDataset:
             self.X = self.df.iloc[:, :-y_split_index]
             self.Y = self.df.iloc[:, -y_split_index:].astype(int)
 
-        # convert to numpy array
-        self.X = self.X.to_numpy()
-        self.Y = self.Y.to_numpy()
+        if (X is not None) and (Y is not None):
+            self.X = X.to_numpy()
+            self.Y = Y.to_numpy()
+        else:
+            # convert to numpy array
+            self.X = self.X.to_numpy()
+            self.Y = self.Y.to_numpy()
 
     def _get_Y_split_index(self):
         """Get the index for splitting Y from X based on the dataset name."""

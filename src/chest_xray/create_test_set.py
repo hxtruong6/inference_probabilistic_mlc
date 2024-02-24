@@ -33,7 +33,7 @@ def get_image_indices_from_txt(txt_file_path, csv_file_path):
 
 # Example Usage
 txt_file_path = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/test_list.txt"
-csv_file_path = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017.csv"
+csv_file_path = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017_fixed.csv"
 
 matching_image_indices = get_image_indices_from_txt(txt_file_path, csv_file_path)
 print(matching_image_indices.head())
