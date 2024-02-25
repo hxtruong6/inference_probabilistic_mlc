@@ -9,4 +9,4 @@ docker-exec:
 eval:
 	python inference_evaluate_models.py
 dataset_chest_xray:
-	python src/chest_xray_dataset.py
+	python src/chest_xray_dataset/chest_xray_dataset.py

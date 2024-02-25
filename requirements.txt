@@ -1,6 +1,10 @@
-deeplake==3.8.21
 joblib==1.3.2
 numpy==1.26.4
 pandas==2.0.3
+Pillow==10.2.0
 scikit_learn==1.2.2
 scipy==1.12.0
+scikit-image==0.22
+torch==2.2.1
+torchvision==0.17.1
+torchxrayvision==1.2.2

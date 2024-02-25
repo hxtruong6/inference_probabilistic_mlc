@@ -10,7 +10,7 @@ import torchvision.transforms as transforms
 import numpy as np
 from PIL import Image
 
-from chest_xray_dataset.chest_xray_utils import (
+from chest_xray_utils import (
     load_df_features_from_npy,
     load_features_from_npy,
     save_features_to_npy,
@@ -19,7 +19,7 @@ from chest_xray_dataset.chest_xray_utils import (
 SEED = 6
 torch.manual_seed(SEED)
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 print(f"\U0001F4C1 Base project folder: {BASE_DIR}")
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -143,6 +143,7 @@ def set_custom_feature_extractor(model: xrv.models.DenseNet):
 
 def get_features(model, dataloader):
     extract_features = []
+    model.eval()
 
     with torch.no_grad():
         for i, data in enumerate(dataloader):
