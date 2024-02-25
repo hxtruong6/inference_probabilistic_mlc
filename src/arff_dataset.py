@@ -1,9 +1,6 @@
 import pandas as pd
 import scipy.io.arff as arff
-from sklearn.model_selection import (
-    KFold,
-    StratifiedKFold,
-)
+from sklearn.model_selection import KFold
 
 # Define a constant for seed
 SEED = 6
@@ -14,18 +11,31 @@ class MultiLabelArffDataset:
 
     def __init__(
         self,
+        dataset_name,
         path=None,
-        dataset_name=None,
         target_at_first=False,
         X=None,
         Y=None,
     ):
         """Initialize the dataset handler."""
+        self.dataset_name = dataset_name
+
+        if (
+            (X is not None)
+            and (Y is not None)
+            and isinstance(X, pd.DataFrame)
+            and isinstance(Y, pd.DataFrame)
+        ):
+            self.X = X.to_numpy()
+            self.Y = Y.to_numpy()
+            print(f"\U0001F4A5 Number of features: {self.X.shape}")
+            print(f"\U0001F4A6 Number of labels: {self.Y.shape}")
+            return
+
         self.path = path
         self.data = arff.loadarff(self.path)
         self.df = pd.DataFrame(self.data[0])
 
-        self.dataset_name = dataset_name
         y_split_index = self._get_Y_split_index()
 
         if target_at_first:
@@ -35,13 +45,11 @@ class MultiLabelArffDataset:
             self.X = self.df.iloc[:, :-y_split_index]
             self.Y = self.df.iloc[:, -y_split_index:].astype(int)
 
-        if (X is not None) and (Y is not None):
-            self.X = X.to_numpy()
-            self.Y = Y.to_numpy()
-        else:
-            # convert to numpy array
-            self.X = self.X.to_numpy()
-            self.Y = self.Y.to_numpy()
+        self.X = self.X.to_numpy()
+        self.Y = self.Y.to_numpy()
+
+        print(f"\U0001F4A5 Number of features: {self.X.shape}")
+        print(f"\U0001F4A6 Number of labels: {self.Y.shape}")
 
     def _get_Y_split_index(self):
         """Get the index for splitting Y from X based on the dataset name."""

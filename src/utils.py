@@ -43,7 +43,7 @@ def save_crosstab(df, output_csv, aggfunc="mean"):
     cross_tab.to_csv(f"{output_csv.split('.csv')[0]}_crosstab.csv")
 
 
-def add_key_if_missing(data, key1, key2, key3, key4, value):
+def add_key_if_missing(data, key1, key2, key3, key4, value=None):
     """Checks if nested keys exist, adds them if not, and sets the value."""
     if key1 not in data:
         data[key1] = {}

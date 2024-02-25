@@ -5,6 +5,7 @@ from uuid import uuid4
 
 from joblib import Parallel, delayed
 from src.arff_dataset import MultiLabelArffDataset
+from src.chest_xray_dataset.chest_xray_utils import load_df_features_from_npy
 from src.evaluation_metrics import EvaluationMetrics
 
 import numpy as np
@@ -20,6 +21,8 @@ from sklearn.linear_model import LinearRegression, LogisticRegression, SGDClassi
 
 import scipy.io.arff as arff
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+print(f"🤯 Base project folder: {BASE_DIR}")
 
 # Define a constant for seed
 SEED = 6
@@ -41,10 +44,21 @@ def read_datasets_from_folder(folder_path, dataset_names):
         raise Exception(f"Folder path is not valid - {folder_path}")
 
     for filename in dataset_names:
-        if filename in DATASET_WHOLE_FILES:
+        if filename == "chest_xray_nih":
+            df_feats, df_labels = load_df_features_from_npy(
+                features_filename=f"{BASE_DIR}/datasets/nih_feature_vectors.npy",
+                labels_filename=f"{BASE_DIR}/datasets/nih_feature_vectors__labels.npy",
+            )
             yield MultiLabelArffDataset(
-                path=os.path.join(folder_path, f"{filename}.arff"),
                 dataset_name=filename,
+                X=df_feats,
+                Y=df_labels,
+            )
+
+        elif filename in DATASET_WHOLE_FILES:
+            yield MultiLabelArffDataset(
+                dataset_name=filename,
+                path=os.path.join(folder_path, f"{filename}.arff"),
                 target_at_first=(filename in DATASET_WHOLE_FILES_TARGET_AT_FIRST),
             )
         else:
@@ -124,10 +138,10 @@ def evaluate_model(model, X_test, Y_test, predict_funcs, metric_funcs):
 def prepare_model_to_evaluate():
     """Prepare a list of models for evaluation."""
     base_estimators = [
-        LogisticRegression(random_state=SEED, max_iter=10000),
+        LogisticRegression(random_state=SEED, max_iter=500000),
         # SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10000),
         # RandomForestClassifier(random_state=SEED),
-        AdaBoostClassifier(random_state=SEED),
+        # AdaBoostClassifier(random_state=SEED),
     ]
     return [ProbabilisticClassifierChainCustom(model) for model in base_estimators]
 
@@ -157,6 +171,8 @@ def evaluate_kfold(
         dataset_handler.Y[train_index],
         dataset_handler.Y[test_index],
     )
+
+    print(f"🫨 X_train shape: {X_train.shape} | X_test shape: {X_test.shape}")
 
     # For each dataset, iterate over the models and perform evaluation
     for model in evaluated_models:
@@ -215,13 +231,15 @@ def main():
 
     print(f"📂 Dataset folder path: {folder_path}")
 
+    # DOC: Uncomment the dataset names you want to evaluate
     dataset_names = [
         # "emotions",
-        "Water-quality",
+        # "Water-quality",
         # "scene",
         # "VirusGO_sparse",
         # "CHD_49",
         # "yeast",
+        "chest_xray_nih",  # Cusom Image dataset of NIH.
     ]
     # -----------------  MAIN -----------------
     # func is same name of the predict function in ProbabilisticClassifierChainCustom
@@ -293,6 +311,10 @@ def main():
 
             dataset_results[dataset_handler.dataset_name] = {}
             for fold_result in job_results:
+                if fold_result is None:
+                    print("Fold result is None")
+                    continue
+
                 for model in evaluated_models:
                     for predict_func in predict_functions:
                         for metric_func in metric_functions:
