@@ -3,3 +3,5 @@ __pycache__/
 *.so
 .DS_Store
 datasets/NIH
+datasets/nih_*
+datasets/nih_feature_vectors__labels.npy

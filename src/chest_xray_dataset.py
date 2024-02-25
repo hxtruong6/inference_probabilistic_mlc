@@ -1,5 +1,4 @@
 import os
-import sys
 import numpy as np
 import pandas as pd
 import torch
@@ -12,6 +11,7 @@ import numpy as np
 from PIL import Image
 
 from chest_xray_dataset.chest_xray_utils import (
+    load_df_features_from_npy,
     load_features_from_npy,
     save_features_to_npy,
 )
@@ -127,12 +127,17 @@ def load_model():
     return model
 
 
-def set_custom_feature_extractor(model):
+def set_custom_feature_extractor(model: xrv.models.DenseNet):
     model.features = torch.nn.Sequential(
         *list(model.classifier.children())[:-1],
-        torch.nn.AvgPool2d((7, 7)),
+        # Option 1 - Use the following layers
+        torch.nn.AdaptiveAvgPool2d((512, 1)),
         torch.nn.Flatten(),
+        # Option 2 - Use Conv2d - recheck the output size
+        # torch.nn.Conv2d(1024, 512, kernel_size=3, stride=2, padding=1),
+        # torch.nn.Flatten(),
     )
+
     return model
 
 
@@ -140,15 +145,15 @@ def get_features(model, dataloader):
     extract_features = []
 
     with torch.no_grad():
-        for data in dataloader:
-            print(f"\U0001F4E6 Processing batch... {data[0].shape}")
+        for i, data in enumerate(dataloader):
+            print(f"\U0001F4E6 Processing batch {i}... | Batch size: {data[0].shape}")
             image, labels = data
             # print(f"Image 1 transformed by custom: {image[0]}")
 
             image = image.to(DEVICE)
             # The first dimension is the batch size
             feat_vec = model.features(image)
-            # print(f"\U0001F4E7 Feature vector shape: {feat_vec.shape}")
+            # print(f"\U0001F4D1 Feature vector shape: {feat_vec.shape}")
 
             # append feat_vec to extract_features in each instance of batch
             for i in range(labels.shape[0]):
@@ -159,14 +164,14 @@ def get_features(model, dataloader):
                     }
                 )
 
-            # for testing purpose, break after 1 batch
-            break
+            # TODO: for testing purpose, break after 1 batch
+            # break
 
     return extract_features
 
 
 def main():
-    dataloader = load_dataloader(batch_size=3, shuffle=False)
+    dataloader = load_dataloader(batch_size=32, shuffle=False)
     print(f"\U0001F4C1 Dataloader size: {len(dataloader)}")
 
     model = load_model()
@@ -191,7 +196,15 @@ def main():
         labels_filename=f"{BASE_DIR}/datasets/nih_feature_vectors__labels.npy",
     )
 
-    print(f"\U0001F4E9 Loaded features: \n{data_feat}")
+    print(f"\U0001F4E9 Loaded features: \U0001F4C0 {data_feat[0].shape}")
+
+    df_feats, df_labels = load_df_features_from_npy(
+        features_filename=f"{BASE_DIR}/datasets/nih_feature_vectors.npy",
+        labels_filename=f"{BASE_DIR}/datasets/nih_feature_vectors__labels.npy",
+    )
+
+    print(f"\U0001F4B9 Loaded features: \n{df_feats.head(5)}")
+    print(f"\U0001F3B9 Loaded labels: \n{df_labels.head(5)}")
 
 
 if __name__ == "__main__":
