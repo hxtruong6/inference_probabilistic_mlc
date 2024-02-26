@@ -1,6 +1,7 @@
 import pandas as pd
 import scipy.io.arff as arff
 from sklearn.model_selection import KFold
+from sklearn.preprocessing import StandardScaler
 
 # Define a constant for seed
 SEED = 6
@@ -26,10 +27,7 @@ class MultiLabelArffDataset:
             and isinstance(X, pd.DataFrame)
             and isinstance(Y, pd.DataFrame)
         ):
-            self.X = X.to_numpy()
-            self.Y = Y.to_numpy()
-            print(f"\U0001F4A5 Number of features: {self.X.shape}")
-            print(f"\U0001F4A6 Number of labels: {self.Y.shape}")
+            self.X, self.Y = self._preprocess(X, Y)
             return
 
         self.path = path
@@ -45,11 +43,21 @@ class MultiLabelArffDataset:
             self.X = self.df.iloc[:, :-y_split_index]
             self.Y = self.df.iloc[:, -y_split_index:].astype(int)
 
-        self.X = self.X.to_numpy()
-        self.Y = self.Y.to_numpy()
+        self.X, self.Y = self._preprocess(self.X, self.Y)
 
-        print(f"\U0001F4A5 Number of features: {self.X.shape}")
-        print(f"\U0001F4A6 Number of labels: {self.Y.shape}")
+    def _preprocess(self, X, Y):
+        """Preprocess the input data."""
+        X = X.to_numpy()
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X)
+
+        Y = Y.to_numpy()
+
+        print(
+            f"\U0001F4A5 Features shape: {X_scaled.shape} in range {X_scaled.min()} to {X_scaled.max()}"
+        )
+        print(f"\U0001F4A6 Labels shape: {Y.shape}")
+        return X_scaled, Y
 
     def _get_Y_split_index(self):
         """Get the index for splitting Y from X based on the dataset name."""

@@ -138,7 +138,7 @@ def evaluate_model(model, X_test, Y_test, predict_funcs, metric_funcs):
 def prepare_model_to_evaluate():
     """Prepare a list of models for evaluation."""
     base_estimators = [
-        LogisticRegression(random_state=SEED, max_iter=500000),
+        LogisticRegression(random_state=SEED, max_iter=5000000),
         # SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10000),
         # RandomForestClassifier(random_state=SEED),
         # AdaBoostClassifier(random_state=SEED),
