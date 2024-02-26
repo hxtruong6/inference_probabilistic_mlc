@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-def save_features_to_npy(extract_features, filename="feature_vectors.npy"):
+def save_features_to_npy(extract_features, filename):
     features = np.array([item["features"].numpy() for item in extract_features])
     labels = np.array([item["labels"].numpy() for item in extract_features])
     np.save(filename, features)
@@ -11,16 +11,14 @@ def save_features_to_npy(extract_features, filename="feature_vectors.npy"):
     np.save(labels_filename, labels)
 
 
-def load_features_from_npy(
-    features_filename="feature_vectors.npy",
-    labels_filename="feature_vectors__labels.npy",
-):
+def load_features_from_npy(features_filename):
     features = np.load(features_filename)
+    labels_filename = features_filename.split(".")[0] + "__labels.npy"
     labels = np.load(labels_filename)
     return features, labels
 
 
-def load_df_features_from_npy(features_filename, labels_filename):
+def load_df_features_from_npy(features_filename):
     """
     Loads features and labels from NumPy arrays, then converts them to DataFrames.
 
@@ -34,6 +32,8 @@ def load_df_features_from_npy(features_filename, labels_filename):
     """
 
     features = np.load(features_filename)
+
+    labels_filename = features_filename.split(".")[0] + "__labels.npy"
     labels = np.load(labels_filename)
 
     # Create feature DataFrame
