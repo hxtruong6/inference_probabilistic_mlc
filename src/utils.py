@@ -19,7 +19,7 @@ def save_result_df(data, output_csv):
                     column_name["Model"].append(model)
                     column_name["Predict Function of Model"].append(predict_func)
                     column_name["Metric Function"].append(metric)
-                    column_name["Score"].append(round(average_score, 5))
+                    column_name["Score"].append(round(average_score, 8))
 
     result_df = pd.DataFrame(column_name)
 
@@ -34,7 +34,7 @@ def save_crosstab(df, output_csv, aggfunc="mean"):
         rownames=["Dataset", "Base Model", "Predict Func"],
         columns=[df["Metric Function"]],
         colnames=["Metric"],
-        values=round(df["Score"], 5),
+        values=round(df["Score"] * 100, 6),
         aggfunc=aggfunc,
         margins=True,
     )

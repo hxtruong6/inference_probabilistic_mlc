@@ -37,10 +37,11 @@ def read_datasets_from_folder(folder_path, dataset_names):
         raise Exception(f"Folder path is not valid - {folder_path}")
 
     for filename in dataset_names:
-        if filename == "chest_xray_nih":
+        if "chest_xray_nih" in filename:
+            feature_type = filename.split("__")[-1]
+
             df_feats, df_labels = load_df_features_from_npy(
-                features_filename=f"{BASE_DIR}/datasets/nih_feature_vectors.npy",
-                labels_filename=f"{BASE_DIR}/datasets/nih_feature_vectors__labels.npy",
+                features_filename=f"{BASE_DIR}/datasets/nih_feature_vectors_{feature_type}.npy",
             )
             yield MultiLabelArffDataset(
                 dataset_name=filename,
@@ -232,7 +233,9 @@ def main():
         # "VirusGO_sparse",
         # "CHD_49",
         # "yeast",
-        "chest_xray_nih",  # Cusom Image dataset of NIH.
+        # "chest_xray_nih__densenet",  # Cusom Image dataset of NIH.
+        # "chest_xray_nih__resnet",
+        "chest_xray_nih__resnetae",
     ]
     # -----------------  MAIN -----------------
     # func is same name of the predict function in ProbabilisticClassifierChainCustom
@@ -267,7 +270,7 @@ def main():
             "func": EvaluationMetrics.f_markedness,
         },
         {
-            "name": "F-beta Score",
+            "name": "Fmeasure Score",
             "func": EvaluationMetrics.f_beta_score,
         },
         # TODO: add informedness

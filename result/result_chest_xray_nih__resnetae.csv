@@ -1,0 +1,50 @@
+Dataset,Model,Predict Function of Model,Metric Function,Score
+chest_xray_nih__resnetae,LogisticRegression,Predict Hamming Loss,Hamming Loss,0.893743
+chest_xray_nih__resnetae,LogisticRegression,Predict Hamming Loss,Subset Accuracy,0.446434
+chest_xray_nih__resnetae,LogisticRegression,Predict Hamming Loss,Precision Score,0.463198
+chest_xray_nih__resnetae,LogisticRegression,Predict Hamming Loss,Negative Predictive Value,0.897746
+chest_xray_nih__resnetae,LogisticRegression,Predict Hamming Loss,Recall Score,0.455351
+chest_xray_nih__resnetae,LogisticRegression,Predict Hamming Loss,Markedness,0.9309
+chest_xray_nih__resnetae,LogisticRegression,Predict Hamming Loss,Fmeasure Score,0.45742
+chest_xray_nih__resnetae,LogisticRegression,Predict Subset,Hamming Loss,0.894563
+chest_xray_nih__resnetae,LogisticRegression,Predict Subset,Subset Accuracy,0.452179
+chest_xray_nih__resnetae,LogisticRegression,Predict Subset,Precision Score,0.458827
+chest_xray_nih__resnetae,LogisticRegression,Predict Subset,Negative Predictive Value,0.896187
+chest_xray_nih__resnetae,LogisticRegression,Predict Subset,Recall Score,0.456114
+chest_xray_nih__resnetae,LogisticRegression,Predict Subset,Markedness,0.94122
+chest_xray_nih__resnetae,LogisticRegression,Predict Subset,Fmeasure Score,0.456736
+chest_xray_nih__resnetae,LogisticRegression,Predict Pre,Hamming Loss,0.83449
+chest_xray_nih__resnetae,LogisticRegression,Predict Pre,Subset Accuracy,0.118261
+chest_xray_nih__resnetae,LogisticRegression,Predict Pre,Precision Score,0.258362
+chest_xray_nih__resnetae,LogisticRegression,Predict Pre,Negative Predictive Value,0.916796
+chest_xray_nih__resnetae,LogisticRegression,Predict Pre,Recall Score,0.180074
+chest_xray_nih__resnetae,LogisticRegression,Predict Pre,Markedness,0.587578
+chest_xray_nih__resnetae,LogisticRegression,Predict Pre,Fmeasure Score,0.203245
+chest_xray_nih__resnetae,LogisticRegression,Predict Neg,Hamming Loss,0.105099
+chest_xray_nih__resnetae,LogisticRegression,Predict Neg,Subset Accuracy,0.0
+chest_xray_nih__resnetae,LogisticRegression,Predict Neg,Precision Score,0.105099
+chest_xray_nih__resnetae,LogisticRegression,Predict Neg,Negative Predictive Value,1.0
+chest_xray_nih__resnetae,LogisticRegression,Predict Neg,Recall Score,1.0
+chest_xray_nih__resnetae,LogisticRegression,Predict Neg,Markedness,0.552549
+chest_xray_nih__resnetae,LogisticRegression,Predict Neg,Fmeasure Score,0.171148
+chest_xray_nih__resnetae,LogisticRegression,Predict Recall,Hamming Loss,0.105099
+chest_xray_nih__resnetae,LogisticRegression,Predict Recall,Subset Accuracy,0.0
+chest_xray_nih__resnetae,LogisticRegression,Predict Recall,Precision Score,0.105099
+chest_xray_nih__resnetae,LogisticRegression,Predict Recall,Negative Predictive Value,1.0
+chest_xray_nih__resnetae,LogisticRegression,Predict Recall,Recall Score,1.0
+chest_xray_nih__resnetae,LogisticRegression,Predict Recall,Markedness,0.552549
+chest_xray_nih__resnetae,LogisticRegression,Predict Recall,Fmeasure Score,0.171148
+chest_xray_nih__resnetae,LogisticRegression,Predict Mar,Hamming Loss,0.894901
+chest_xray_nih__resnetae,LogisticRegression,Predict Mar,Subset Accuracy,0.453666
+chest_xray_nih__resnetae,LogisticRegression,Predict Mar,Precision Score,0.453666
+chest_xray_nih__resnetae,LogisticRegression,Predict Mar,Negative Predictive Value,0.894901
+chest_xray_nih__resnetae,LogisticRegression,Predict Mar,Recall Score,0.453666
+chest_xray_nih__resnetae,LogisticRegression,Predict Mar,Markedness,0.947451
+chest_xray_nih__resnetae,LogisticRegression,Predict Mar,Fmeasure Score,0.453666
+chest_xray_nih__resnetae,LogisticRegression,Predict Fmeasure,Hamming Loss,0.865401
+chest_xray_nih__resnetae,LogisticRegression,Predict Fmeasure,Subset Accuracy,0.376583
+chest_xray_nih__resnetae,LogisticRegression,Predict Fmeasure,Precision Score,0.45295
+chest_xray_nih__resnetae,LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.914427
+chest_xray_nih__resnetae,LogisticRegression,Predict Fmeasure,Recall Score,0.479519
+chest_xray_nih__resnetae,LogisticRegression,Predict Fmeasure,Markedness,0.853481
+chest_xray_nih__resnetae,LogisticRegression,Predict Fmeasure,Fmeasure Score,0.457072

@@ -1,0 +1,9 @@
+Dataset,Base Model,Predict Func,Fmeasure Score,Hamming Loss,Markedness,Negative Predictive Value,Precision Score,Recall Score,Subset Accuracy,All
+chest_xray_nih__resnetae,LogisticRegression,Predict Fmeasure,45.7072,86.5401,85.3481,91.4427,45.295,47.9519,37.6583,62.84904285714286
+chest_xray_nih__resnetae,LogisticRegression,Predict Hamming Loss,45.742,89.3743,93.09,89.7746,46.3198,45.5351,44.6434,64.9256
+chest_xray_nih__resnetae,LogisticRegression,Predict Mar,45.3666,89.4901,94.7451,89.4901,45.3666,45.3666,45.3666,65.02738571428571
+chest_xray_nih__resnetae,LogisticRegression,Predict Neg,17.1148,10.5099,55.2549,100.0,10.5099,100.0,0.0,41.91278571428571
+chest_xray_nih__resnetae,LogisticRegression,Predict Pre,20.3245,83.449,58.7578,91.6796,25.8362,18.0074,11.8261,44.268657142857144
+chest_xray_nih__resnetae,LogisticRegression,Predict Recall,17.1148,10.5099,55.2549,100.0,10.5099,100.0,0.0,41.91278571428571
+chest_xray_nih__resnetae,LogisticRegression,Predict Subset,45.6736,89.4563,94.122,89.6187,45.8827,45.6114,45.2179,65.08322857142858
+All,,,33.86335714285714,65.61851428571428,76.65325714285714,93.14367142857144,32.81715714285714,57.49605714285714,26.387471428571427,55.139926530612236
