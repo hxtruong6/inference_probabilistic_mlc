@@ -2,25 +2,18 @@ from collections import defaultdict
 import os
 import time
 from uuid import uuid4
-
 from joblib import Parallel, delayed
 from src.arff_dataset import MultiLabelArffDataset
 from src.chest_xray_dataset.chest_xray_utils import load_df_features_from_npy
 from src.evaluation_metrics import EvaluationMetrics
-
 import numpy as np
-
 from src.probability_classifier_chains import ProbabilisticClassifierChainCustom
 from src.utils import add_key_if_missing, save_crosstab, save_result_df
-
-print(f"Numpy version: {np.__version__}")
-
-import pandas as pd
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 from sklearn.linear_model import LinearRegression, LogisticRegression, SGDClassifier
 
-import scipy.io.arff as arff
 
+print(f"Numpy version: {np.__version__}")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 print(f"🤯 Base project folder: {BASE_DIR}")
 
