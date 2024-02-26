@@ -92,6 +92,8 @@ class NIHChestXRayDataset(torchvision.datasets.ImageFolder):
 
 
 class XRVModel:
+    MODEL_TYPE = ["densenet", "resnet", "ResNetAE"]
+
     def __init__(self, model, dataloader, model_type):
         self.model = model
         self.model_type = model_type
@@ -105,30 +107,42 @@ class XRVModel:
             raise ValueError("Model is not loaded")
 
         if isinstance(self.model, xrv.models.DenseNet):
-            self.model.features = torch.nn.Sequential(
-                *list(self.model.classifier.children())[:-1],
-                # Option 1 - Use the following layers
-                torch.nn.AdaptiveAvgPool2d((512, 1)),
+            # [1024, 7, 7] -> [1, 512]
+            self.custom_features = torch.nn.Sequential(
+                # torch.nn.AdaptiveAvgPool1d((512, 1)),
+                torch.nn.AvgPool2d(kernel_size=7, stride=7),
                 torch.nn.Flatten(),
-                # Option 2 - Use Conv2d - recheck the output size
-                # torch.nn.Conv2d(1024, 512, kernel_size=3, stride=2, padding=1),
-                # torch.nn.Flatten(),
             )
+            print(f"\U0001F4D1 Model custom_features: {self.custom_features}")
         elif isinstance(self.model, xrv.models.ResNet):
-            self.model.features = torch.nn.Sequential(
-                *list(self.model.children())[:-1],
-                torch.nn.AdaptiveAvgPool2d((512, 1)),
+            # [2048, 1] -> [1, 512]
+            self.custom_features = torch.nn.Sequential(
+                torch.nn.Linear(2048, 512),
                 torch.nn.Flatten(),
             )
+
+            print(f"\U0001F4E6 Model custom_features: {self.custom_features}")
         elif self.model_type == "ResNetAE":
             # Convert model.encode to a feature extractor [512, 3, 3] to -> [1, 512]
-            self.model.encode = torch.nn.Sequential(
-                *list(self.model.encode.children())[:-1],
-                torch.nn.AdaptiveAvgPool2d((512, 1)),
+            assert isinstance(self.model, xrv.autoencoders._ResNetAE)
+            self.custom_features = torch.nn.Sequential(
+                torch.nn.AvgPool2d(kernel_size=3, stride=3),
                 torch.nn.Flatten(),
+                # torch.nn.Linear(512 * 3 * 3, 512),
             )
+
+            print(f"\U0001F4B2 Model custom_features: {self.custom_features}")
+
         else:
-            raise ValueError("Model type is not supported")
+            self.custom_features = None
+
+    def _custom_forward(self, x):
+        if self.model_type not in self.MODEL_TYPE:
+            raise ValueError("Model type is not supported for _custom_forward()")
+
+        if self.custom_features is not None:
+            return self.custom_features(x)
+        return x
 
     def extract_features_vec(self):
         extracted_features = []
@@ -143,12 +157,10 @@ class XRVModel:
                 # print(f"Image 1 transformed by custom: {image[0]}")
 
                 image = image.to(DEVICE)
-                # The first dimension is the batch size
-                if self.model_type == "ResNetAE":
-                    feat_vec = self.model.encode(image)
-                else:
-                    feat_vec = self.model.features(image)
-                print(f"\U0001F4D1 Feature vector shape: {feat_vec.shape}")
+                feat_vec = self.model.features(image)
+                print(f"\U0001F3D1 Feature vector shape: {feat_vec.shape}")
+                feat_vec = self._custom_forward(feat_vec)
+                print(f"\U0001F4D1 Feature vector shape: {feat_vec.shape} after custom")
 
                 # append feat_vec to extract_features in each instance of batch
                 for i in range(labels.shape[0]):
@@ -199,7 +211,7 @@ def load_dataloader(batch_size=1, shuffle=False):
 
 
 def main():
-    dataloader = load_dataloader(batch_size=32, shuffle=False)
+    dataloader = load_dataloader(batch_size=64, shuffle=False)
     print(f"\U0001F4C1 Dataloader size: {len(dataloader)}")
 
     MODELS = {
@@ -218,8 +230,8 @@ def main():
     }
 
     # TODO: Select the model
-    SELECTED_MODEL = "densenet"
-    # SELECTED_MODEL = "resnet"
+    # SELECTED_MODEL = "densenet"
+    SELECTED_MODEL = "resnet"
     # SELECTED_MODEL = "resnetae"
 
     xrvModel = XRVModel(
