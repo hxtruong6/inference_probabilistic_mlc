@@ -1,4 +1,5 @@
 import os
+from typing import Any, Dict, List
 import numpy as np
 import pandas as pd
 import torch
@@ -9,6 +10,13 @@ from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 import numpy as np
 from PIL import Image
+import logging
+
+from tqdm import tqdm
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 from chest_xray_utils import (
     load_df_features_from_npy,
@@ -20,10 +28,10 @@ SEED = 6
 torch.manual_seed(SEED)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-print(f"\U0001F4C1 Base project folder: {BASE_DIR}")
+logger.info(f"\U0001F4C1 Base project folder: {BASE_DIR}")
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print(f"\U0001F4BB Using device: {DEVICE}")
+logger.info(f"\U0001F4BB Using device: {DEVICE}")
 
 
 class XRCVImageTransform(object):
@@ -74,7 +82,7 @@ class NIHChestXRayDataset(torchvision.datasets.ImageFolder):
     def __init__(self, root, transform, df_labels, is_valid_file=None):
         super().__init__(root, transform, is_valid_file=is_valid_file)
         self.df_labels = df_labels
-        print(f"\U0001F4A5 Loading dataset from: {root}")
+        logger.info(f"\U0001F4A5 Loading dataset from: {root}")
 
     def __getitem__(self, index):
         path, target = self.samples[index]
@@ -113,7 +121,7 @@ class XRVModel:
                 torch.nn.AvgPool2d(kernel_size=7, stride=7),
                 torch.nn.Flatten(),
             )
-            print(f"\U0001F4D1 Model custom_features: {self.custom_features}")
+            logger.info(f"\U0001F4D1 Model custom_features: {self.custom_features}")
         elif isinstance(self.model, xrv.models.ResNet):
             # [2048, 1] -> [1, 512]
             self.custom_features = torch.nn.Sequential(
@@ -121,7 +129,7 @@ class XRVModel:
                 torch.nn.Flatten(),
             )
 
-            print(f"\U0001F4E6 Model custom_features: {self.custom_features}")
+            logger.info(f"\U0001F4E6 Model custom_features: {self.custom_features}")
         elif self.model_type == "ResNetAE":
             # Convert model.encode to a feature extractor [512, 3, 3] to -> [1, 512]
             assert isinstance(self.model, xrv.autoencoders._ResNetAE)
@@ -131,7 +139,7 @@ class XRVModel:
                 # torch.nn.Linear(512 * 3 * 3, 512),
             )
 
-            print(f"\U0001F4B2 Model custom_features: {self.custom_features}")
+            logger.info(f"\U0001F4B2 Model custom_features: {self.custom_features}")
 
         else:
             self.custom_features = None
@@ -145,24 +153,32 @@ class XRVModel:
         return x
 
     def extract_features_vec(self):
-        extracted_features = []
+        self.model.to(DEVICE)
         self.model.eval()
+        if self.custom_features is not None:
+            self.custom_features.to(DEVICE)
+
+        self.extracted_features: List[Dict[str, Any]] = (
+            self._extract_features_from_dataloader()
+        )
+
+    def _extract_features_from_dataloader(self) -> List[Dict[str, Any]]:
+        extracted_features: List[Dict[str, Any]] = []
 
         with torch.no_grad():
-            for i, data in enumerate(self.dataloader):
-                print(
+            for i, data in tqdm(enumerate(self.dataloader), total=len(self.dataloader)):
+                logger.info(
                     f"\U0001F4E6 Processing batch {i}... | Batch size: {data[0].shape}"
                 )
                 image, labels = data
-                # print(f"Image 1 transformed by custom: {image[0]}")
-
                 image = image.to(DEVICE)
                 feat_vec = self.model.features(image)
-                print(f"\U0001F3D1 Feature vector shape: {feat_vec.shape}")
+                logger.info(f"\U0001F3D1 Feature vector shape: {feat_vec.shape}")
                 feat_vec = self._custom_forward(feat_vec)
-                print(f"\U0001F4D1 Feature vector shape: {feat_vec.shape} after custom")
+                logger.info(
+                    f"\U0001F4D1 Feature vector shape: {feat_vec.shape} after custom"
+                )
 
-                # append feat_vec to extract_features in each instance of batch
                 for i in range(labels.shape[0]):
                     extracted_features.append(
                         {
@@ -171,7 +187,7 @@ class XRVModel:
                         }
                     )
 
-        self.extracted_features = extracted_features
+        return extracted_features
 
     def get_features_vec(self):
         return self.extracted_features
@@ -204,15 +220,15 @@ def load_dataloader(batch_size=1, shuffle=False):
         df_labels=df_labels,
         is_valid_file=lambda file_name: is_valid_file(file_name, valid_filenames),
     )
-    print(f"\U0001F4A1 Dataset size: {len(dataset)}")
+    logger.info(f"\U0001F4A1 Dataset size: {len(dataset)}")
 
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
     return dataloader
 
 
 def main():
-    dataloader = load_dataloader(batch_size=64, shuffle=False)
-    print(f"\U0001F4C1 Dataloader size: {len(dataloader)}")
+    dataloader = load_dataloader(batch_size=128, shuffle=False)
+    logger.info(f"\U0001F4C1 Dataloader size: {len(dataloader)}")
 
     MODELS = {
         "densenet": {
@@ -230,8 +246,8 @@ def main():
     }
 
     # TODO: Select the model
-    # SELECTED_MODEL = "densenet"
-    SELECTED_MODEL = "resnet"
+    SELECTED_MODEL = "densenet"
+    # SELECTED_MODEL = "resnet"
     # SELECTED_MODEL = "resnetae"
 
     xrvModel = XRVModel(
@@ -243,7 +259,7 @@ def main():
 
     # get only 8 label. check index of label in dataset.pathologies by order then drop the rest column index.
     extract_features = xrvModel.get_features_vec()
-    print(
+    logger.info(
         f"\U0001F4E7 Extracted features of The first image: \n {extract_features[0]}\n"
     )
 
@@ -251,23 +267,19 @@ def main():
 
     xrvModel.save(saved_file)
 
-    print(
+    logger.info(
         f"\U0001F4E8 Saved features to file: {saved_file} | Total features: {len(extract_features)}\n"
     )
 
     # ---------------------------   Load the saved features   ---------------------------
     # Load the saved features
     data_feat = load_features_from_npy(saved_file)
-    print(f"\U0001F4E9 Loaded features: \U0001F4C0 {data_feat[0].shape}")
+    logger.info(f"\U0001F4E9 Loaded features: \U0001F4C0 {data_feat[0].shape}")
 
-    # df_feats, df_labels = load_df_features_from_npy(
-    #     features_filename=f"{BASE_DIR}/datasets/nih_feature_vectors.npy",
-    #     labels_filename=f"{BASE_DIR}/datasets/nih_feature_vectors__labels.npy",
-    # )
     df_feats, df_labels = load_df_features_from_npy(features_filename=saved_file)
 
-    print(f"\U0001F4B9 Loaded features: \n{df_feats.head(5)}")
-    print(f"\U0001F3B9 Loaded labels: \n{df_labels.head(5)}")
+    logger.info(f"\U0001F4B9 Loaded features: \n{df_feats.head(5)}")
+    logger.info(f"\U0001F3B9 Loaded labels: \n{df_labels.head(5)}")
 
 
 if __name__ == "__main__":
