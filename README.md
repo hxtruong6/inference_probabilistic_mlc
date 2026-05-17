@@ -88,14 +88,30 @@ Pinned versions (relevant subset): `numpy==1.26.4`, `pandas==2.0.3`, `scikit-lea
 
 ### Running the evaluation
 
+**Single combo (local):**
+
+```bash
+python inference_evaluate_models.py \
+    --dataset emotions --seed 1 --estimator lr --output-dir result
+```
+
+Writes `result/<dataset>/seed<S>_<est-tag>.csv` (+ `_crosstab.csv`) for that one (dataset, seed, estimator) combination.
+
+**Full paper sweep (no args):**
+
 ```bash
 python inference_evaluate_models.py
 ```
 
-Select datasets by editing `dataset_names` in `inference_evaluate_models.py`. The script writes:
+Iterates over `DEFAULT_DATASET_NAMES × DEFAULT_SEEDS × all estimators`. Practical only for small datasets on a laptop; for the full sweep use Slurm (below).
 
-- `result/result_<dataset>.csv` — long format: (dataset, model, inference_rule, metric, fold-mean)
-- `result/result_<dataset>_crosstab.csv` — pivot: rows = (model × inference_rule), cols = metrics
+**Slurm cluster:** see [`slurm/README.md`](slurm/README.md). One job per (dataset × seed × estimator); aggregate with `python slurm/aggregate.py` once jobs finish.
+
+Output (per dataset, after aggregation):
+
+- `result/result_<dataset>.csv` — long format: one row per (dataset, model, inference_rule, metric, seed)
+- `result/result_<dataset>_summary.csv` — mean ± std across seeds
+- `result/result_<dataset>_crosstab.csv` — pivot: rows = (model × inference_rule), cols = metrics, cells = "mean ± std"
 
 ### Datasets
 

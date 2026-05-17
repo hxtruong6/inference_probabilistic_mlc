@@ -1,3 +1,4 @@
+import argparse
 import os
 import time
 from uuid import uuid4
@@ -110,16 +111,23 @@ def evaluate_model(model, X_test, Y_test, predict_funcs):
     return results
 
 
-def prepare_model_to_evaluate():
-    """Return the list of (PCC, BR) × (base_estimator) models to evaluate."""
-    base_estimators = [
-        LogisticRegression(random_state=SEED, max_iter=5_000_000),
-        RandomForestClassifier(random_state=SEED, n_estimators=100, n_jobs=1),
-        AdaBoostClassifier(random_state=SEED, n_estimators=50),
-        # SGDClassifier(loss="log_loss", random_state=SEED, max_iter=10_000),
-    ]
+ESTIMATOR_FACTORIES = {
+    "lr":       lambda seed: LogisticRegression(random_state=seed, max_iter=5_000_000),
+    "rf":       lambda seed: RandomForestClassifier(random_state=seed, n_estimators=100, n_jobs=1),
+    "adaboost": lambda seed: AdaBoostClassifier(random_state=seed, n_estimators=50),
+}
+
+
+def prepare_model_to_evaluate(estimator_names=None, seed=SEED):
+    """Return the list of (PCC, BR) × (base_estimator) models to evaluate.
+
+    estimator_names: iterable of keys from ESTIMATOR_FACTORIES, or None for all.
+    """
+    if estimator_names is None:
+        estimator_names = list(ESTIMATOR_FACTORIES)
     models = []
-    for est in base_estimators:
+    for name in estimator_names:
+        est = ESTIMATOR_FACTORIES[name](seed)
         models.append(ProbabilisticClassifierChainCustom(est))
         models.append(BinaryRelevance(est))
     return models
@@ -168,110 +176,151 @@ def evaluate_kfold(
     return fold_results
 
 
-def main():
-    """Orchestrate the full evaluation pipeline."""
-    evaluated_models = prepare_model_to_evaluate()
+# L=14 datasets (yeast, Water-quality) are tractable thanks to the prefix-tree
+# batched predict() — ~hundreds of x faster than the brute-force enumeration.
+# chest_xray_nih__* requires pre-extracted features at
+# datasets/nih_feature_vectors_{densenet,resnet,resnetae}.npy; see
+# src/chest_xray_dataset/Readme.md to regenerate.
+DEFAULT_DATASET_NAMES = [
+    "flags",                       # L=7
+    "emotions",                    # L=6
+    "scene",                       # L=6
+    "CHD_49",                      # L=6
+    "VirusGO_sparse",              # L=6  (sparse ARFF)
+    "PlantPseAAC",                 # L=12 (sparse ARFF)
+    "Water-quality",               # L=14
+    "yeast",                       # L=14
+    "chest_xray_nih__densenet",    # L=14, N≈112k
+    "chest_xray_nih__resnet",      # L=14, N≈112k
+    "chest_xray_nih__resnetae",    # L=14, N≈112k
+]
+
+DEFAULT_SEEDS = [1, 2, 3, 4, 5]
+
+# Binary-prediction metrics: applied to each predict_X output.
+BINARY_METRICS = [
+    {"name": "Hamming Accuracy",          "func": EvaluationMetrics.hamming_accuracy},
+    {"name": "Subset Accuracy",            "func": EvaluationMetrics.subset_accuracy},
+    {"name": "Precision Score",            "func": EvaluationMetrics.precision_score},
+    {"name": "Negative Predictive Value",  "func": EvaluationMetrics.negative_predictive_value},
+    {"name": "Recall Score",               "func": EvaluationMetrics.recall_score},
+    {"name": "Markedness",                 "func": EvaluationMetrics.markedness},
+    {"name": "Fmeasure Score",             "func": EvaluationMetrics.f_beta},
+    {"name": "Informedness",               "func": EvaluationMetrics.informedness},
+    {"name": "Macro F1",                   "func": EvaluationMetrics.macro_f1},
+    {"name": "Micro F1",                   "func": EvaluationMetrics.micro_f1},
+]
+# Ranking metrics: applied to continuous marginal scores (model-level, not per inference rule).
+RANKING_METRICS = [
+    {"name": "One-Error Score",       "func": EvaluationMetrics.one_error_score},
+    {"name": "Coverage Score",         "func": EvaluationMetrics.coverage_score},
+    {"name": "Ranking Loss Score",     "func": EvaluationMetrics.ranking_loss_score},
+    {"name": "Average Precision",      "func": EvaluationMetrics.average_precision_score},
+]
+
+PREDICT_FUNCTIONS = [
+    {"name": "Predict Hamming",      "func": "predict_hamming",         "metrics": BINARY_METRICS},
+    {"name": "Predict Subset",       "func": "predict_subset",          "metrics": BINARY_METRICS},
+    {"name": "Predict Precision",    "func": "predict_precision",       "metrics": BINARY_METRICS},
+    {"name": "Predict NPV",          "func": "predict_npv",             "metrics": BINARY_METRICS},
+    {"name": "Predict Recall",       "func": "predict_recall",          "metrics": BINARY_METRICS},
+    {"name": "Predict Markedness",   "func": "predict_markedness",      "metrics": BINARY_METRICS},
+    {"name": "Predict Fmeasure",     "func": "predict_fmeasure",        "metrics": BINARY_METRICS},
+    {"name": "Predict Informedness", "func": "predict_informedness",    "metrics": BINARY_METRICS},
+    {"name": "Marginal Scores",      "func": "predict_marginal_scores", "metrics": RANKING_METRICS},
+]
+
+
+def _n_parallel_folds():
+    """Honour Slurm's CPU allocation when present; else use all local cores."""
+    slurm_cpus = os.environ.get("SLURM_CPUS_PER_TASK")
+    return int(slurm_cpus) if slurm_cpus else -1
+
+
+def run_single(dataset_name, seed, estimator_names, output_dir):
+    """Run k-fold CV for one (dataset, seed, estimator-set) combo and write one CSV.
+
+    Output: <output_dir>/<dataset>/seed<seed>_<est-tag>.csv (+ _crosstab.csv).
+    `est-tag` is "all" if every estimator is requested, otherwise a `-` join.
+    """
     folder_path = os.path.join(BASE_DIR, "datasets")
-    result_dir = os.path.join(BASE_DIR, "result")
-    os.makedirs(result_dir, exist_ok=True)
+    out_subdir = os.path.join(output_dir, dataset_name)
+    os.makedirs(out_subdir, exist_ok=True)
 
-    print(f"Dataset folder: {folder_path}")
+    est_tag = "all" if set(estimator_names) == set(ESTIMATOR_FACTORIES) else "-".join(estimator_names)
+    output_csv = os.path.join(out_subdir, f"seed{seed}_{est_tag}.csv")
 
-    # L=14 datasets (yeast, Water-quality) are tractable thanks to the prefix-tree
-    # batched predict() — ~hundreds of x faster than the brute-force enumeration.
-    # chest_xray_nih__* requires pre-extracted features at
-    # datasets/nih_feature_vectors_{densenet,resnet,resnetae}.npy; see
-    # src/chest_xray_dataset/extract_nih_features.py to regenerate.
-    dataset_names = [
-        "flags",                       # L=7
-        "emotions",                    # L=6
-        "scene",                       # L=6
-        "CHD_49",                      # L=6
-        "VirusGO_sparse",              # L=6  (sparse ARFF)
-        "PlantPseAAC",                 # L=12 (sparse ARFF)
-        "Water-quality",               # L=14
-        "yeast",                       # L=14
-        "chest_xray_nih__densenet",    # L=14, N≈112k
-        "chest_xray_nih__resnet",      # L=14, N≈112k
-        "chest_xray_nih__resnetae",    # L=14, N≈112k
-    ]
+    evaluated_models = prepare_model_to_evaluate(estimator_names=estimator_names, seed=seed)
 
-    # Binary-prediction metrics: applied to each predict_X output.
-    binary_metrics = [
-        {"name": "Hamming Accuracy",          "func": EvaluationMetrics.hamming_accuracy},
-        {"name": "Subset Accuracy",            "func": EvaluationMetrics.subset_accuracy},
-        {"name": "Precision Score",            "func": EvaluationMetrics.precision_score},
-        {"name": "Negative Predictive Value",  "func": EvaluationMetrics.negative_predictive_value},
-        {"name": "Recall Score",               "func": EvaluationMetrics.recall_score},
-        {"name": "Markedness",                 "func": EvaluationMetrics.markedness},
-        {"name": "Fmeasure Score",             "func": EvaluationMetrics.f_beta},
-        {"name": "Informedness",               "func": EvaluationMetrics.informedness},
-        {"name": "Macro F1",                   "func": EvaluationMetrics.macro_f1},
-        {"name": "Micro F1",                   "func": EvaluationMetrics.micro_f1},
-    ]
-    # Ranking metrics: applied to continuous marginal scores (model-level, not per inference rule).
-    ranking_metrics = [
-        {"name": "One-Error Score",       "func": EvaluationMetrics.one_error_score},
-        {"name": "Coverage Score",         "func": EvaluationMetrics.coverage_score},
-        {"name": "Ranking Loss Score",     "func": EvaluationMetrics.ranking_loss_score},
-        {"name": "Average Precision",      "func": EvaluationMetrics.average_precision_score},
-    ]
+    (dataset_handler,) = list(read_datasets_from_folder(folder_path, [dataset_name]))
+    print(f"\nEvaluating: {dataset_name} (seed={seed}, estimators={estimator_names})")
+    t0 = time.time()
 
-    predict_functions = [
-        {"name": "Predict Hamming",      "func": "predict_hamming",         "metrics": binary_metrics},
-        {"name": "Predict Subset",       "func": "predict_subset",          "metrics": binary_metrics},
-        {"name": "Predict Precision",    "func": "predict_precision",       "metrics": binary_metrics},
-        {"name": "Predict NPV",          "func": "predict_npv",             "metrics": binary_metrics},
-        {"name": "Predict Recall",       "func": "predict_recall",          "metrics": binary_metrics},
-        {"name": "Predict Markedness",   "func": "predict_markedness",      "metrics": binary_metrics},
-        {"name": "Predict Fmeasure",     "func": "predict_fmeasure",        "metrics": binary_metrics},
-        {"name": "Predict Informedness", "func": "predict_informedness",    "metrics": binary_metrics},
-        {"name": "Marginal Scores",      "func": "predict_marginal_scores", "metrics": ranking_metrics},
-    ]
-
-    dataset_results = {}
-
-    for dataset_handler in read_datasets_from_folder(folder_path, dataset_names):
-        print(f"\nEvaluating: {dataset_handler.dataset_name}")
-        t0 = time.time()
-
-        job_results = Parallel(n_jobs=-1)(
-            delayed(evaluate_kfold)(
-                dataset_handler,
-                evaluated_models,
-                predict_functions,
-                train_index,
-                test_index,
-                kfold_index,
-            )
-            for kfold_index, (train_index, test_index) in enumerate(
-                dataset_handler.get_cross_validation_folds(
-                    n_splits=KFOLD_SPLIT_NUMBER, random_state=SEED
-                )
+    job_results = Parallel(n_jobs=_n_parallel_folds())(
+        delayed(evaluate_kfold)(
+            dataset_handler,
+            evaluated_models,
+            PREDICT_FUNCTIONS,
+            train_index,
+            test_index,
+            kfold_index,
+        )
+        for kfold_index, (train_index, test_index) in enumerate(
+            dataset_handler.get_cross_validation_folds(
+                n_splits=KFOLD_SPLIT_NUMBER, random_state=seed
             )
         )
+    )
 
-        dataset_results[dataset_handler.dataset_name] = {}
-        for fold_result in job_results:
-            if fold_result is None:
-                continue
-            for model in evaluated_models:
-                m_key = model_display_key(model)
-                for pf in predict_functions:
-                    for mf in pf["metrics"]:
-                        add_key_if_missing(
-                            dataset_results,
-                            dataset_handler.dataset_name,
-                            m_key,
-                            pf["name"],
-                            mf["name"],
-                            fold_result[dataset_handler.dataset_name][m_key][pf["name"]][mf["name"]],
-                        )
+    dataset_results = {dataset_name: {}}
+    for fold_result in job_results:
+        if fold_result is None:
+            continue
+        for model in evaluated_models:
+            m_key = model_display_key(model)
+            for pf in PREDICT_FUNCTIONS:
+                for mf in pf["metrics"]:
+                    add_key_if_missing(
+                        dataset_results, dataset_name, m_key, pf["name"], mf["name"],
+                        fold_result[dataset_name][m_key][pf["name"]][mf["name"]],
+                    )
 
-        output_csv = os.path.join(result_dir, f"result_{dataset_handler.dataset_name}.csv")
-        result_df = save_result_df(dataset_results, output_csv)
-        save_crosstab(result_df, output_csv)
-        print(f"Dataset evaluation time: {time.time() - t0:.1f}s")
+    result_df = save_result_df(dataset_results, output_csv)
+    save_crosstab(result_df, output_csv)
+    print(f"Dataset evaluation time: {time.time() - t0:.1f}s")
+    return output_csv
+
+
+def parse_args():
+    p = argparse.ArgumentParser(
+        description="Evaluate PCC/BR inference rules. With no args, runs the full "
+                    "sweep over DEFAULT_DATASET_NAMES × DEFAULT_SEEDS × all estimators."
+    )
+    p.add_argument("--dataset", choices=DEFAULT_DATASET_NAMES,
+                   help="Run a single dataset (Slurm per-job mode).")
+    p.add_argument("--seed", type=int, default=SEED,
+                   help="Single-job: RNG seed used for KFold shuffling and base estimators.")
+    p.add_argument("--estimator", choices=list(ESTIMATOR_FACTORIES) + ["all"], default="all",
+                   help="Single-job: base estimator(s) to train. 'all' = lr+rf+adaboost.")
+    p.add_argument("--output-dir", default=os.path.join(BASE_DIR, "result"),
+                   help="Root output dir; per-job CSVs land in <output-dir>/<dataset>/.")
+    return p.parse_args()
+
+
+def main():
+    args = parse_args()
+    estimator_names = list(ESTIMATOR_FACTORIES) if args.estimator == "all" else [args.estimator]
+
+    if args.dataset is not None:
+        # Per-job mode (one row of the sweep, e.g. invoked from sbatch).
+        run_single(args.dataset, args.seed, estimator_names, args.output_dir)
+        return
+
+    # Full sweep — kept for local interactive use; on the cluster prefer
+    # slurm/submit_all.sh which launches one --dataset job at a time.
+    for dataset_name in DEFAULT_DATASET_NAMES:
+        for seed in DEFAULT_SEEDS:
+            run_single(dataset_name, seed, estimator_names, args.output_dir)
 
 
 if __name__ == "__main__":
