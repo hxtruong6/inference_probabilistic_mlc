@@ -201,6 +201,34 @@ class TestFInformedness:
 
 
 # ──────────────────────────────────────────────
+# macro_f1 / micro_f1
+# ──────────────────────────────────────────────
+
+class TestMacroMicroF1:
+    def test_perfect(self, perfect):
+        assert EM.macro_f1(*perfect) == pytest.approx(1.0)
+        assert EM.micro_f1(*perfect) == pytest.approx(1.0)
+
+    def test_worst(self, worst):
+        assert EM.macro_f1(*worst) == pytest.approx(0.0)
+        assert EM.micro_f1(*worst) == pytest.approx(0.0)
+
+    def test_all_zero(self):
+        Y = np.zeros((3, 3), dtype=int)
+        assert EM.macro_f1(Y, Y) == pytest.approx(1.0)
+        assert EM.micro_f1(Y, Y) == pytest.approx(1.0)
+
+    def test_known_case_macro_differs_from_micro(self):
+        # Y_true col sums: [2,2,1]; Y_pred col sums: [1,1,0]
+        # Per-label F1: [2/3, 2/3, 0] → macro = 4/9
+        # Global: TP=2, FP=0, FN=3 → micro = 4/7
+        Y_true = np.array([[1, 0, 1], [0, 1, 0], [1, 1, 0]])
+        Y_pred = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 0]])
+        assert EM.macro_f1(Y_true, Y_pred) == pytest.approx(4 / 9)
+        assert EM.micro_f1(Y_true, Y_pred) == pytest.approx(4 / 7)
+
+
+# ──────────────────────────────────────────────
 # markedness  (was buggy: precision=1 when pred=0,true>0)
 # ──────────────────────────────────────────────
 
@@ -232,3 +260,51 @@ class TestFMarkedness:
         mar = EM.markedness(Y_true, Y_pred)
         assert prec == pytest.approx(0.5)  # mean of [0, 1]
         assert mar >= 0.0 and mar <= 1.0
+
+
+# ──────────────────────────────────────────────
+# Ranking metrics: one_error, coverage, ranking_loss, average_precision
+# All take continuous scores (not binary preds). Higher = better.
+# ──────────────────────────────────────────────
+
+class TestRankingMetrics:
+    def test_perfect_single_positive(self):
+        Y = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+        S = Y.astype(float)
+        assert EM.one_error_score(Y, S) == pytest.approx(1.0)
+        assert EM.coverage_score(Y, S) == pytest.approx(1.0)
+        assert EM.ranking_loss_score(Y, S) == pytest.approx(1.0)
+        assert EM.average_precision_score(Y, S) == pytest.approx(1.0)
+
+    def test_worst_single_positive(self):
+        Y = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+        S = (1 - Y).astype(float)
+        assert EM.one_error_score(Y, S) == pytest.approx(0.0)
+
+    def test_known_case_correct_top(self):
+        # Top-1 is true positive; pos ranks [1,2] of L=4 → cov norm = 1/3
+        Y = np.array([[1, 0, 1, 0]])
+        S = np.array([[0.9, 0.1, 0.5, 0.2]])
+        assert EM.one_error_score(Y, S) == pytest.approx(1.0)
+        assert EM.coverage_score(Y, S) == pytest.approx(2 / 3)
+        assert EM.ranking_loss_score(Y, S) == pytest.approx(1.0)
+        assert EM.average_precision_score(Y, S) == pytest.approx(1.0)
+
+    def test_known_case_misranked(self):
+        # Pos ranks [4, 2] of L=4 → cov norm=1
+        # Pair misorder: 3/4 → RL_score=0.25
+        # AP: sorted pos ranks [2,4] → mean(1/2, 2/4) = 0.5
+        Y = np.array([[1, 0, 1, 0]])
+        S = np.array([[0.1, 0.9, 0.5, 0.2]])
+        assert EM.one_error_score(Y, S) == pytest.approx(0.0)
+        assert EM.coverage_score(Y, S) == pytest.approx(0.0)
+        assert EM.ranking_loss_score(Y, S) == pytest.approx(0.25)
+        assert EM.average_precision_score(Y, S) == pytest.approx(0.5)
+
+    def test_all_negative_sample_is_vacuous(self):
+        # No positive labels — should not crash; AP=1, coverage perfect.
+        Y = np.array([[0, 0, 0]])
+        S = np.array([[0.1, 0.2, 0.3]])
+        assert EM.coverage_score(Y, S) == pytest.approx(1.0)
+        assert EM.ranking_loss_score(Y, S) == pytest.approx(1.0)
+        assert EM.average_precision_score(Y, S) == pytest.approx(1.0)

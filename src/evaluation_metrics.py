@@ -204,6 +204,36 @@ class EvaluationMetrics:
         return f_beta.mean()
 
     @staticmethod
+    def macro_f1(Y_true, Y_pred):
+        """Macro-averaged F1: per-label F1 (aggregated across samples), then mean over labels.
+
+        Per-label: F1_j = 2*TP_j / (2*TP_j + FP_j + FN_j).
+        Edge case: label with no positives in both Y_true and Y_pred → 1.0 (vacuous);
+        label with positives in Y_true but none predicted → 0.0.
+        """
+        EvaluationMetrics._check_dimensions(Y_true, Y_pred)
+        tp = np.sum(Y_true * Y_pred, axis=0).astype(float)
+        fp = np.sum((1 - Y_true) * Y_pred, axis=0).astype(float)
+        fn = np.sum(Y_true * (1 - Y_pred), axis=0).astype(float)
+        denom = 2 * tp + fp + fn
+        f1 = np.where(denom > 0, 2 * tp / np.where(denom > 0, denom, 1), 1.0)
+        return float(f1.mean())
+
+    @staticmethod
+    def micro_f1(Y_true, Y_pred):
+        """Micro-averaged F1: aggregate TP/FP/FN globally, then single F1.
+
+        Equivalent to weighting each (sample, label) pair equally.
+        Edge case: both Y_true and Y_pred all zeros → 1.0.
+        """
+        EvaluationMetrics._check_dimensions(Y_true, Y_pred)
+        tp = float(np.sum(Y_true * Y_pred))
+        fp = float(np.sum((1 - Y_true) * Y_pred))
+        fn = float(np.sum(Y_true * (1 - Y_pred)))
+        denom = 2 * tp + fp + fn
+        return 1.0 if denom == 0 else 2 * tp / denom
+
+    @staticmethod
     def informedness(Y_true, Y_pred):
         """
         Calculate label-averaged Informedness (Balanced Accuracy per label) for multilabel classification.
@@ -271,3 +301,104 @@ class EvaluationMetrics:
                 precision[i] = np.dot(Y_true[i], Y_pred[i]) / sum_pred
 
         return (0.5 * (npv + precision)).mean()
+
+    # ────────────────────────────────────────────────────────────────────
+    # Ranking-based metrics (Schapire & Singer 2000).
+    # These take continuous SCORES per label (e.g. marginal P(y_j=1|x))
+    # rather than binary predictions. All are reported in higher-is-better
+    # form: 1 - raw_metric, scaled to [0, 1] where applicable.
+    # ────────────────────────────────────────────────────────────────────
+
+    @staticmethod
+    def _rank_descending(scores):
+        """Return rank (1-indexed) of each entry along last axis, ties broken arbitrarily.
+
+        rank 1 = highest score. Shape preserved.
+        """
+        order = np.argsort(-scores, axis=-1)  # indices of descending sort
+        ranks = np.empty_like(order)
+        np.put_along_axis(ranks, order, np.arange(1, scores.shape[-1] + 1), axis=-1)
+        return ranks
+
+    @staticmethod
+    def one_error_score(Y_true, scores):
+        """1 - OneError. Top-scored label IS in the true label set → 1, else 0.
+
+        Higher is better. Range [0, 1].
+        """
+        EvaluationMetrics._check_dimensions(Y_true, scores)
+        top = np.argmax(scores, axis=1)
+        hits = Y_true[np.arange(len(Y_true)), top]
+        return float(hits.mean())
+
+    @staticmethod
+    def coverage_score(Y_true, scores):
+        """1 - normalised Coverage error.
+
+        Coverage_raw = mean over samples of: how far down the ranked list (1-indexed)
+        we must go to include all true labels. Normalised to [0, 1] by (L-1).
+        Returned as 1 - normalised (higher better).
+        Samples with no positive labels contribute 0 to raw coverage (vacuous).
+        """
+        EvaluationMetrics._check_dimensions(Y_true, scores)
+        N, L = Y_true.shape
+        if L <= 1:
+            return 1.0
+        ranks = EvaluationMetrics._rank_descending(scores)  # (N, L)
+        # Per sample: max rank among labels where Y_true=1; if no positives, 0.
+        masked = np.where(Y_true.astype(bool), ranks, 0)
+        max_rank = masked.max(axis=1)  # (N,)
+        # Normalise: rank ∈ [1, L] for samples with positives; map to [0, 1] via (rank-1)/(L-1)
+        # For samples with no positives, max_rank = 0; convention: 0 normalised (perfect).
+        norm = np.where(max_rank > 0, (max_rank - 1) / (L - 1), 0.0)
+        return float(1.0 - norm.mean())
+
+    @staticmethod
+    def ranking_loss_score(Y_true, scores):
+        """1 - Ranking Loss.
+
+        Ranking Loss = avg fraction of (relevant, irrelevant) label pairs that are
+        misordered (score of irrelevant >= score of relevant). Lower is better → we
+        return 1 - RL. Samples with all-positive or all-negative labels contribute 0
+        loss (vacuous).
+        """
+        EvaluationMetrics._check_dimensions(Y_true, scores)
+        N, L = Y_true.shape
+        rl = np.zeros(N)
+        for n in range(N):
+            pos = np.where(Y_true[n] == 1)[0]
+            neg = np.where(Y_true[n] == 0)[0]
+            if len(pos) == 0 or len(neg) == 0:
+                rl[n] = 0.0
+                continue
+            s_pos = scores[n, pos][:, None]    # (|pos|, 1)
+            s_neg = scores[n, neg][None, :]    # (1, |neg|)
+            # Pair misorder: s_pos <= s_neg (strict tie counted as half-violation)
+            mis = (s_pos < s_neg).sum() + 0.5 * (s_pos == s_neg).sum()
+            rl[n] = mis / (len(pos) * len(neg))
+        return float(1.0 - rl.mean())
+
+    @staticmethod
+    def average_precision_score(Y_true, scores):
+        """Label-ranking Average Precision (LRAP).
+
+        For each true label, precision @ its rank (fraction of labels ranked
+        at-or-above it that are also true). Averaged within sample, then across.
+        Samples with no positive labels contribute 1 (vacuous).
+        Higher is better. Range [0, 1].
+        """
+        EvaluationMetrics._check_dimensions(Y_true, scores)
+        N, L = Y_true.shape
+        ranks = EvaluationMetrics._rank_descending(scores)  # (N, L)
+        ap = np.zeros(N)
+        for n in range(N):
+            pos = np.where(Y_true[n] == 1)[0]
+            if len(pos) == 0:
+                ap[n] = 1.0
+                continue
+            pos_ranks = ranks[n, pos]  # ranks of true labels
+            # For each true label at rank r: count how many of the true labels have rank ≤ r.
+            sorted_pr = np.sort(pos_ranks)
+            counts = np.arange(1, len(pos) + 1)  # 1, 2, ..., |pos|
+            ap[n] = float(np.mean(counts / sorted_pr))
+        return float(ap.mean())
