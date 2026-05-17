@@ -1,6 +1,60 @@
+import re
+import numpy as np
 import pandas as pd
 import scipy.io.arff as arff
 from sklearn.model_selection import KFold
+
+
+def _load_sparse_arff(path):
+    """Parse MULAN sparse ARFF (`{idx val, idx val, ...}` rows).
+
+    scipy.io.arff cannot read this format. Returns a dense DataFrame
+    where unspecified indices default to 0 (the MULAN convention).
+    """
+    attr_re = re.compile(r"^@attribute\s+(\S+)\s+(.+)$", re.IGNORECASE)
+    attr_names = []
+    in_data = False
+    rows = []
+
+    with open(path, "r", encoding="utf-8", errors="replace") as fh:
+        for raw in fh:
+            line = raw.strip()
+            if not line or line.startswith("%"):
+                continue
+            if not in_data:
+                if line.lower().startswith("@data"):
+                    in_data = True
+                    continue
+                m = attr_re.match(line)
+                if m:
+                    attr_names.append(m.group(1))
+                continue
+            # data row: "{idx val, idx val, ...}"
+            inner = line.strip().lstrip("{").rstrip("}")
+            row = np.zeros(len(attr_names), dtype=float)
+            if inner:
+                for pair in inner.split(","):
+                    idx_str, val_str = pair.strip().split(None, 1)
+                    row[int(idx_str)] = float(val_str)
+            rows.append(row)
+
+    return pd.DataFrame(np.vstack(rows), columns=attr_names)
+
+
+def _is_sparse_arff(path):
+    """Peek for `{` as the first non-comment char after @data."""
+    with open(path, "r", encoding="utf-8", errors="replace") as fh:
+        in_data = False
+        for raw in fh:
+            line = raw.strip()
+            if not line or line.startswith("%"):
+                continue
+            if not in_data:
+                if line.lower().startswith("@data"):
+                    in_data = True
+                continue
+            return line.startswith("{")
+    return False
 
 
 _LABEL_COUNTS = {
@@ -43,8 +97,11 @@ class MultiLabelArffDataset:
             return
 
         self.path = path
-        data = arff.loadarff(self.path)
-        df = pd.DataFrame(data[0])
+        if _is_sparse_arff(self.path):
+            df = _load_sparse_arff(self.path)
+        else:
+            data = arff.loadarff(self.path)
+            df = pd.DataFrame(data[0])
 
         n_labels = self._get_label_count()
         if target_at_first:
