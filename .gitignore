@@ -5,3 +5,4 @@ __pycache__/
 datasets/NIH
 datasets/nih_*
 datasets/nih_feature_vectors__labels.npy
+slurm/logs/
