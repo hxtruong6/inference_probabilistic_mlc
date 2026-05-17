@@ -179,17 +179,21 @@ def main():
 
     # L=14 datasets (yeast, Water-quality) are tractable thanks to the prefix-tree
     # batched predict() — ~hundreds of x faster than the brute-force enumeration.
+    # chest_xray_nih__* requires pre-extracted features at
+    # datasets/nih_feature_vectors_{densenet,resnet,resnetae}.npy; see
+    # src/chest_xray_dataset/extract_nih_features.py to regenerate.
     dataset_names = [
-        "flags",            # L=7
-        "emotions",         # L=6
-        "scene",            # L=6
-        "CHD_49",           # L=6
-        # "Water-quality",  # L=14 — feasible with optimized predict(); enable for full run
-        # "yeast",          # L=14 — feasible with optimized predict()
-        # "VirusGO_sparse", "PlantPseAAC",  # sparse ARFF — scipy.io.arff cannot parse
-        # "chest_xray_nih__densenet",
-        # "chest_xray_nih__resnet",
-        # "chest_xray_nih__resnetae",
+        "flags",                       # L=7
+        "emotions",                    # L=6
+        "scene",                       # L=6
+        "CHD_49",                      # L=6
+        "VirusGO_sparse",              # L=6  (sparse ARFF)
+        "PlantPseAAC",                 # L=12 (sparse ARFF)
+        "Water-quality",               # L=14
+        "yeast",                       # L=14
+        "chest_xray_nih__densenet",    # L=14, N≈112k
+        "chest_xray_nih__resnet",      # L=14, N≈112k
+        "chest_xray_nih__resnetae",    # L=14, N≈112k
     ]
 
     # Binary-prediction metrics: applied to each predict_X output.

@@ -107,10 +107,13 @@ Select datasets by editing `dataset_names` in `inference_evaluate_models.py`. Th
 | `CHD_49` | 6 | 555 | MULAN | supported |
 | `Water-quality` | 14 | 1060 | MULAN | supported, HPC recommended |
 | `yeast` | 14 | 2417 | MULAN | supported, HPC recommended |
-| `VirusGO_sparse`, `PlantPseAAC` | — | — | MULAN | **unsupported** — sparse ARFF; `scipy.io.arff` cannot parse |
-| `chest_xray_nih__{densenet,resnet,resnetae}` | 14 | ~112k | NIH ChestX-ray14 | supported via pre-extracted `.npy` features |
+| `VirusGO_sparse` | 6 | 207 | MULAN | supported (sparse ARFF, parsed by `src/arff_dataset.py`) |
+| `PlantPseAAC` | 12 | 978 | MULAN | supported (sparse ARFF) |
+| `chest_xray_nih__{densenet,resnet,resnetae}` | 8 | ~112k | NIH ChestX-ray14 | supported via pre-extracted `.npy` features; see [`src/chest_xray_dataset/Readme.md`](src/chest_xray_dataset/Readme.md) |
 
 For L = 14, exact enumeration over 2^L = 16 384 label vectors is required. The batched implementation (below) makes this tractable on a single CPU; for L ≥ 18, approximate inference is recommended.
+
+The NIH ChestX-ray14 features are not redistributed in this repo (50 MB+ per backbone). To regenerate `datasets/nih_feature_vectors_{densenet,resnet,resnetae}.npy`, follow the instructions in `src/chest_xray_dataset/Readme.md`.
 
 ## Implementation
 
@@ -153,7 +156,6 @@ python -m pytest tests/ -v
 
 ## Limitations
 
-- **Sparse ARFF** (`{idx val, ...}` format) is not supported by `scipy.io.arff`; `VirusGO_sparse` and `PlantPseAAC` therefore fail to load.
 - **Exact enumeration** over 2^L scales poorly for L ≥ 18 even with the batched implementation (memory ≈ N · 2^L · 8 bytes for the joint cache). Approximate inference (e.g. ε-A or beam search) is the natural extension and is not implemented here.
 - All base estimators must implement `predict_proba`. `SGDClassifier` works with `loss="log_loss"`; calibration is the user's responsibility.
 

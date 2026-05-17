@@ -1,45 +1,34 @@
-def get_image_indices_from_txt(txt_file_path, csv_file_path):
-    """
-    Extracts Image Index values from the given CSV file, filtering
-    to include only those found in the specified TXT file.
+"""Subset the NIH metadata CSV to the official test-list image IDs.
 
-    Args:
-        txt_file_path (str): Path to the TXT file containing image filenames.
-        csv_file_path (str): Path to the CSV file containing image metadata.
+Reads NIH's test_list.txt (one image filename per line) and the cleaned
+metadata CSV (produced by fix-csv.py); writes a CSV containing only the
+metadata rows whose Image Index appears in test_list.txt.
 
-    Returns:
-        list: A list of Image Index values present in the TXT file.
-    """
-
-    # 1. Read image filenames from TXT file
-    with open(txt_file_path, "r") as f:
-        image_filenames = f.read().splitlines()
-
-    # 2. Extract Image Index from filenames (efficiently)
-    image_indices_from_txt = [filename for filename in image_filenames]
-
-    print(image_indices_from_txt[:5])
-    # 3. Load CSV and filter Image Index values
-    import pandas as pd
-
-    df = pd.read_csv(csv_file_path)
-    print(df.head())
-    df.drop(columns=["Unnamed: 11"], inplace=True)
-
-    filtered_image_indices = df[df["Image Index"].isin(image_indices_from_txt)]
-
-    return filtered_image_indices
+Usage:
+    python create_test_set.py <test_list.txt> <data_entry_fixed.csv> <output.csv>
+"""
+import argparse
+import pandas as pd
 
 
-# Example Usage
-txt_file_path = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/test_list.txt"
-csv_file_path = "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017_fixed.csv"
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("test_list_txt", help="NIH-provided test_list.txt")
+    ap.add_argument("data_entry_csv", help="Cleaned Data_Entry_2017 CSV (from fix-csv.py)")
+    ap.add_argument("output_csv", help="Destination CSV for the test-set subset")
+    args = ap.parse_args()
 
-matching_image_indices = get_image_indices_from_txt(txt_file_path, csv_file_path)
-print(matching_image_indices.head())
+    with open(args.test_list_txt, "r") as f:
+        test_filenames = set(line.strip() for line in f if line.strip())
 
-# Save to CSV
-matching_image_indices.to_csv(
-    "/Users/xuantruong/Documents/JAIST/inference_prob_mlc_code/datasets/NIH/Data_Entry_2017__testset.csv",
-    index=False,
-)
+    df = pd.read_csv(args.data_entry_csv)
+    if "Unnamed: 11" in df.columns:
+        df = df.drop(columns=["Unnamed: 11"])
+
+    out = df[df["Image Index"].isin(test_filenames)]
+    out.to_csv(args.output_csv, index=False)
+    print(f"Wrote {len(out)} test rows to {args.output_csv}")
+
+
+if __name__ == "__main__":
+    main()

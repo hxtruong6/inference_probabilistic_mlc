@@ -1,3 +1,4 @@
+import argparse
 import os
 from typing import Any, Dict, List
 import numpy as np
@@ -226,58 +227,55 @@ def load_dataloader(batch_size=1, shuffle=False):
     return dataloader
 
 
+def build_model(model_name):
+    """Instantiate one of the three NIH backbones used in the paper."""
+    if model_name == "densenet":
+        return xrv.models.DenseNet(weights="densenet121-res224-nih"), "densenet"
+    if model_name == "resnet":
+        return xrv.models.ResNet(weights="resnet50-res512-all"), "resnet"
+    if model_name == "resnetae":
+        return xrv.autoencoders.ResNetAE(weights="101-elastic"), "ResNetAE"
+    raise ValueError(
+        f"Unknown model '{model_name}'. Choose from: densenet, resnet, resnetae."
+    )
+
+
 def main():
-    dataloader = load_dataloader(batch_size=128, shuffle=False)
+    parser = argparse.ArgumentParser(
+        description="Extract NIH ChestX-ray14 features for the paper's chest_xray_nih__* eval rows."
+    )
+    parser.add_argument(
+        "--model",
+        choices=["densenet", "resnet", "resnetae"],
+        default="densenet",
+        help="Backbone whose pooled features to dump. Run once per backbone.",
+    )
+    parser.add_argument("--batch-size", type=int, default=128)
+    args = parser.parse_args()
+
+    dataloader = load_dataloader(batch_size=args.batch_size, shuffle=False)
     logger.info(f"\U0001F4C1 Dataloader size: {len(dataloader)}")
 
-    MODELS = {
-        "densenet": {
-            "model": xrv.models.DenseNet(weights="densenet121-res224-nih"),
-            "model_type": "densenet",
-        },
-        "resnet": {
-            "model": xrv.models.ResNet(weights="resnet50-res512-all"),
-            "model_type": "resnet",
-        },
-        "resnetae": {
-            "model": xrv.autoencoders.ResNetAE(weights="101-elastic"),
-            "model_type": "ResNetAE",
-        },
-    }
-
-    # TODO: Select the model
-    SELECTED_MODEL = "densenet"
-    # SELECTED_MODEL = "resnet"
-    # SELECTED_MODEL = "resnetae"
-
-    xrvModel = XRVModel(
-        model=MODELS[SELECTED_MODEL]["model"],
-        dataloader=dataloader,
-        model_type=MODELS[SELECTED_MODEL]["model_type"],
-    )
+    model, model_type = build_model(args.model)
+    xrvModel = XRVModel(model=model, dataloader=dataloader, model_type=model_type)
     xrvModel.extract_features_vec()
 
-    # get only 8 label. check index of label in dataset.pathologies by order then drop the rest column index.
     extract_features = xrvModel.get_features_vec()
     logger.info(
-        f"\U0001F4E7 Extracted features of The first image: \n {extract_features[0]}\n"
+        f"\U0001F4E7 Extracted features of the first image: \n {extract_features[0]}\n"
     )
 
-    saved_file = f"{BASE_DIR}/datasets/nih_feature_vectors_{SELECTED_MODEL}.npy"
-
+    saved_file = f"{BASE_DIR}/datasets/nih_feature_vectors_{args.model}.npy"
     xrvModel.save(saved_file)
 
     logger.info(
         f"\U0001F4E8 Saved features to file: {saved_file} | Total features: {len(extract_features)}\n"
     )
 
-    # ---------------------------   Load the saved features   ---------------------------
-    # Load the saved features
+    # sanity-check: reload and report shape
     data_feat = load_features_from_npy(saved_file)
     logger.info(f"\U0001F4E9 Loaded features: \U0001F4C0 {data_feat[0].shape}")
-
     df_feats, df_labels = load_df_features_from_npy(features_filename=saved_file)
-
     logger.info(f"\U0001F4B9 Loaded features: \n{df_feats.head(5)}")
     logger.info(f"\U0001F3B9 Loaded labels: \n{df_labels.head(5)}")
 
