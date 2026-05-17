@@ -5,7 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from src.skmultiflow.meta.classifier_chains import ClassifierChain
 
 
-def P(y, x, cc, payoff=np.prod):
+def joint_probability(y, x, cc, payoff=np.prod):
     """Compute the joint probability P(Y=y | X=x) under the classifier chain cc.
 
     Parameters
@@ -57,37 +57,37 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
     def __init__(self, base_estimator=LogisticRegression(), order=None, random_state=None):
         super().__init__(base_estimator=base_estimator, order=order, random_state=random_state)
-        self.store_key: str | None = None
-        self.predicted_store: dict = {}
+        self.cache_key: str | None = None
+        self.prediction_cache: dict = {}
 
-    def set_store_key(self, key: str) -> None:
-        self.store_key = key
-        self.predicted_store[key] = None
+    def set_cache_key(self, key: str) -> None:
+        self.cache_key = key
+        self.prediction_cache[key] = None
 
     def predict(self, X, marginal=False, pairwise=False) -> tuple[np.ndarray, np.ndarray, dict]:
         """Enumerate all 2^L label combinations and compute joint probabilities.
 
-        Results are cached by store_key so multiple predict_* calls on the
+        Results are cached by cache_key so multiple predict_* calls on the
         same fold reuse the computed probabilities.
 
         Returns
         -------
-        (Yp, P_margin_yi_1, pairwise_dict)
-            Yp : (N, L) — MAP prediction (argmax over joint distribution).
+        (Y_pred, P_margin_yi_1, pairwise_dict)
+            Y_pred : (N, L) — MAP prediction (argmax over joint distribution).
             P_margin_yi_1 : (N, L) — marginal P(y_j=1 | x).
             pairwise_dict : dict with 'P_pair_wise', 'P_pair_wise0', 'P_pair_wise1'.
         """
         # Return cached result if available
         if (
-            self.store_key is not None
-            and self.predicted_store.get(self.store_key) is not None
+            self.cache_key is not None
+            and self.prediction_cache.get(self.cache_key) is not None
         ):
-            print(f"Cached [{self.store_key}]")
-            return self.predicted_store[self.store_key]
+            print(f"Cached [{self.cache_key}]")
+            return self.prediction_cache[self.cache_key]
 
-        print(f"Predicting... [{self.store_key}]")
+        print(f"Predicting... [{self.cache_key}]")
         N, D = X.shape
-        Yp = np.zeros((N, self.L))
+        Y_pred = np.zeros((N, self.L))
         P_margin_yi_1 = np.zeros((N, self.L))
         P_pair_wise = np.zeros((N, self.L, self.L + 1))
         P_pair_wise0 = np.zeros((N, 1))
@@ -97,7 +97,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
             w_max = 0.0
             for b in range(2 ** self.L):
                 y_ = np.array(list(map(int, np.binary_repr(b, width=self.L))))
-                w_ = P(y_, X[n], self)
+                w_ = joint_probability(y_, X[n], self)
 
                 s = int(np.sum(y_))
                 if s == 0:
@@ -112,11 +112,11 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
                             P_pair_wise[n, j, s] += w_
 
                 if w_ > w_max:
-                    Yp[n, :] = y_.copy()
+                    Y_pred[n, :] = y_.copy()
                     w_max = w_
 
         result = (
-            Yp,
+            Y_pred,
             P_margin_yi_1,
             {
                 "P_pair_wise": P_pair_wise,
@@ -126,10 +126,10 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         )
         # Fixed: update the existing dict entry instead of replacing the whole dict,
         # which would wipe out cached results for other keys.
-        self.predicted_store[self.store_key] = result
+        self.prediction_cache[self.cache_key] = result
         return result
 
-    def predict_Hamming(self, X):
+    def predict_hamming(self, X):
         """Bayes-optimal predictor for Hamming Accuracy.
 
         Thresholds each marginal P(y_j=1|x) at 0.5.
@@ -137,7 +137,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         _, P_margin_yi_1, _ = self.predict(X, marginal=True)
         return np.where(P_margin_yi_1 > 0.5, 1, 0)
 
-    def predict_Subset(self, X):
+    def predict_subset(self, X):
         """Bayes-optimal predictor for Subset Accuracy.
 
         Returns the joint MAP label vector (argmax over all 2^L combinations).
@@ -145,19 +145,19 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         predictions, _, _ = self.predict(X)
         return predictions
 
-    def predict_Precision(self, X):
+    def predict_precision(self, X):
         """Bayes-optimal predictor for Precision.
 
         Predicts exactly one label: the one with the highest marginal probability.
         """
         N = X.shape[0]
-        Yp = np.zeros((N, self.L))
+        Y_pred = np.zeros((N, self.L))
         _, P_margin_yi_1, _ = self.predict(X, marginal=True)
         for n in range(N):
-            Yp[n, np.argmax(P_margin_yi_1[n])] = 1
-        return Yp
+            Y_pred[n, np.argmax(P_margin_yi_1[n])] = 1
+        return Y_pred
 
-    def predict_Neg(self, X):
+    def predict_npv(self, X):
         """Bayes-optimal predictor for Negative Predictive Value (NPV).
 
         Predicts all labels as positive except the one with the lowest marginal
@@ -168,11 +168,11 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         _, P_margin_yi_1, _ = self.predict(X, marginal=True)
         # Sort marginals ascending; set only the least-likely label to 0.
         indices = np.argsort(P_margin_yi_1, axis=1)
-        Yp = np.ones((N, self.L))
-        Yp[np.arange(N)[:, None], indices[:, :1]] = 0
-        return Yp
+        Y_pred = np.ones((N, self.L))
+        Y_pred[np.arange(N)[:, None], indices[:, :1]] = 0
+        return Y_pred
 
-    def predict_Recall(self, X):
+    def predict_recall(self, X):
         """Bayes-optimal predictor for Recall.
 
         Predicting all labels as positive trivially achieves perfect recall
@@ -181,7 +181,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         """
         return np.ones((X.shape[0], self.L))
 
-    def predict_Mar(self, X):
+    def predict_markedness(self, X):
         """Bayes-optimal predictor for Markedness = 0.5 * (NPV + Precision).
 
         Conventions (match `EvaluationMetrics`):
@@ -202,7 +202,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         L = self.L
 
         indices = np.argsort(P_margin_yi_1, axis=1)[:, ::-1]
-        Yp = np.zeros((N, L))
+        Y_pred = np.zeros((N, L))
 
         for i in range(N):
             sum_p = float(np.sum(P_margin_yi_1[i]))
@@ -220,17 +220,17 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
             l_opt = int(np.argmax(E))
             for k in range(l_opt):
-                Yp[i, indices[i, k]] = 1
-        return Yp
+                Y_pred[i, indices[i, k]] = 1
+        return Y_pred
 
-    def predict_Fmeasure(self, X, beta=1):
+    def predict_fmeasure(self, X, beta=1):
         """Bayes-optimal predictor for F-beta measure."""
         N, _ = X.shape
         _, _, pw = self.predict(X, pairwise=True)
         P_pair_wise = pw["P_pair_wise"]
         P_pair_wise0 = pw["P_pair_wise0"]
 
-        Yp = np.zeros((N, self.L))
+        Y_pred = np.zeros((N, self.L))
         for i in range(N):
             q = np.zeros((self.L, self.L))
             indices_desc = []
@@ -249,28 +249,28 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
                     E[k] += q[k][int(indices_desc[k][i_])]
 
             if E0 > np.max(E):
-                Yp[i] = np.zeros(self.L)
+                Y_pred[i] = np.zeros(self.L)
             else:
                 k_opt = np.argmax(E)
                 for _l in range(k_opt + 1):
-                    Yp[i][int(indices_desc[k_opt][_l])] = 1
+                    Y_pred[i][int(indices_desc[k_opt][_l])] = 1
 
-        return Yp
+        return Y_pred
 
-    def predict_Inf(self, X):
+    def predict_informedness(self, X):
         """Bayes-optimal predictor for Informedness (Sensitivity + Specificity - 1).
 
         Include label j iff q_sens[j] + q_spec_cost[j] > C, where:
             q_sens[j]      = Σ_{s=1}^{L}   P(y_j=1, |y|=s | x) / s
             q_spec_cost[j] = Σ_{s=1}^{L-1} P(y_j=1, |y|=s | x) / (L-s)
-            C              = P(|y|=0 | x)/L + Σ_{s=1}^{L-1} P(|y|=s | x) / (s*(L-s))
+            C              = joint_probability(|y|=0 | x)/L + Σ_{s=1}^{L-1} P(|y|=s | x) / (s*(L-s))
         """
         N, _ = X.shape
         _, _, pw = self.predict(X, pairwise=True)
         P_pair_wise = pw["P_pair_wise"]    # (N, L, L+1)
         P_pair_wise0 = pw["P_pair_wise0"]  # (N, 1)
         L = self.L
-        Yp = np.zeros((N, L))
+        Y_pred = np.zeros((N, L))
 
         for i in range(N):
             q_sens = np.zeros(L)
@@ -286,6 +286,6 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
                 P_s = np.sum(P_pair_wise[i, :, s]) / s
                 C += P_s / (L - s)
 
-            Yp[i] = np.where(q_sens + q_spec_cost > C, 1.0, 0.0)
+            Y_pred[i] = np.where(q_sens + q_spec_cost > C, 1.0, 0.0)
 
-        return Yp
+        return Y_pred

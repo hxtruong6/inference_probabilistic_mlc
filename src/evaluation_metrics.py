@@ -177,7 +177,7 @@ class EvaluationMetrics:
         return f1.mean()
 
     @staticmethod
-    def f_beta_score(y_true, y_pred, beta=1):
+    def f_beta(y_true, y_pred, beta=1):
         """
         Calculate example-based F-beta score for multilabel classification.
 
@@ -204,7 +204,7 @@ class EvaluationMetrics:
         return f_beta.mean()
 
     @staticmethod
-    def f_informedness(Y_true, Y_pred):
+    def informedness(Y_true, Y_pred):
         """
         Calculate label-averaged Informedness (Balanced Accuracy per label) for multilabel classification.
 
@@ -232,7 +232,7 @@ class EvaluationMetrics:
         return (0.5 * (f_spec + f_sens)).mean()
 
     @staticmethod
-    def f_markedness(Y_true, Y_pred):
+    def markedness(Y_true, Y_pred):
         """
         Calculate example-based Markedness for multilabel classification.
 

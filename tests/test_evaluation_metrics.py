@@ -156,36 +156,36 @@ class TestNPV:
 
 
 # ──────────────────────────────────────────────
-# f_beta_score
+# f_beta
 # ──────────────────────────────────────────────
 
 class TestFBetaScore:
     def test_perfect(self, perfect):
-        assert EM.f_beta_score(*perfect) == pytest.approx(1.0)
+        assert EM.f_beta(*perfect) == pytest.approx(1.0)
 
     def test_worst(self, worst):
-        assert EM.f_beta_score(*worst) == pytest.approx(0.0)
+        assert EM.f_beta(*worst) == pytest.approx(0.0)
 
     def test_both_zero(self):
         Y = np.array([[0, 0, 0]])
-        assert EM.f_beta_score(Y, Y) == pytest.approx(1.0)
+        assert EM.f_beta(Y, Y) == pytest.approx(1.0)
 
 
 # ──────────────────────────────────────────────
-# f_informedness  (was buggy: used Y_pred instead of Y_true)
+# informedness  (was buggy: used Y_pred instead of Y_true)
 # ──────────────────────────────────────────────
 
 class TestFInformedness:
     def test_perfect(self, perfect):
-        assert EM.f_informedness(*perfect) == pytest.approx(1.0)
+        assert EM.informedness(*perfect) == pytest.approx(1.0)
 
     def test_worst(self, worst):
-        assert EM.f_informedness(*worst) == pytest.approx(0.0)
+        assert EM.informedness(*worst) == pytest.approx(0.0)
 
     def test_all_ones_informedness(self, all_ones):
         # Sensitivity = 1 (all true pos captured), Specificity = 0 (no TN).
         # Informedness = 0.5*(1+0) = 0.5
-        assert EM.f_informedness(*all_ones) == pytest.approx(0.5)
+        assert EM.informedness(*all_ones) == pytest.approx(0.5)
 
     def test_uses_true_labels_as_denominator(self):
         # Verify the fixed denominator: uses N_true_pos (from Y_true), not N_pred_pos.
@@ -197,24 +197,24 @@ class TestFInformedness:
         #   tp=[1,0,0], tn=[0,0,2], n_true_pos=[2,1,0], n_true_neg=[0,1,2]
         #   sens=[0.5, 0, 1.0(default)], spec=[1.0(default), 0, 1.0]
         #   informedness = 0.5*mean([1.5, 0, 2.0]) = 0.5833...
-        assert EM.f_informedness(Y_true, Y_pred) == pytest.approx(0.5833333, rel=1e-5)
+        assert EM.informedness(Y_true, Y_pred) == pytest.approx(0.5833333, rel=1e-5)
 
 
 # ──────────────────────────────────────────────
-# f_markedness  (was buggy: precision=1 when pred=0,true>0)
+# markedness  (was buggy: precision=1 when pred=0,true>0)
 # ──────────────────────────────────────────────
 
 class TestFMarkedness:
     def test_perfect(self, perfect):
-        assert EM.f_markedness(*perfect) == pytest.approx(1.0)
+        assert EM.markedness(*perfect) == pytest.approx(1.0)
 
     def test_worst(self, worst):
-        assert EM.f_markedness(*worst) == pytest.approx(0.0)
+        assert EM.markedness(*worst) == pytest.approx(0.0)
 
     def test_all_zeros_precision_is_zero(self, all_zeros):
         # pred=zeros, some true=1 → precision=0, not 1 (was the bug)
         # precision=0 for all samples, so markedness ≤ 0.5
-        result = EM.f_markedness(*all_zeros)
+        result = EM.markedness(*all_zeros)
         # Precision component must be 0; NPV component may be non-zero.
         # Markedness = 0.5*(NPV + 0). NPV is non-zero since TN > 0.
         assert result < 1.0
@@ -222,13 +222,13 @@ class TestFMarkedness:
         assert EM.precision_score(*all_zeros) == pytest.approx(0.0)
 
     def test_consistent_with_precision_score(self):
-        # f_markedness's internal precision edge case must match precision_score
+        # markedness's internal precision edge case must match precision_score
         Y_true = np.array([[1, 0], [1, 1]])
         Y_pred = np.array([[0, 0], [0, 1]])
         # Sample 0: pred=0,true=[1,0] → precision=0 (both metrics)
         # Sample 1: pred=[0,1],true=[1,1] → precision=1*1/1=1
         prec = EM.precision_score(Y_true, Y_pred)
-        # f_markedness uses same logic; result should be consistent
-        mar = EM.f_markedness(Y_true, Y_pred)
+        # markedness uses same logic; result should be consistent
+        mar = EM.markedness(Y_true, Y_pred)
         assert prec == pytest.approx(0.5)  # mean of [0, 1]
         assert mar >= 0.0 and mar <= 1.0

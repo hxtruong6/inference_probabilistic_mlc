@@ -68,14 +68,14 @@ def calculate_metrics(Y_true, Y_pred, metric_funcs):
     return scores
 
 
-def training_model(model, X_train, Y_train, predicted_store_key=None):
+def training_model(model, X_train, Y_train, cache_key=None):
     """Train the model and assign a cache key for prediction reuse."""
-    if predicted_store_key is None:
-        predicted_store_key = uuid4().hex
+    if cache_key is None:
+        cache_key = uuid4().hex
     try:
         start = time.time()
         print(f"Training {model.base_estimator.__class__.__name__} ...")
-        model.set_store_key(predicted_store_key)
+        model.set_cache_key(cache_key)
         model.fit(X_train, Y_train)
         print(f"Training time: {time.time() - start:.3f}s")
         return model
@@ -141,7 +141,7 @@ def evaluate_kfold(
             model,
             X_train,
             y_train,
-            predicted_store_key=f"{dataset_name}_{model_name}_fold{kfold_index}",
+            cache_key=f"{dataset_name}_{model_name}_fold{kfold_index}",
         )
         results = evaluate_model(model, X_test, y_test, predict_functions, metric_functions)
 
@@ -166,10 +166,11 @@ def main():
     # Uncomment the datasets to evaluate:
     dataset_names = [
         "emotions",
+        "scene",
+        "CHD_49",
+        # "VirusGO_sparse",  # sparse ARFF — scipy.io.arff cannot parse
+
         # "Water-quality",
-        # "scene",
-        # "VirusGO_sparse",
-        # "CHD_49",
         # "yeast",
         # "chest_xray_nih__densenet",
         # "chest_xray_nih__resnet",
@@ -177,14 +178,14 @@ def main():
     ]
 
     predict_functions = [
-        {"name": "Predict Hamming", "func": "predict_Hamming"},
-        {"name": "Predict Subset",  "func": "predict_Subset"},
-        {"name": "Predict Pre",     "func": "predict_Precision"},
-        {"name": "Predict Neg",     "func": "predict_Neg"},
-        {"name": "Predict Recall",  "func": "predict_Recall"},
-        {"name": "Predict Mar",     "func": "predict_Mar"},
-        {"name": "Predict Fmeasure","func": "predict_Fmeasure"},
-        {"name": "Predict Inf",     "func": "predict_Inf"},
+        {"name": "Predict Hamming",      "func": "predict_hamming"},
+        {"name": "Predict Subset",       "func": "predict_subset"},
+        {"name": "Predict Precision",    "func": "predict_precision"},
+        {"name": "Predict NPV",          "func": "predict_npv"},
+        {"name": "Predict Recall",       "func": "predict_recall"},
+        {"name": "Predict Markedness",   "func": "predict_markedness"},
+        {"name": "Predict Fmeasure",     "func": "predict_fmeasure"},
+        {"name": "Predict Informedness", "func": "predict_informedness"},
     ]
 
     metric_functions = [
@@ -193,9 +194,9 @@ def main():
         {"name": "Precision Score",            "func": EvaluationMetrics.precision_score},
         {"name": "Negative Predictive Value",  "func": EvaluationMetrics.negative_predictive_value},
         {"name": "Recall Score",               "func": EvaluationMetrics.recall_score},
-        {"name": "Markedness",                 "func": EvaluationMetrics.f_markedness},
-        {"name": "Fmeasure Score",             "func": EvaluationMetrics.f_beta_score},
-        {"name": "Informedness",               "func": EvaluationMetrics.f_informedness},
+        {"name": "Markedness",                 "func": EvaluationMetrics.markedness},
+        {"name": "Fmeasure Score",             "func": EvaluationMetrics.f_beta},
+        {"name": "Informedness",               "func": EvaluationMetrics.informedness},
     ]
 
     dataset_results = {}

@@ -8,14 +8,14 @@ This codebase implements and evaluates optimal inference algorithms for differen
 
 | Inference rule | Optimises | Method |
 |---|---|---|
-| `predict_Hamming` | Hamming Accuracy | Threshold marginals at 0.5 |
-| `predict_Subset` | Subset Accuracy | MAP over joint distribution |
-| `predict_Precision` | Precision | Predict single most probable label |
-| `predict_Neg` | NPV | All-ones except least probable label |
-| `predict_Recall` | Recall | All-ones (trivially achieves Recall = 1) |
-| `predict_Mar` | Markedness | Expectation over marginals |
-| `predict_Fmeasure` | F-beta | Pairwise probability aggregation |
-| `predict_Inf` | Informedness | Pairwise probability aggregation |
+| `predict_hamming` | Hamming Accuracy | Threshold marginals at 0.5 |
+| `predict_subset` | Subset Accuracy | MAP over joint distribution |
+| `predict_precision` | Precision | Predict single most probable label |
+| `predict_npv` | NPV | All-ones except least probable label |
+| `predict_recall` | Recall | All-ones (trivially achieves Recall = 1) |
+| `predict_markedness` | Markedness | Expectation over marginals |
+| `predict_fmeasure` | F-beta | Pairwise probability aggregation |
+| `predict_informedness` | Informedness | Pairwise probability aggregation |
 
 All metrics are reported in **higher-is-better** form (e.g., "Hamming Accuracy" = 1 − Hamming Loss).
 
