@@ -14,6 +14,8 @@ _LABEL_COUNTS = {
     "VirusGO_sparse": 6,
     "Water-quality": 14,
     "CHD_49": 6,
+    "flags": 7,
+    "PlantPseAAC": 12,
 }
 
 

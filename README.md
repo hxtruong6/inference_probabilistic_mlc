@@ -1,10 +1,17 @@
 # Probabilistic Classifier Chains — Inference Evaluation
 
-Evaluation framework for Bayes-optimal inference rules in multi-label classification using Probabilistic Classifier Chains (PCC).
+Evaluation framework for Bayes-optimal inference rules in multi-label classification using Probabilistic Classifier Chains (PCC), with Binary Relevance baseline.
 
-## Overview
+## Models
 
-This codebase implements and evaluates optimal inference algorithms for different loss functions in multi-label classification:
+| Model | Joint distribution |
+|---|---|
+| `ProbabilisticClassifierChainCustom` (PCC) | Chain rule: P(y\|x) = Π_j P(y_j \| x, y_<j) |
+| `BinaryRelevance` (BR) | Independence: P(y\|x) = Π_j P(y_j \| x) |
+
+Both expose the same `predict_*` inference rules (below). Base estimator is configurable (LogisticRegression, RandomForest, AdaBoost).
+
+## Inference rules
 
 | Inference rule | Optimises | Method |
 |---|---|---|
@@ -13,11 +20,27 @@ This codebase implements and evaluates optimal inference algorithms for differen
 | `predict_precision` | Precision | Predict single most probable label |
 | `predict_npv` | NPV | All-ones except least probable label |
 | `predict_recall` | Recall | All-ones (trivially achieves Recall = 1) |
-| `predict_markedness` | Markedness | Expectation over marginals |
+| `predict_markedness` | Markedness | Top-l expectation: arg max E[0.5·(NPV + Pre)] |
 | `predict_fmeasure` | F-beta | Pairwise probability aggregation |
-| `predict_informedness` | Informedness | Pairwise probability aggregation |
+| `predict_informedness` | Informedness | Pairwise: include label j iff q_sens[j] + q_spec_cost[j] > C |
+| `predict_marginal_scores` | — (continuous) | Returns marginals as scores for ranking metrics |
 
-All metrics are reported in **higher-is-better** form (e.g., "Hamming Accuracy" = 1 − Hamming Loss).
+## Metrics
+
+Binary-prediction metrics (applied to each `predict_*` output):
+`hamming_accuracy`, `subset_accuracy`, `precision_score`, `recall_score`,
+`negative_predictive_value`, `f_beta`, `macro_f1`, `micro_f1`,
+`markedness`, `informedness`.
+
+Ranking metrics (applied to marginal probability scores, Schapire & Singer 2000):
+`one_error_score`, `coverage_score`, `ranking_loss_score`, `average_precision_score`.
+
+All metrics are reported in **higher-is-better** form, e.g., "Hamming Accuracy" = 1 − Hamming Loss; "Coverage Score" = 1 − normalised coverage error.
+
+## Implementation notes
+
+- `predict()` uses **prefix-tree batched inference**: for each chain level j, all N × 2^j partial label prefixes share a single batched `predict_proba` call. This is numerically equivalent to brute-force enumeration but ~hundreds of times faster, enabling L=14 datasets (yeast, Water-quality) in seconds. Verified in `tests/test_predict_equivalence.py` against the reference per-element implementation.
+- Per-fold `StandardScaler` is fit on training data only (no leakage into test).
 
 ## Installation
 
