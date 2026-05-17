@@ -1,5 +1,6 @@
 from uuid import uuid4
 import numpy as np
+from sklearn.base import clone
 from sklearn.linear_model import LogisticRegression
 
 from src.skmultiflow.meta.classifier_chains import ClassifierChain
@@ -64,8 +65,26 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         self.cache_key = key
         self.prediction_cache[key] = None
 
+    @staticmethod
+    def _binary_matrix(K, L):
+        """Return (K, L) int8 matrix where row k is binary repr of k with L bits, MSB-first."""
+        if L == 0:
+            return np.zeros((1, 0), dtype=np.int8)
+        powers = (1 << np.arange(L - 1, -1, -1)).astype(np.int64)
+        return ((np.arange(K, dtype=np.int64)[:, None] & powers[None, :]) > 0).astype(np.int8)
+
     def predict(self, X, marginal=False, pairwise=False) -> tuple[np.ndarray, np.ndarray, dict]:
         """Enumerate all 2^L label combinations and compute joint probabilities.
+
+        Uses prefix-tree batched inference: for each chain level j, all
+        N × 2^j partial label sequences are evaluated with one batched
+        `predict_proba` call (instead of N × 2^L × L per-element calls).
+        Numerically equivalent to brute-force enumeration but ~L × 2^L
+        fewer estimator calls. Verified by `_predict_reference()` test.
+
+        Layout convention: at depth L, the k-th (0 ≤ k < 2^L) probability for
+        sample n corresponds to the label vector = binary repr of k with L
+        bits, MSB-first (i.e. y[j] = (k >> (L-1-j)) & 1).
 
         Results are cached by cache_key so multiple predict_* calls on the
         same fold reuse the computed probabilities.
@@ -73,11 +92,11 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         Returns
         -------
         (Y_pred, P_margin_yi_1, pairwise_dict)
-            Y_pred : (N, L) — MAP prediction (argmax over joint distribution).
+            Y_pred        : (N, L) — MAP prediction (argmax over joint).
             P_margin_yi_1 : (N, L) — marginal P(y_j=1 | x).
-            pairwise_dict : dict with 'P_pair_wise', 'P_pair_wise0', 'P_pair_wise1'.
+            pairwise_dict : 'P_pair_wise' (N, L, L+1), 'P_pair_wise0' (N, 1),
+                            'P_pair_wise1' (N, 1).
         """
-        # Return cached result if available
         if (
             self.cache_key is not None
             and self.prediction_cache.get(self.cache_key) is not None
@@ -87,33 +106,61 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
         print(f"Predicting... [{self.cache_key}]")
         N, D = X.shape
-        Y_pred = np.zeros((N, self.L))
-        P_margin_yi_1 = np.zeros((N, self.L))
-        P_pair_wise = np.zeros((N, self.L, self.L + 1))
-        P_pair_wise0 = np.zeros((N, 1))
-        P_pair_wise1 = np.zeros((N, 1))
+        L = self.L
+        K = 1 << L  # 2^L
 
-        for n in range(N):
-            w_max = 0.0
-            for b in range(2 ** self.L):
-                y_ = np.array(list(map(int, np.binary_repr(b, width=self.L))))
-                w_ = joint_probability(y_, X[n], self)
+        # Sample-major prefix-tree expansion.
+        # At depth j: joint_p has shape (N * 2^j,), sample-major layout.
+        # Sample n's entries occupy positions [n * 2^j : (n+1) * 2^j),
+        # and within that block the entry at index k_partial corresponds to
+        # prefix = binary repr of k_partial with j bits (MSB-first).
+        joint_p = np.ones(N, dtype=np.float64)
 
-                s = int(np.sum(y_))
-                if s == 0:
-                    P_pair_wise0[n] = w_
-                if s == self.L:
-                    P_pair_wise1[n] = w_
+        for j in range(L):
+            K_j = 1 << j  # 2^j
+            # Build inputs for predict_proba: (N * K_j, D + j).
+            # Each sample contributes K_j rows (one per partial prefix).
+            x_rep = np.repeat(X, K_j, axis=0)  # (N * K_j, D), sample-major
+            if j == 0:
+                inputs = x_rep
+            else:
+                prefixes = self._binary_matrix(K_j, j).astype(np.float64)  # (K_j, j)
+                prefix_rep = np.tile(prefixes, (N, 1))                     # (N * K_j, j)
+                inputs = np.concatenate([x_rep, prefix_rep], axis=1)
 
-                if marginal or pairwise:
-                    for j in range(self.L):
-                        if y_[j] == 1:
-                            P_margin_yi_1[n, j] += w_
-                            P_pair_wise[n, j, s] += w_
+            proba = self.ensemble[j].predict_proba(inputs)  # (N * K_j, 2)
 
-                if w_ > w_max:
-                    Y_pred[n, :] = y_.copy()
-                    w_max = w_
+            # Interleaved expansion: each entry → 2 entries (||0 at even, ||1 at odd).
+            # Preserves sample-major layout: sample n's new block at [n*2^(j+1), (n+1)*2^(j+1)).
+            new_joint = np.empty(N * K_j * 2, dtype=np.float64)
+            new_joint[0::2] = joint_p * proba[:, 0]
+            new_joint[1::2] = joint_p * proba[:, 1]
+            joint_p = new_joint
+
+        # joint_p shape: (N * 2^L,) sample-major → reshape (N, 2^L).
+        joint_p = joint_p.reshape(N, K)
+
+        # Build all label vectors once: (K, L) MSB-first binary repr.
+        all_vecs = self._binary_matrix(K, L).astype(np.float64)
+        s_vals = all_vecs.sum(axis=1).astype(np.int64)  # (K,) cardinality of each vec
+
+        # MAP prediction
+        idx_max = np.argmax(joint_p, axis=1)         # (N,)
+        Y_pred = all_vecs[idx_max]                   # (N, L)
+
+        # All-zero vec is at index 0 (binary repr 0...0), all-ones at K-1.
+        P_pair_wise0 = joint_p[:, 0:1].copy()        # (N, 1)
+        P_pair_wise1 = joint_p[:, K - 1:K].copy()    # (N, 1)
+
+        # Always compute marginal AND pairwise (cheap once joint_p is computed)
+        # so that the cached result satisfies any later marginal/pairwise request.
+        # The `marginal` / `pairwise` flags exist for API compatibility only.
+        P_margin_yi_1 = joint_p @ all_vecs           # (N, K) @ (K, L) → (N, L)
+        P_pair_wise = np.zeros((N, L, L + 1))
+        for s in range(L + 1):
+            mask = s_vals == s
+            if mask.any():
+                P_pair_wise[:, :, s] = joint_p[:, mask] @ all_vecs[mask]
 
         result = (
             Y_pred,
@@ -124,10 +171,46 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
                 "P_pair_wise1": P_pair_wise1,
             },
         )
-        # Fixed: update the existing dict entry instead of replacing the whole dict,
-        # which would wipe out cached results for other keys.
         self.prediction_cache[self.cache_key] = result
         return result
+
+    def _predict_reference(self, X, marginal=False, pairwise=False):
+        """Brute-force reference implementation (slow). For testing only.
+
+        Same return shape as predict() but computed via per-sample, per-combination,
+        per-label predict_proba calls. Use to verify the optimized predict().
+        """
+        N, _ = X.shape
+        L = self.L
+        Y_pred = np.zeros((N, L))
+        P_margin_yi_1 = np.zeros((N, L))
+        P_pair_wise = np.zeros((N, L, L + 1))
+        P_pair_wise0 = np.zeros((N, 1))
+        P_pair_wise1 = np.zeros((N, 1))
+
+        for n in range(N):
+            w_max = -1.0
+            for b in range(1 << L):
+                y_ = np.array(list(map(int, np.binary_repr(b, width=L))))
+                w_ = joint_probability(y_, X[n], self)
+                s = int(y_.sum())
+                if s == 0:
+                    P_pair_wise0[n] = w_
+                if s == L:
+                    P_pair_wise1[n] = w_
+                if marginal or pairwise:
+                    for j in range(L):
+                        if y_[j] == 1:
+                            P_margin_yi_1[n, j] += w_
+                            P_pair_wise[n, j, s] += w_
+                if w_ > w_max:
+                    Y_pred[n, :] = y_
+                    w_max = w_
+        return (
+            Y_pred,
+            P_margin_yi_1,
+            {"P_pair_wise": P_pair_wise, "P_pair_wise0": P_pair_wise0, "P_pair_wise1": P_pair_wise1},
+        )
 
     def predict_hamming(self, X):
         """Bayes-optimal predictor for Hamming Accuracy.
@@ -257,13 +340,26 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
         return Y_pred
 
+    def predict_marginal_scores(self, X):
+        """Return per-label marginal probabilities P(y_j=1|x) as continuous scores.
+
+        Returns
+        -------
+        np.ndarray of shape (N, L)
+            scores[n, j] = P(y_j=1 | x_n). Use with ranking-based metrics
+            (one_error_score, coverage_score, ranking_loss_score,
+            average_precision_score).
+        """
+        _, P_margin_yi_1, _ = self.predict(X, marginal=True)
+        return P_margin_yi_1
+
     def predict_informedness(self, X):
         """Bayes-optimal predictor for Informedness (Sensitivity + Specificity - 1).
 
         Include label j iff q_sens[j] + q_spec_cost[j] > C, where:
             q_sens[j]      = Σ_{s=1}^{L}   P(y_j=1, |y|=s | x) / s
             q_spec_cost[j] = Σ_{s=1}^{L-1} P(y_j=1, |y|=s | x) / (L-s)
-            C              = joint_probability(|y|=0 | x)/L + Σ_{s=1}^{L-1} P(|y|=s | x) / (s*(L-s))
+            C              = P(|y|=0 | x)/L + Σ_{s=1}^{L-1} P(|y|=s | x) / (s*(L-s))
         """
         N, _ = X.shape
         _, _, pw = self.predict(X, pairwise=True)
@@ -289,3 +385,79 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
             Y_pred[i] = np.where(q_sens + q_spec_cost > C, 1.0, 0.0)
 
         return Y_pred
+
+
+class BinaryRelevance(ProbabilisticClassifierChainCustom):
+    """Binary Relevance baseline.
+
+    Trains one independent classifier per label (no chain dependence).
+    Joint distribution is computed as product of per-label marginals
+    (independence assumption: P(y | x) = Π_j P(y_j | x)).
+
+    Inherits all `predict_X` Bayes-optimal inference rules from PCC.
+    The difference is only in how the joint distribution is computed:
+    PCC uses chain conditionals, BR uses independent marginals.
+    """
+
+    def fit(self, X, Y):
+        self.L = Y.shape[1]
+        self.classifiers = [
+            clone(self.base_estimator).fit(X, Y[:, j]) for j in range(self.L)
+        ]
+        return self
+
+    def predict(self, X, marginal=False, pairwise=False) -> tuple[np.ndarray, np.ndarray, dict]:
+        """Joint distribution under label-independence assumption.
+
+        Same output shape as ProbabilisticClassifierChainCustom.predict().
+        """
+        if (
+            self.cache_key is not None
+            and self.prediction_cache.get(self.cache_key) is not None
+        ):
+            print(f"Cached [{self.cache_key}]")
+            return self.prediction_cache[self.cache_key]
+
+        print(f"Predicting (BR)... [{self.cache_key}]")
+        N = X.shape[0]
+        L = self.L
+        K = 1 << L
+
+        # Independent per-label marginals
+        m = np.column_stack(
+            [c.predict_proba(X)[:, 1] for c in self.classifiers]
+        )  # (N, L)
+
+        # Joint under independence: P(y | x) = Π_j m_j^{y_j} * (1-m_j)^{1-y_j}
+        all_vecs = self._binary_matrix(K, L).astype(np.float64)  # (K, L)
+        joint_p = np.ones((N, K))
+        for j in range(L):
+            v_j = all_vecs[:, j][None, :]   # (1, K)
+            m_j = m[:, j][:, None]          # (N, 1)
+            joint_p *= m_j * v_j + (1.0 - m_j) * (1.0 - v_j)
+
+        s_vals = all_vecs.sum(axis=1).astype(np.int64)
+        idx_max = np.argmax(joint_p, axis=1)
+        Y_pred = all_vecs[idx_max]
+        P_pair_wise0 = joint_p[:, 0:1].copy()
+        P_pair_wise1 = joint_p[:, K - 1:K].copy()
+
+        # Always compute both (flags are API-compat only; cheap relative to joint_p).
+        P_margin_yi_1 = joint_p @ all_vecs
+        P_pair_wise = np.zeros((N, L, L + 1))
+        for s in range(L + 1):
+            mask = s_vals == s
+            if mask.any():
+                P_pair_wise[:, :, s] = joint_p[:, mask] @ all_vecs[mask]
+
+        result = (
+            Y_pred,
+            P_margin_yi_1,
+            {
+                "P_pair_wise": P_pair_wise,
+                "P_pair_wise0": P_pair_wise0,
+                "P_pair_wise1": P_pair_wise1,
+            },
+        )
+        self.prediction_cache[self.cache_key] = result
+        return result
