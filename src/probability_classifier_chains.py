@@ -242,30 +242,34 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         return Yp
 
     def predict_Inf(self, X):
-        """Bayes-optimal predictor for Informedness."""
+        """Bayes-optimal predictor for Informedness (Sensitivity + Specificity - 1).
+
+        Include label j iff q_sens[j] + q_spec_cost[j] > C, where:
+            q_sens[j]      = Σ_{s=1}^{L}   P(y_j=1, |y|=s | x) / s
+            q_spec_cost[j] = Σ_{s=1}^{L-1} P(y_j=1, |y|=s | x) / (L-s)
+            C              = P(|y|=0 | x)/L + Σ_{s=1}^{L-1} P(|y|=s | x) / (s*(L-s))
+        """
         N, _ = X.shape
         _, _, pw = self.predict(X, pairwise=True)
-        P_pair_wise = pw["P_pair_wise"]
-        P_pair_wise0 = pw["P_pair_wise0"]
-        P_pair_wise1 = pw["P_pair_wise1"]
-
-        q_inf = np.zeros((N, self.L - 1))
-        Yp = np.zeros((N, self.L))
-        index_L = [0, self.L, self.L - 1]
+        P_pair_wise = pw["P_pair_wise"]    # (N, L, L+1)
+        P_pair_wise0 = pw["P_pair_wise0"]  # (N, 1)
+        L = self.L
+        Yp = np.zeros((N, L))
 
         for i in range(N):
-            for k in range(self.L - 1):
-                for s in range(self.L):
-                    q_inf[i][k] += P_pair_wise[i][k][s] / (s + 1)
+            q_sens = np.zeros(L)
+            q_spec_cost = np.zeros(L)
+            for j in range(L):
+                for s in range(1, L + 1):
+                    q_sens[j] += P_pair_wise[i, j, s] / s
+                    if s < L:
+                        q_spec_cost[j] += P_pair_wise[i, j, s] / (L - s)
 
-            indices_q = np.argsort(q_inf[i])[::-1]
-            E = np.zeros(3)
-            E[0] = 1 + P_pair_wise0[i]
-            E[1] = 1 + P_pair_wise1[i]
-            E[2] = np.sum(q_inf[i][indices_q[: self.L - 1]])
+            C = float(P_pair_wise0[i, 0]) / L
+            for s in range(1, L):
+                P_s = np.sum(P_pair_wise[i, :, s]) / s
+                C += P_s / (L - s)
 
-            L_optimal = index_L[int(np.argsort(E)[::-1][0])]
-            for _l in range(L_optimal):
-                Yp[i][indices_q[_l]] = 1
+            Yp[i] = np.where(q_sens + q_spec_cost > C, 1.0, 0.0)
 
         return Yp
