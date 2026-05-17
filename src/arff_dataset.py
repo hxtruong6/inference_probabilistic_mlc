@@ -1,14 +1,29 @@
 import pandas as pd
 import scipy.io.arff as arff
 from sklearn.model_selection import KFold
-from sklearn.preprocessing import StandardScaler
 
-# Define a constant for seed
-SEED = 6
+
+_LABEL_COUNTS = {
+    "emotions": 6,
+    "corel5k": 374,
+    "bitex": 159,
+    "scene": 6,
+    "yeast": 14,
+    "CAL500": 174,
+    "mediaMill": 101,
+    "VirusGO_sparse": 6,
+    "Water-quality": 14,
+    "CHD_49": 6,
+}
 
 
 class MultiLabelArffDataset:
-    """Class to handle Mulan datasets stored in ARFF files."""
+    """Class to handle Mulan datasets stored in ARFF files.
+
+    Stores raw (unscaled) feature arrays. Callers are responsible for
+    applying StandardScaler per fold AFTER train/test split to avoid
+    data leakage.
+    """
 
     def __init__(
         self,
@@ -21,81 +36,46 @@ class MultiLabelArffDataset:
         """Initialize the dataset handler."""
         self.dataset_name = dataset_name
 
-        if (
-            (X is not None)
-            and (Y is not None)
-            and isinstance(X, pd.DataFrame)
-            and isinstance(Y, pd.DataFrame)
-        ):
-            self.X, self.Y = self._preprocess(X, Y)
+        if X is not None and Y is not None and isinstance(X, pd.DataFrame) and isinstance(Y, pd.DataFrame):
+            self.X, self.Y = self._to_numpy(X, Y)
             return
 
         self.path = path
-        self.data = arff.loadarff(self.path)
-        self.df = pd.DataFrame(self.data[0])
+        data = arff.loadarff(self.path)
+        df = pd.DataFrame(data[0])
 
-        y_split_index = self._get_Y_split_index()
-
+        n_labels = self._get_label_count()
         if target_at_first:
-            self.Y = self.df.iloc[:, :y_split_index].astype(int)
-            self.X = self.df.iloc[:, y_split_index:]
+            Y_df = df.iloc[:, :n_labels].astype(int)
+            X_df = df.iloc[:, n_labels:]
         else:
-            self.X = self.df.iloc[:, :-y_split_index]
-            self.Y = self.df.iloc[:, -y_split_index:].astype(int)
+            X_df = df.iloc[:, :-n_labels]
+            Y_df = df.iloc[:, -n_labels:].astype(int)
 
-        self.X, self.Y = self._preprocess(self.X, self.Y)
+        self.X, self.Y = self._to_numpy(X_df, Y_df)
 
-    def _preprocess(self, X, Y):
-        """Preprocess the input data."""
-        X = X.to_numpy()
-        scaler = StandardScaler()
-        X_scaled = scaler.fit_transform(X)
+    def _to_numpy(self, X, Y):
+        """Convert DataFrames to numpy arrays (no scaling applied here)."""
+        X_np = X.to_numpy().astype(float)
+        Y_np = Y.to_numpy()
+        print(f"Features shape: {X_np.shape}")
+        print(f"Labels shape:   {Y_np.shape}")
+        return X_np, Y_np
 
-        Y = Y.to_numpy()
+    def _get_label_count(self):
+        """Return the number of labels for the dataset."""
+        if self.dataset_name not in _LABEL_COUNTS:
+            raise Exception(f"Dataset '{self.dataset_name}' is not supported. "
+                            f"Known datasets: {list(_LABEL_COUNTS)}")
+        return _LABEL_COUNTS[self.dataset_name]
 
-        print(
-            f"\U0001F4A5 Features shape: {X_scaled.shape} in range {X_scaled.min()} to {X_scaled.max()}"
-        )
-        print(f"\U0001F4A6 Labels shape: {Y.shape}")
-        return X_scaled, Y
-
-    def _get_Y_split_index(self):
-        """Get the index for splitting Y from X based on the dataset name."""
-        if self.dataset_name == "emotions":
-            return 6
-        elif self.dataset_name == "corel5k":
-            return 374
-        elif self.dataset_name == "bitex":
-            return 159
-        elif self.dataset_name == "scene":
-            return 6
-        elif self.dataset_name == "yeast":
-            return 14
-        elif self.dataset_name == "CAL500":
-            return 174
-        elif self.dataset_name == "mediaMill":
-            return 101
-        elif self.dataset_name == "VirusGO_sparse":
-            return 6
-        elif self.dataset_name == "Water-quality":
-            return 14
-        elif self.dataset_name == "CHD_49":
-            return 6
-
-        else:
-            raise Exception("Dataset name is not supported")
-
-    def get_cross_validation_folds(self, n_splits=5, shuffle=True, random_state=SEED):
-        """Provides cross-validation folds for the dataset.
+    def get_cross_validation_folds(self, n_splits=5, shuffle=True, random_state=None):
+        """Yield (train_index, test_index) tuples for k-fold cross-validation.
 
         Args:
-            n_splits: Number of folds for cross-validation.
-            shuffle:  Whether to shuffle the data before splitting.
+            n_splits: Number of folds.
+            shuffle: Whether to shuffle before splitting.
             random_state: Random seed for reproducibility.
-
-        Yields:
-            Tuple of (train_index, test_index) for each fold.
         """
         skf = KFold(n_splits=n_splits, shuffle=shuffle, random_state=random_state)
-        for train_index, test_index in skf.split(self.X, self.Y):
-            yield train_index, test_index
+        yield from skf.split(self.X, self.Y)

@@ -2,7 +2,11 @@ import numpy as np
 
 
 class EvaluationMetrics:
-    """A class for various evaluation metrics."""
+    """A class for various evaluation metrics for multi-label classification.
+
+    All metrics are reported in "higher is better" form (i.e., values in [0,1]
+    where 1 is perfect). This includes hamming_accuracy (= 1 - Hamming Loss).
+    """
 
     @staticmethod
     def _check_dimensions(Y_true, Y_pred):
@@ -17,27 +21,36 @@ class EvaluationMetrics:
         return loss_func(Y_true, Y_pred)
 
     @staticmethod
-    def hamming_loss(Y_true, Y_pred):
+    def hamming_accuracy(Y_true, Y_pred):
         """
-        Calculate Hamming Loss for multilabel classification.
+        Calculate Hamming Accuracy (1 - Hamming Loss) for multilabel classification.
+
+        Hamming Accuracy = fraction of correctly predicted (label, sample) pairs.
+        Higher is better; perfect prediction = 1.0.
+
+        Note: the original Hamming Loss metric is the complement (fraction of
+        incorrect predictions). We report accuracy here for a uniform higher-is-better
+        convention across all metrics.
 
         Parameters:
-        - y_true: NumPy array, true labels (2D array with shape [n_samples, n_labels]).
-        - y_pred: NumPy array, predicted labels (2D array with shape [n_samples, n_labels]).
+        - Y_true: NumPy array, true labels (2D array with shape [n_samples, n_labels]).
+        - Y_pred: NumPy array, predicted labels (2D array with shape [n_samples, n_labels]).
 
         Returns:
-        - float: Hamming Loss.
+        - float: Hamming Accuracy in [0, 1].
         """
         EvaluationMetrics._check_dimensions(Y_true, Y_pred)
-
-        # Calculate Hamming Loss
-        loss = np.mean(np.not_equal(Y_true, Y_pred))
-        return 1 - loss
+        return 1 - np.mean(np.not_equal(Y_true, Y_pred))
 
     @staticmethod
     def precision_score(y_true, y_pred):
         """
-        Calculate Precision score for binary or multiclass classification.
+        Calculate example-based Precision for multilabel classification.
+
+        Per-sample: TP / (TP + FP). Averaged over all samples.
+        Edge cases:
+        - Both true and pred are all-zero → precision = 1 (vacuously correct).
+        - Pred is all-zero but true has positives → precision = 0 (nothing predicted).
 
         Parameters:
         - y_true: NumPy array, true labels.
@@ -46,39 +59,29 @@ class EvaluationMetrics:
         Returns:
         - float: Precision score.
         """
-        # Ensure y_true and y_pred have the same shape
         EvaluationMetrics._check_dimensions(y_true, y_pred)
-        n_samples, n_labels = y_true.shape
+        n_samples, _ = y_true.shape
         precision = np.zeros(n_samples)
-        for index in range(n_samples):
-            if np.sum(y_true[index]) + np.sum(y_pred[index]) == 0:
-                precision[index] = 1
-            elif np.sum(y_pred[index]) == 0 and np.sum(y_true[index]) > 0:
-                precision[index] = 0
+        for i in range(n_samples):
+            sum_true = np.sum(y_true[i])
+            sum_pred = np.sum(y_pred[i])
+            if sum_true == 0 and sum_pred == 0:
+                precision[i] = 1
+            elif sum_pred == 0:
+                precision[i] = 0
             else:
-                precision[index] = np.dot(y_true[index], y_pred[index]) / np.sum(
-                    y_pred[index]
-                )
-        # # Calculate True Positives and False Positives
-        # true_positives = np.sum((y_true == 1) & (y_pred == 1))
-        # false_positives = np.sum((y_true == 0) & (y_pred == 1))
-        # # print(
-        # #     f"true_positives:\t{true_positives}\t\t| false_positives:\t{false_positives}"
-        # # )
-
-        # # Calculate Precision
-        # precision = (
-        #     true_positives / (true_positives + false_positives)
-        #     if (true_positives + false_positives) > 0
-        #     else 0
-        # )
-
+                precision[i] = np.dot(y_true[i], y_pred[i]) / sum_pred
         return precision.mean()
 
     @staticmethod
     def recall_score(y_true, y_pred):
         """
-        Calculate Recall score for binary or multiclass classification.
+        Calculate example-based Recall for multilabel classification.
+
+        Per-sample: TP / (TP + FN). Averaged over all samples.
+        Edge cases:
+        - True has no positives and pred has no positives → recall = 1.
+        - True has no positives but pred has positives → recall = 0.
 
         Parameters:
         - y_true: NumPy array, true labels.
@@ -87,248 +90,184 @@ class EvaluationMetrics:
         Returns:
         - float: Recall score.
         """
-        # Ensure y_true and y_pred have the same shape
         EvaluationMetrics._check_dimensions(y_true, y_pred)
-        n_samples, n_labels = y_true.shape
+        n_samples, _ = y_true.shape
         recall = np.zeros(n_samples)
-        for index in range(n_samples):
-            if np.sum(y_true[index]) == 0:
-                if np.sum(y_pred[index]) == 0:
-                    recall[index] = 1
-                elif np.sum(y_pred[index]) == n_labels:
-                    recall[index] = 1
-                else:
-                    recall[index] = 0
+        for i in range(n_samples):
+            sum_true = np.sum(y_true[i])
+            if sum_true == 0:
+                recall[i] = 1 if np.sum(y_pred[i]) == 0 else 0
             else:
-                recall[index] = np.dot(y_true[index], y_pred[index]) / np.sum(
-                    y_true[index]
-                )
-
-        # # Calculate True Positives and False Negatives
-        # true_positives = np.sum((y_true == 1) & (y_pred == 1))
-        # false_negatives = np.sum((y_true == 1) & (y_pred == 0))
-
-        # # Calculate Recall
-        # recall = (
-        #     true_positives / (true_positives + false_negatives)
-        #     if (true_positives + false_negatives) > 0
-        #     else 0
-        # )
-
+                recall[i] = np.dot(y_true[i], y_pred[i]) / sum_true
         return recall.mean()
 
     @staticmethod
     def subset_accuracy(y_true, y_pred):
         """
-        Calculate Subset Accuracy for multilabel classification.
+        Calculate Subset Accuracy (exact match ratio) for multilabel classification.
+
+        A sample is correct only if all its labels are predicted exactly.
 
         Parameters:
         - y_true: NumPy array, true labels (2D array with shape [n_samples, n_labels]).
         - y_pred: NumPy array, predicted labels (2D array with shape [n_samples, n_labels]).
 
         Returns:
-        - float: Subset Accuracy.
+        - float: Subset Accuracy in [0, 1].
         """
-        # Ensure y_true and y_pred have the same shape
         EvaluationMetrics._check_dimensions(y_true, y_pred)
-
-        # Calculate subset accuracy
         correct_samples = np.sum(np.all(y_true == y_pred, axis=1))
-        subset_accuracy_value = correct_samples / len(y_true)
-
-        return subset_accuracy_value
+        return correct_samples / len(y_true)
 
     @staticmethod
     def negative_predictive_value(y_true, y_pred):
         """
-        Calculate Negative Predictive Value for binary or multiclass classification.
+        Calculate example-based Negative Predictive Value (NPV) for multilabel classification.
+
+        Per-sample: TN / (TN + FN). Averaged over all samples.
+        Edge cases:
+        - All labels predicted positive (no negative predictions):
+            - If all true labels are also positive → NPV = 1 (vacuously correct).
+            - Otherwise (some true negatives exist but missed) → NPV = 0.
 
         Parameters:
         - y_true: NumPy array, true labels.
         - y_pred: NumPy array, predicted labels.
 
         Returns:
-        - float: Negative Predictive Value.
+        - float: NPV in [0, 1].
         """
-        # Ensure y_true and y_pred have the same shape
         EvaluationMetrics._check_dimensions(y_true, y_pred)
         n_samples, n_labels = y_true.shape
         npv = np.zeros(n_samples)
-        for index in range(n_samples):
-            if np.sum(y_pred[index]) == n_labels:
-                if np.sum(y_true[index]) == n_labels:
-                    npv[index] = 1
-                else:
-                    npv[index] = 1
+        for i in range(n_samples):
+            sum_pred = np.sum(y_pred[i])
+            if sum_pred == n_labels:
+                # All positive predictions: no negatives predicted.
+                # TN = 0; FN = number of true negatives (1 - y_true).
+                npv[i] = 1 if np.sum(y_true[i]) == n_labels else 0
             else:
-                npv[index] = np.dot(1 - y_true[index], 1 - y_pred[index]) / np.sum(
-                    1 - y_pred[index]
-                )
-
-        # # Calculate True Negatives and False Negatives
-        # true_negatives = np.sum((y_true == 0) & (y_pred == 0))
-        # false_negatives = np.sum((y_true == 1) & (y_pred == 0))
-
-        # # Calculate Negative Predictive Value
-        # npv = (
-        #     true_negatives / (true_negatives + false_negatives)
-        #     if (true_negatives + false_negatives) > 0
-        #     else 0
-        # )
-
+                npv[i] = np.dot(1 - y_true[i], 1 - y_pred[i]) / np.sum(1 - y_pred[i])
         return npv.mean()
 
     @staticmethod
     def f1_score(y_true, y_pred):
         """
-        Calculate F1 score for binary or multiclass classification.
+        Calculate example-based F1 score for multilabel classification.
+
+        Per-sample Dice coefficient: 2*TP / (2*TP + FP + FN). Averaged over samples.
+        Edge case: both true and pred are all-zero → F1 = 1.
 
         Parameters:
         - y_true: NumPy array, true labels.
         - y_pred: NumPy array, predicted labels.
 
         Returns:
-        - float: F1 score.
+        - float: F1 score in [0, 1].
         """
-        # Ensure y_true and y_pred have the same shape
         EvaluationMetrics._check_dimensions(y_true, y_pred)
-        n_samples, n_labels = y_true.shape
+        n_samples, _ = y_true.shape
         f1 = np.zeros(n_samples)
-        for index in range(n_samples):
-            if np.sum(y_true[index]) + np.sum(y_pred[index]) == 0:
-                f1[index] = 1
+        for i in range(n_samples):
+            denom = np.sum(y_true[i]) + np.sum(y_pred[i])
+            if denom == 0:
+                f1[i] = 1
             else:
-                f1[index] = (2 * np.dot(y_true[index], y_pred[index])) / (
-                    np.sum(y_true[index]) + np.sum(y_pred[index])
-                )
-        # # Calculate Precision and Recall
-        # precision = EvaluationMetrics.precision_score(y_true, y_pred)
-        # f1 = EvaluationMetrics.recall_score(y_true, y_pred)
-
-        # # Calculate F1 score
-        # f1 = (
-        #     2 * precision * recall / (precision + recall)
-        #     if (precision + recall) > 0
-        #     else 0
-        # )
-
+                f1[i] = (2 * np.dot(y_true[i], y_pred[i])) / denom
         return f1.mean()
 
     @staticmethod
     def f_beta_score(y_true, y_pred, beta=1):
         """
-        Calculate F-beta score for binary or multiclass classification.
+        Calculate example-based F-beta score for multilabel classification.
+
+        Per-sample: (1+β²)*TP / (β²*(TP+FN) + (TP+FP)). Averaged over samples.
+        Edge case: both true and pred are all-zero → F_β = 1.
 
         Parameters:
         - y_true: NumPy array, true labels.
         - y_pred: NumPy array, predicted labels.
-        - beta: float, beta value. Default value is 1.
+        - beta: float, controls precision/recall trade-off. Default = 1 (F1).
 
         Returns:
-        - float: F-beta score.
+        - float: F-beta score in [0, 1].
         """
-        # Ensure y_true and y_pred have the same shape
         EvaluationMetrics._check_dimensions(y_true, y_pred)
-
-        n_samples, n_labels = y_true.shape
+        n_samples, _ = y_true.shape
         f_beta = np.zeros(n_samples)
-        for index in range(n_samples):
-            if np.sum(y_true[index]) + np.sum(y_pred[index]) == 0:
-                f_beta[index] = 1
+        for i in range(n_samples):
+            denom = (beta**2) * np.sum(y_true[i]) + np.sum(y_pred[i])
+            if denom == 0:
+                f_beta[i] = 1
             else:
-                f_beta[index] = (
-                    (1 + beta**2) * np.dot(y_true[index], y_pred[index])
-                ) / ((beta**2) * np.sum(y_true[index]) + np.sum(y_pred[index]))
-
-        # # Calculate Precision and Recall
-        # precision = EvaluationMetrics.precision_score(y_true, y_pred)
-        # recall = EvaluationMetrics.recall_score(y_true, y_pred)
-
-        # # Calculate F-beta score
-        # f_beta = (
-        #     (1 + beta**2) * precision * recall / (beta**2 * precision + recall)
-        #     if (beta**2 * precision + recall) > 0
-        #     else 0
-        # )
-
+                f_beta[i] = (1 + beta**2) * np.dot(y_true[i], y_pred[i]) / denom
         return f_beta.mean()
 
     @staticmethod
     def f_informedness(Y_true, Y_pred):
         """
-        Calculate Informedness for binary or multiclass classification.
+        Calculate label-averaged Informedness (Balanced Accuracy per label) for multilabel classification.
+
+        Per-label: 0.5 * (Specificity + Sensitivity)
+            = 0.5 * (TN/N_true_negative + TP/N_true_positive)
+        Averaged over labels.
 
         Parameters:
-        - y_true: NumPy array, true labels.
-        - y_pred: NumPy array, predicted labels.
+        - Y_true: NumPy array, true labels (shape [n_samples, n_labels]).
+        - Y_pred: NumPy array, predicted labels (shape [n_samples, n_labels]).
 
         Returns:
-        - float: Informedness.
+        - float: Informedness in [0, 1].
         """
-        # Ensure y_true and y_pred have the same shape
         EvaluationMetrics._check_dimensions(Y_true, Y_pred)
 
-        sum_not_y_true_and_not_y_pred = np.sum((1 - Y_true) * (1 - Y_pred), axis=0)
-        sum_y_true_and_y_pred = np.sum(Y_true * Y_pred, axis=0)
-        sum_not_y_true = np.sum(1 - Y_true, axis=0)
-        sum_y_true = np.sum(Y_pred, axis=0)
+        tn = np.sum((1 - Y_true) * (1 - Y_pred), axis=0)
+        tp = np.sum(Y_true * Y_pred, axis=0)
+        n_true_neg = np.sum(1 - Y_true, axis=0)
+        n_true_pos = np.sum(Y_true, axis=0)  # fixed: was np.sum(Y_pred, axis=0)
 
-        f_spec = sum_not_y_true_and_not_y_pred / sum_not_y_true
-        f_rec = sum_y_true_and_y_pred / sum_y_true
+        f_spec = np.where(n_true_neg > 0, tn / n_true_neg, 1.0)
+        f_sens = np.where(n_true_pos > 0, tp / n_true_pos, 1.0)
 
-        f_inf = 0.5 * (f_spec + f_rec)
-
-        return f_inf.mean()
+        return (0.5 * (f_spec + f_sens)).mean()
 
     @staticmethod
     def f_markedness(Y_true, Y_pred):
         """
-        Calculate Markedness for binary or multiclass classification.
+        Calculate example-based Markedness for multilabel classification.
+
+        Per-sample: 0.5 * (NPV + Precision). Averaged over samples.
+        Edge cases for NPV and Precision follow the same conventions as
+        negative_predictive_value() and precision_score() respectively.
 
         Parameters:
-        - y_true: NumPy array, true labels.
-        - y_pred: NumPy array, predicted labels.
+        - Y_true: NumPy array, true labels (shape [n_samples, n_labels]).
+        - Y_pred: NumPy array, predicted labels (shape [n_samples, n_labels]).
 
         Returns:
-        - float: Markedness.
+        - float: Markedness in [0, 1].
         """
-        # Ensure y_true and y_pred have the same shape
         EvaluationMetrics._check_dimensions(Y_true, Y_pred)
         n_samples, n_labels = Y_true.shape
         npv = np.zeros(n_samples)
         precision = np.zeros(n_samples)
-        for index in range(n_samples):
-            if np.sum(Y_pred[index]) == n_labels:
-                if np.sum(Y_true[index]) == n_labels:
-                    npv[index] = 1
-                else:
-                    npv[index] = 1
+
+        for i in range(n_samples):
+            sum_pred = np.sum(Y_pred[i])
+            sum_true = np.sum(Y_true[i])
+
+            # NPV: TN / (TN + FN)
+            if sum_pred == n_labels:
+                npv[i] = 1 if sum_true == n_labels else 0
             else:
-                npv[index] = np.dot(1 - Y_true[index], 1 - Y_pred[index]) / np.sum(
-                    1 - Y_pred[index]
-                )
+                npv[i] = np.dot(1 - Y_true[i], 1 - Y_pred[i]) / np.sum(1 - Y_pred[i])
 
-            if np.sum(Y_true[index]) + np.sum(Y_pred[index]) == 0:
-                precision[index] = 1
-            elif np.sum(Y_pred[index]) == 0 and np.sum(Y_true[index]) > 0:
-                precision[index] = 1
+            # Precision: TP / (TP + FP)
+            if sum_true == 0 and sum_pred == 0:
+                precision[i] = 1
+            elif sum_pred == 0:
+                precision[i] = 0  # fixed: was 1 when pred=0 and true>0
             else:
-                precision[index] = np.dot(Y_true[index], Y_pred[index]) / np.sum(
-                    Y_pred[index]
-                )
+                precision[i] = np.dot(Y_true[i], Y_pred[i]) / sum_pred
 
-        f_mar = np.zeros(n_samples)
-        for index in range(n_samples):
-            f_mar[index] = 0.5 * (npv[index] + precision[index])
-
-        # sum_not_y_true_and_not_y_pred = np.sum((1 - Y_true) * (1 - Y_pred), axis=0)
-        # sum_not_y_pred = np.sum(1 - Y_pred, axis=0)
-        # sum_y_true_and_y_pred = np.sum(Y_true * Y_pred, axis=0)
-        # sum_y_pred = np.sum(Y_pred, axis=0)
-
-        # f_neg = sum_not_y_true_and_not_y_pred / sum_not_y_pred
-        # f_pre = sum_y_true_and_y_pred / sum_y_pred
-
-        # f_mar = 0.5 * (f_neg + f_pre)
-
-        return f_mar.mean()
+        return (0.5 * (npv + precision)).mean()
