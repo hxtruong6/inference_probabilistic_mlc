@@ -182,29 +182,45 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         return np.ones((X.shape[0], self.L))
 
     def predict_Mar(self, X):
-        """Bayes-optimal predictor for Markedness."""
+        """Bayes-optimal predictor for Markedness = 0.5 * (NPV + Precision).
+
+        Conventions (match `EvaluationMetrics`):
+            - Precision = 1 if pred=0 and true=0 (vacuous), 0 if pred=0 and true>0.
+            - NPV      = 1 if pred=all-ones and true=all-ones (vacuous), 0 if
+                         pred=all-ones and true has any 0.
+
+        For candidate top-l (l ∈ {0,..,L}), expected markedness is:
+            l = 0  : 0.5 * (P(y=0|x) + 1 - sum_p/L)
+            0<l<L  : 0.5 * (A_l/l + 1 - (sum_p - A_l)/(L-l))
+            l = L  : 0.5 * (sum_p/L + P(y=all-ones|x))
+        where sum_p = Σ_j P(y_j=1|x) and A_l = sum of top-l marginals.
+        """
         N, _ = X.shape
-        _, P_margin_yi_1, _ = self.predict(X, marginal=True)
+        _, P_margin_yi_1, pw = self.predict(X, marginal=True)
+        P_pair_wise0 = pw["P_pair_wise0"]
+        P_pair_wise1 = pw["P_pair_wise1"]
+        L = self.L
+
         indices = np.argsort(P_margin_yi_1, axis=1)[:, ::-1]
+        Yp = np.zeros((N, L))
 
-        E = np.zeros((N, self.L + 1))
         for i in range(N):
-            sum_p = np.sum(P_margin_yi_1[i])
-            E[i][0] = 2 - (1 / self.L) * sum_p
-            E[i][self.L] = 1 + (1 / self.L) * sum_p
-            s2 = 0
-            for _l in range(1, self.L):
-                s2 += P_margin_yi_1[i, indices[i, _l - 1]]
-                E[i][_l] = (
-                    1 - (1 / (self.L - _l)) * sum_p
-                    + (1 / ((self.L - _l) * _l)) * s2
-                )
+            sum_p = float(np.sum(P_margin_yi_1[i]))
+            P_y0 = float(P_pair_wise0[i, 0])
+            P_yall = float(P_pair_wise1[i, 0])
 
-        l_optimal = np.argsort(E, axis=1)[:, ::-1]
-        Yp = np.zeros((N, self.L))
-        for i in range(N):
-            for _l in range(l_optimal[i][0]):
-                Yp[i][indices[i, _l]] = 1
+            E = np.zeros(L + 1)
+            E[0] = 0.5 * (P_y0 + 1.0 - sum_p / L)
+            E[L] = 0.5 * (sum_p / L + P_yall)
+
+            A_l = 0.0
+            for l in range(1, L):
+                A_l += P_margin_yi_1[i, indices[i, l - 1]]
+                E[l] = 0.5 * (A_l / l + 1.0 - (sum_p - A_l) / (L - l))
+
+            l_opt = int(np.argmax(E))
+            for k in range(l_opt):
+                Yp[i, indices[i, k]] = 1
         return Yp
 
     def predict_Fmeasure(self, X, beta=1):
