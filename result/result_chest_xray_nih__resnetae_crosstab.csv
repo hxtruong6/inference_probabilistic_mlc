@@ -1,9 +1,55 @@
-Dataset,Base Model,Predict Func,Fmeasure Score,Hamming Loss,Markedness,Negative Predictive Value,Precision Score,Recall Score,Subset Accuracy,All
-chest_xray_nih__resnetae,LogisticRegression,Predict Fmeasure,45.7072,86.5401,85.3481,91.4427,45.295,47.9519,37.6583,62.84904285714286
-chest_xray_nih__resnetae,LogisticRegression,Predict Hamming Loss,45.742,89.3743,93.09,89.7746,46.3198,45.5351,44.6434,64.9256
-chest_xray_nih__resnetae,LogisticRegression,Predict Mar,45.3666,89.4901,94.7451,89.4901,45.3666,45.3666,45.3666,65.02738571428571
-chest_xray_nih__resnetae,LogisticRegression,Predict Neg,17.1148,10.5099,55.2549,100.0,10.5099,100.0,0.0,41.91278571428571
-chest_xray_nih__resnetae,LogisticRegression,Predict Pre,20.3245,83.449,58.7578,91.6796,25.8362,18.0074,11.8261,44.268657142857144
-chest_xray_nih__resnetae,LogisticRegression,Predict Recall,17.1148,10.5099,55.2549,100.0,10.5099,100.0,0.0,41.91278571428571
-chest_xray_nih__resnetae,LogisticRegression,Predict Subset,45.6736,89.4563,94.122,89.6187,45.8827,45.6114,45.2179,65.08322857142858
-All,,,33.86335714285714,65.61851428571428,76.65325714285714,93.14367142857144,32.81715714285714,57.49605714285714,26.387471428571427,55.139926530612236
+Dataset,Base Model,Predict Func,Average Precision,Coverage Score,Fmeasure Score,Hamming Accuracy,Informedness,Macro F1,Markedness,Micro F1,Negative Predictive Value,One-Error Score,Precision Score,Ranking Loss Score,Recall Score,Subset Accuracy
+chest_xray_nih__resnetae,BR_AdaBoostClassifier,Marginal Scores,77.82 ± 0.04,79.68 ± 0.04,,,,,,,,23.61 ± 0.14,,85.53 ± 0.04,,
+chest_xray_nih__resnetae,BR_AdaBoostClassifier,Predict Fmeasure,,,17.12 ± 0.00,10.54 ± 0.01,50.01 ± 0.01,18.32 ± 0.00,5.38 ± 0.03,19.02 ± 0.00,0.24 ± 0.06,,10.51 ± 0.00,,54.63 ± 0.00,0.00 ± 0.00
+chest_xray_nih__resnetae,BR_AdaBoostClassifier,Predict Hamming,,,45.03 ± 0.06,89.38 ± 0.01,50.10 ± 0.01,0.88 ± 0.05,67.37 ± 0.04,1.76 ± 0.04,89.56 ± 0.00,,45.19 ± 0.07,,44.97 ± 0.05,44.77 ± 0.05
+chest_xray_nih__resnetae,BR_AdaBoostClassifier,Predict Informedness,,,22.88 ± 0.05,52.37 ± 0.07,53.60 ± 0.24,19.54 ± 0.19,56.15 ± 0.04,26.22 ± 0.07,95.71 ± 0.06,,16.58 ± 0.04,,44.47 ± 0.16,0.58 ± 0.02
+chest_xray_nih__resnetae,BR_AdaBoostClassifier,Predict Markedness,,,21.10 ± 0.08,40.82 ± 0.08,52.19 ± 0.26,18.67 ± 0.12,56.56 ± 0.04,22.69 ± 0.08,96.52 ± 0.04,,16.60 ± 0.05,,45.62 ± 0.15,2.84 ± 0.03
+chest_xray_nih__resnetae,BR_AdaBoostClassifier,Predict NPV,,,18.53 ± 0.02,22.40 ± 0.02,51.06 ± 0.18,18.51 ± 0.04,54.62 ± 0.04,20.83 ± 0.02,97.58 ± 0.06,,11.67 ± 0.01,,53.16 ± 0.06,0.00 ± 0.00
+chest_xray_nih__resnetae,BR_AdaBoostClassifier,Predict Precision,,,18.40 ± 0.09,82.89 ± 0.03,52.08 ± 0.08,13.50 ± 0.16,57.49 ± 0.08,25.65 ± 0.15,91.36 ± 0.02,,23.61 ± 0.14,,16.22 ± 0.07,10.42 ± 0.02
+chest_xray_nih__resnetae,BR_AdaBoostClassifier,Predict Recall,,,17.11 ± 0.00,10.51 ± 0.00,50.00 ± 0.00,18.32 ± 0.00,5.25 ± 0.00,19.02 ± 0.00,0.00 ± 0.00,,10.51 ± 0.00,,54.63 ± 0.00,0.00 ± 0.00
+chest_xray_nih__resnetae,BR_AdaBoostClassifier,Predict Subset,,,45.03 ± 0.06,89.38 ± 0.01,50.10 ± 0.01,0.88 ± 0.05,67.37 ± 0.04,1.76 ± 0.04,89.56 ± 0.00,,45.19 ± 0.07,,44.97 ± 0.05,44.77 ± 0.05
+chest_xray_nih__resnetae,BR_LogisticRegression,Marginal Scores,79.53 ± 0.01,81.10 ± 0.03,,,,,,,,26.07 ± 0.05,,86.95 ± 0.02,,
+chest_xray_nih__resnetae,BR_LogisticRegression,Predict Fmeasure,,,46.33 ± 0.05,86.50 ± 0.05,53.61 ± 0.03,15.37 ± 0.07,68.21 ± 0.03,23.89 ± 0.08,91.20 ± 0.01,,45.22 ± 0.06,,49.45 ± 0.06,39.88 ± 0.04
+chest_xray_nih__resnetae,BR_LogisticRegression,Predict Hamming,,,45.78 ± 0.06,89.39 ± 0.02,50.72 ± 0.02,3.61 ± 0.07,68.06 ± 0.04,6.48 ± 0.12,89.77 ± 0.01,,46.36 ± 0.08,,45.56 ± 0.06,44.72 ± 0.05
+chest_xray_nih__resnetae,BR_LogisticRegression,Predict Informedness,,,30.22 ± 0.09,79.12 ± 0.04,56.75 ± 0.06,22.05 ± 0.16,61.44 ± 0.05,33.89 ± 0.06,93.48 ± 0.00,,29.40 ± 0.09,,35.30 ± 0.08,12.95 ± 0.11
+chest_xray_nih__resnetae,BR_LogisticRegression,Predict Markedness,,,44.07 ± 0.10,87.20 ± 0.02,53.52 ± 0.04,14.69 ± 0.09,68.43 ± 0.06,25.41 ± 0.11,91.17 ± 0.01,,45.68 ± 0.11,,44.51 ± 0.09,37.73 ± 0.10
+chest_xray_nih__resnetae,BR_LogisticRegression,Predict NPV,,,18.64 ± 0.01,22.53 ± 0.01,51.84 ± 0.07,18.69 ± 0.01,54.90 ± 0.02,20.95 ± 0.01,98.06 ± 0.03,,11.73 ± 0.00,,53.47 ± 0.03,0.00 ± 0.00
+chest_xray_nih__resnetae,BR_LogisticRegression,Predict Precision,,,20.50 ± 0.03,83.51 ± 0.01,53.70 ± 0.03,16.69 ± 0.09,58.89 ± 0.03,28.32 ± 0.05,91.71 ± 0.01,,26.07 ± 0.05,,18.15 ± 0.02,11.89 ± 0.02
+chest_xray_nih__resnetae,BR_LogisticRegression,Predict Recall,,,17.11 ± 0.00,10.51 ± 0.00,50.00 ± 0.00,18.32 ± 0.00,5.25 ± 0.00,19.02 ± 0.00,0.00 ± 0.00,,10.51 ± 0.00,,54.63 ± 0.00,0.00 ± 0.00
+chest_xray_nih__resnetae,BR_LogisticRegression,Predict Subset,,,45.78 ± 0.06,89.39 ± 0.02,50.72 ± 0.02,3.61 ± 0.07,68.06 ± 0.04,6.48 ± 0.12,89.77 ± 0.01,,46.36 ± 0.08,,45.56 ± 0.06,44.72 ± 0.05
+chest_xray_nih__resnetae,BR_RandomForestClassifier,Marginal Scores,78.74 ± 0.10,80.36 ± 0.06,,,,,,,,24.94 ± 0.20,,86.24 ± 0.06,,
+chest_xray_nih__resnetae,BR_RandomForestClassifier,Predict Fmeasure,,,41.21 ± 0.18,79.89 ± 0.08,51.75 ± 0.08,14.60 ± 0.11,65.37 ± 0.09,20.01 ± 0.11,91.35 ± 0.02,,39.39 ± 0.18,,47.52 ± 0.20,34.56 ± 0.17
+chest_xray_nih__resnetae,BR_RandomForestClassifier,Predict Hamming,,,45.32 ± 0.03,89.46 ± 0.01,50.06 ± 0.01,0.40 ± 0.05,67.44 ± 0.02,0.68 ± 0.07,89.52 ± 0.00,,45.37 ± 0.04,,45.30 ± 0.03,45.24 ± 0.03
+chest_xray_nih__resnetae,BR_RandomForestClassifier,Predict Informedness,,,27.99 ± 0.10,75.60 ± 0.06,54.06 ± 0.11,18.01 ± 0.20,59.87 ± 0.06,31.51 ± 0.15,93.55 ± 0.04,,26.20 ± 0.10,,34.85 ± 0.12,9.27 ± 0.07
+chest_xray_nih__resnetae,BR_RandomForestClassifier,Predict Markedness,,,39.01 ± 0.08,81.96 ± 0.08,52.10 ± 0.13,14.44 ± 0.23,65.62 ± 0.03,22.43 ± 0.17,91.53 ± 0.03,,39.72 ± 0.05,,42.00 ± 0.11,32.19 ± 0.06
+chest_xray_nih__resnetae,BR_RandomForestClassifier,Predict NPV,,,18.56 ± 0.01,22.44 ± 0.01,50.85 ± 0.10,18.47 ± 0.02,54.69 ± 0.03,20.86 ± 0.01,97.71 ± 0.06,,11.68 ± 0.01,,53.26 ± 0.05,0.00 ± 0.00
+chest_xray_nih__resnetae,BR_RandomForestClassifier,Predict Precision,,,19.49 ± 0.18,83.23 ± 0.05,52.07 ± 0.11,12.75 ± 0.21,58.25 ± 0.11,27.10 ± 0.21,91.55 ± 0.03,,24.94 ± 0.20,,17.20 ± 0.17,11.10 ± 0.15
+chest_xray_nih__resnetae,BR_RandomForestClassifier,Predict Recall,,,17.11 ± 0.00,10.51 ± 0.00,50.00 ± 0.00,18.32 ± 0.00,5.25 ± 0.00,19.02 ± 0.00,0.00 ± 0.00,,10.51 ± 0.00,,54.63 ± 0.00,0.00 ± 0.00
+chest_xray_nih__resnetae,BR_RandomForestClassifier,Predict Subset,,,45.32 ± 0.03,89.47 ± 0.01,50.06 ± 0.02,0.36 ± 0.06,67.44 ± 0.02,0.60 ± 0.08,89.51 ± 0.00,,45.36 ± 0.03,,45.31 ± 0.03,45.25 ± 0.03
+chest_xray_nih__resnetae,PCC_AdaBoostClassifier,Marginal Scores,76.83 ± 0.06,78.71 ± 0.04,,,,,,,,22.19 ± 0.15,,84.70 ± 0.03,,
+chest_xray_nih__resnetae,PCC_AdaBoostClassifier,Predict Fmeasure,,,17.12 ± 0.00,10.53 ± 0.00,50.01 ± 0.01,18.32 ± 0.00,5.35 ± 0.01,19.02 ± 0.00,0.19 ± 0.03,,10.51 ± 0.00,,54.63 ± 0.00,0.00 ± 0.00
+chest_xray_nih__resnetae,PCC_AdaBoostClassifier,Predict Hamming,,,43.04 ± 0.15,88.48 ± 0.04,50.88 ± 0.05,5.21 ± 0.11,67.16 ± 0.08,12.20 ± 0.21,90.05 ± 0.02,,44.27 ± 0.16,,42.65 ± 0.15,40.58 ± 0.16
+chest_xray_nih__resnetae,PCC_AdaBoostClassifier,Predict Informedness,,,22.64 ± 0.03,55.28 ± 0.14,52.99 ± 0.09,19.22 ± 0.07,55.93 ± 0.02,26.23 ± 0.05,95.02 ± 0.03,,16.83 ± 0.03,,41.58 ± 0.09,0.72 ± 0.05
+chest_xray_nih__resnetae,PCC_AdaBoostClassifier,Predict Markedness,,,21.20 ± 0.03,48.25 ± 0.33,52.04 ± 0.19,18.52 ± 0.09,56.55 ± 0.05,23.32 ± 0.07,95.63 ± 0.08,,17.46 ± 0.06,,41.36 ± 0.18,2.69 ± 0.04
+chest_xray_nih__resnetae,PCC_AdaBoostClassifier,Predict NPV,,,18.45 ± 0.01,22.33 ± 0.01,51.22 ± 0.13,18.58 ± 0.02,54.44 ± 0.01,20.75 ± 0.01,97.26 ± 0.02,,11.62 ± 0.00,,52.89 ± 0.02,0.00 ± 0.00
+chest_xray_nih__resnetae,PCC_AdaBoostClassifier,Predict Precision,,,16.92 ± 0.13,82.54 ± 0.04,51.22 ± 0.08,10.05 ± 0.11,56.67 ± 0.08,24.10 ± 0.16,91.16 ± 0.02,,22.19 ± 0.15,,14.73 ± 0.12,8.92 ± 0.11
+chest_xray_nih__resnetae,PCC_AdaBoostClassifier,Predict Recall,,,17.11 ± 0.00,10.51 ± 0.00,50.00 ± 0.00,18.32 ± 0.00,5.25 ± 0.00,19.02 ± 0.00,0.00 ± 0.00,,10.51 ± 0.00,,54.63 ± 0.00,0.00 ± 0.00
+chest_xray_nih__resnetae,PCC_AdaBoostClassifier,Predict Subset,,,45.27 ± 0.02,89.46 ± 0.00,50.03 ± 0.01,0.19 ± 0.04,67.38 ± 0.01,0.15 ± 0.02,89.49 ± 0.00,,45.28 ± 0.02,,45.26 ± 0.02,45.25 ± 0.02
+chest_xray_nih__resnetae,PCC_LogisticRegression,Marginal Scores,79.55 ± 0.03,81.12 ± 0.04,,,,,,,,26.09 ± 0.06,,86.97 ± 0.03,,
+chest_xray_nih__resnetae,PCC_LogisticRegression,Predict Fmeasure,,,46.36 ± 0.10,87.53 ± 0.01,52.66 ± 0.06,12.53 ± 0.14,68.14 ± 0.05,19.19 ± 0.18,90.68 ± 0.01,,45.60 ± 0.09,,48.52 ± 0.12,41.90 ± 0.06
+chest_xray_nih__resnetae,PCC_LogisticRegression,Predict Hamming,,,45.78 ± 0.04,89.39 ± 0.01,50.72 ± 0.02,3.62 ± 0.05,68.06 ± 0.03,6.54 ± 0.09,89.78 ± 0.00,,46.34 ± 0.05,,45.57 ± 0.04,44.71 ± 0.05
+chest_xray_nih__resnetae,PCC_LogisticRegression,Predict Informedness,,,30.86 ± 0.09,80.31 ± 0.02,56.60 ± 0.08,21.70 ± 0.20,61.96 ± 0.05,33.85 ± 0.05,93.24 ± 0.01,,30.68 ± 0.09,,34.92 ± 0.09,14.77 ± 0.12
+chest_xray_nih__resnetae,PCC_LogisticRegression,Predict Markedness,,,44.74 ± 0.13,87.72 ± 0.04,53.08 ± 0.06,13.26 ± 0.14,68.56 ± 0.07,23.31 ± 0.17,90.94 ± 0.01,,46.18 ± 0.14,,45.06 ± 0.13,39.30 ± 0.12
+chest_xray_nih__resnetae,PCC_LogisticRegression,Predict NPV,,,18.64 ± 0.01,22.53 ± 0.01,51.87 ± 0.08,18.69 ± 0.01,54.91 ± 0.02,20.95 ± 0.01,98.08 ± 0.03,,11.74 ± 0.00,,53.48 ± 0.02,0.00 ± 0.00
+chest_xray_nih__resnetae,PCC_LogisticRegression,Predict Precision,,,20.51 ± 0.04,83.51 ± 0.01,53.71 ± 0.04,16.69 ± 0.14,58.90 ± 0.03,28.34 ± 0.07,91.72 ± 0.01,,26.09 ± 0.06,,18.16 ± 0.03,11.88 ± 0.04
+chest_xray_nih__resnetae,PCC_LogisticRegression,Predict Recall,,,17.11 ± 0.00,10.51 ± 0.00,50.00 ± 0.00,18.32 ± 0.00,5.25 ± 0.00,19.02 ± 0.00,0.00 ± 0.00,,10.51 ± 0.00,,54.63 ± 0.00,0.00 ± 0.00
+chest_xray_nih__resnetae,PCC_LogisticRegression,Predict Subset,,,45.66 ± 0.03,89.46 ± 0.01,50.36 ± 0.02,1.83 ± 0.06,67.74 ± 0.02,2.99 ± 0.10,89.62 ± 0.01,,45.86 ± 0.03,,45.59 ± 0.03,45.22 ± 0.04
+chest_xray_nih__resnetae,PCC_RandomForestClassifier,Marginal Scores,78.75 ± 0.04,80.37 ± 0.05,,,,,,,,24.98 ± 0.08,,86.27 ± 0.03,,
+chest_xray_nih__resnetae,PCC_RandomForestClassifier,Predict Fmeasure,,,41.22 ± 0.09,80.32 ± 0.03,51.50 ± 0.09,14.00 ± 0.16,65.36 ± 0.04,19.01 ± 0.14,91.17 ± 0.02,,39.54 ± 0.07,,47.12 ± 0.16,35.22 ± 0.07
+chest_xray_nih__resnetae,PCC_RandomForestClassifier,Predict Hamming,,,45.34 ± 0.03,89.47 ± 0.00,50.06 ± 0.01,0.36 ± 0.04,67.45 ± 0.02,0.60 ± 0.07,89.51 ± 0.00,,45.39 ± 0.04,,45.33 ± 0.02,45.27 ± 0.01
+chest_xray_nih__resnetae,PCC_RandomForestClassifier,Predict Informedness,,,28.33 ± 0.14,76.09 ± 0.05,53.96 ± 0.07,17.68 ± 0.11,60.08 ± 0.09,31.51 ± 0.10,93.46 ± 0.03,,26.71 ± 0.16,,34.84 ± 0.17,10.03 ± 0.15
+chest_xray_nih__resnetae,PCC_RandomForestClassifier,Predict Markedness,,,39.36 ± 0.12,82.14 ± 0.06,52.03 ± 0.05,14.28 ± 0.07,65.70 ± 0.09,21.88 ± 0.11,91.45 ± 0.01,,39.95 ± 0.16,,42.41 ± 0.12,32.84 ± 0.08
+chest_xray_nih__resnetae,PCC_RandomForestClassifier,Predict NPV,,,18.57 ± 0.01,22.45 ± 0.01,51.05 ± 0.12,18.52 ± 0.03,54.73 ± 0.03,20.87 ± 0.01,97.76 ± 0.05,,11.69 ± 0.01,,53.29 ± 0.01,0.00 ± 0.00
+chest_xray_nih__resnetae,PCC_RandomForestClassifier,Predict Precision,,,19.53 ± 0.06,83.24 ± 0.02,52.04 ± 0.04,12.64 ± 0.09,58.27 ± 0.04,27.14 ± 0.09,91.56 ± 0.01,,24.98 ± 0.08,,17.24 ± 0.06,11.14 ± 0.06
+chest_xray_nih__resnetae,PCC_RandomForestClassifier,Predict Recall,,,17.11 ± 0.00,10.51 ± 0.00,50.00 ± 0.00,18.32 ± 0.00,5.25 ± 0.00,19.02 ± 0.00,0.00 ± 0.00,,10.51 ± 0.00,,54.63 ± 0.00,0.00 ± 0.00
+chest_xray_nih__resnetae,PCC_RandomForestClassifier,Predict Subset,,,45.35 ± 0.02,89.47 ± 0.00,50.05 ± 0.01,0.30 ± 0.04,67.44 ± 0.02,0.47 ± 0.07,89.51 ± 0.00,,45.38 ± 0.03,,45.34 ± 0.02,45.29 ± 0.01

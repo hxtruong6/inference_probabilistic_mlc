@@ -1,0 +1,505 @@
+Dataset,Model,Predict Function of Model,Metric Function,Mean,Std,N
+CHD_49,BR_AdaBoostClassifier,Marginal Scores,Average Precision,0.7932418,0.0028195147986843417,5
+CHD_49,BR_AdaBoostClassifier,Marginal Scores,Coverage Score,0.45873220000000003,0.003058955736848773,5
+CHD_49,BR_AdaBoostClassifier,Marginal Scores,One-Error Score,0.7284088,0.007413790744281876,5
+CHD_49,BR_AdaBoostClassifier,Marginal Scores,Ranking Loss Score,0.7884021999999999,0.0019033075684187079,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Fmeasure Score,0.5879744,0.0008818422761469561,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Hamming Accuracy,0.4403284,0.002056169205099619,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Informedness,0.5046074,0.0015030867573097922,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Macro F1,0.5592798,0.0007595983807249416,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Markedness,0.2487536,0.007149554517590597,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Micro F1,0.6054786,0.0007846657250064927,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.0623316,0.013224146467730914,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Precision Score,0.4351746,0.0011034925464179736,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Recall Score,0.994102,0.0010831465736455249,5
+CHD_49,BR_AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.0,0.0,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Fmeasure Score,0.640995,0.0028414859668842033,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Hamming Accuracy,0.7088882,0.0026527298580895945,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Informedness,0.5821174,0.007783924543570622,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Macro F1,0.521869,0.017188134671918313,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Markedness,0.7140764,0.0040763394485739375,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Micro F1,0.666171,0.002718619318698381,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Negative Predictive Value,0.7588528,0.0027448165148148025,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Precision Score,0.669301,0.005433805986599038,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Recall Score,0.670324,0.0030451402266562402,5
+CHD_49,BR_AdaBoostClassifier,Predict Hamming,Subset Accuracy,0.1848768,0.009990421847950171,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Fmeasure Score,0.6672916,0.003035376467590145,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Hamming Accuracy,0.656455,0.004166006841088986,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Informedness,0.5591044000000001,0.007527634143607078,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Macro F1,0.5725046,0.022900010443229077,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Markedness,0.7301222,0.002808746909210567,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Micro F1,0.6895206,0.0029382660362873717,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Negative Predictive Value,0.8840413999999999,0.0031721217347384562,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Precision Score,0.5762050000000001,0.003274147598994275,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Recall Score,0.8764673999999999,0.00404300269601685,5
+CHD_49,BR_AdaBoostClassifier,Predict Informedness,Subset Accuracy,0.0875528,0.00717647049042912,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Fmeasure Score,0.6506082,0.004325094530758818,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Hamming Accuracy,0.6033622000000001,0.003240767609687527,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Informedness,0.5342586,0.008555290778226048,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Macro F1,0.571612,0.016941263810589788,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Markedness,0.738443,0.0027192205684717376,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Micro F1,0.6744432,0.0029328134444591082,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Negative Predictive Value,0.9470024,0.004076380907128266,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Precision Score,0.5298824,0.0032367065514191887,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Recall Score,0.9469806000000001,0.005315893603148966,5
+CHD_49,BR_AdaBoostClassifier,Predict Markedness,Subset Accuracy,0.0270448,0.002547741097521489,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Fmeasure Score,0.648102,0.0007736950303575963,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Hamming Accuracy,0.5828118,0.0010159088049623121,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Informedness,0.525145,0.009648193613314338,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Macro F1,0.5629606,0.009234060932222614,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Markedness,0.732991,0.0018054982691766673,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Micro F1,0.6694428,0.0008651761092401958,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Negative Predictive Value,0.9582594,0.0029953706448451133,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Precision Score,0.5077216,0.0006239950320314911,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Recall Score,0.9770736,0.0010665304965166375,5
+CHD_49,BR_AdaBoostClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Fmeasure Score,0.4017722,0.004750573670621264,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Hamming Accuracy,0.6460782,0.0024353465256509465,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Informedness,0.5453886,0.009523650130070898,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Macro F1,0.2948626,0.016250996178696228,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Markedness,0.6790102,0.004426082206647305,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Micro F1,0.4067374,0.004160356991893839,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Negative Predictive Value,0.629611,0.0014407740974906073,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Precision Score,0.7284088,0.007413790744281876,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Recall Score,0.2879352,0.004406260512044208,5
+CHD_49,BR_AdaBoostClassifier,Predict Precision,Subset Accuracy,0.028109600000000002,0.005226255428124423,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Fmeasure Score,0.5834887999999999,9.29203960387268e-05,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Hamming Accuracy,0.4300578,8.873668914267049e-05,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Informedness,0.5,0.0,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Macro F1,0.5584956,0.0004723259467782903,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Markedness,0.215029,4.496109429273174e-05,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Micro F1,0.6011674,0.00011686659060652324,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Precision Score,0.4300578,8.873668914267049e-05,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Recall Score,0.9945782,3.225213171246696e-05,5
+CHD_49,BR_AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Fmeasure Score,0.640995,0.0028414859668842033,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Hamming Accuracy,0.7088882,0.0026527298580895945,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Informedness,0.5821174,0.007783924543570622,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Macro F1,0.521869,0.017188134671918313,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Markedness,0.7140764,0.0040763394485739375,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Micro F1,0.666171,0.002718619318698381,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.7588528,0.0027448165148148025,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Precision Score,0.669301,0.005433805986599038,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Recall Score,0.670324,0.0030451402266562402,5
+CHD_49,BR_AdaBoostClassifier,Predict Subset,Subset Accuracy,0.1848768,0.009990421847950171,5
+CHD_49,BR_LogisticRegression,Marginal Scores,Average Precision,0.7939952,0.0032201315501078605,5
+CHD_49,BR_LogisticRegression,Marginal Scores,Coverage Score,0.4540374,0.004681297661973666,5
+CHD_49,BR_LogisticRegression,Marginal Scores,One-Error Score,0.7420188,0.007033424038119712,5
+CHD_49,BR_LogisticRegression,Marginal Scores,Ranking Loss Score,0.7874106000000001,0.0026998669041269057,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Fmeasure Score,0.672026,0.0026994983793290545,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Hamming Accuracy,0.6829556,0.004257821778797258,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Informedness,0.5745053999999999,0.005297056947022507,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Macro F1,0.5669656,0.009517957911232848,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Markedness,0.7179306,0.0035791643298401605,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Micro F1,0.692554,0.003049526274685968,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.8287983999999999,0.00525403695266789,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Precision Score,0.6070628,0.003915454916098521,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Recall Score,0.8246648000000001,0.005489284898782346,5
+CHD_49,BR_LogisticRegression,Predict Fmeasure,Subset Accuracy,0.1344358,0.003644404574138274,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Fmeasure Score,0.6380814,0.006960594895553103,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Hamming Accuracy,0.7069484,0.0056151050123751005,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Informedness,0.5833678,0.005693243205765924,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Macro F1,0.5305994,0.022299988156947535,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Markedness,0.7115516,0.005133794678403127,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Micro F1,0.6638106,0.006490804210573601,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Negative Predictive Value,0.7582954,0.0036257640298287008,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Precision Score,0.6648075999999999,0.006807564491064334,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Recall Score,0.6703848,0.007417924487348237,5
+CHD_49,BR_LogisticRegression,Predict Hamming,Subset Accuracy,0.1714872,0.004383776362909037,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Fmeasure Score,0.6601142,0.0032171130225716175,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Hamming Accuracy,0.7058396,0.0031813385233263663,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Informedness,0.5835884,0.005048848512284764,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Macro F1,0.5581384,0.02049972822502777,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Markedness,0.7129338000000001,0.002960620576838569,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Micro F1,0.6820044000000001,0.0033847944250722634,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Negative Predictive Value,0.7803178,0.003214626992358539,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Precision Score,0.6455498000000001,0.002837497171804777,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Recall Score,0.7318298000000001,0.0041457580368371464,5
+CHD_49,BR_LogisticRegression,Predict Informedness,Subset Accuracy,0.1599936,0.005609199613135538,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Fmeasure Score,0.6328574,0.00681839330781084,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Hamming Accuracy,0.6851689999999999,0.00520005043244777,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Informedness,0.5790974,0.006162080030314418,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Macro F1,0.5433898,0.015354407826419078,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Markedness,0.7304964,0.005430022863671943,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Micro F1,0.6669714,0.006660180162728353,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Negative Predictive Value,0.8114298,0.005855649724838372,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Precision Score,0.6495632,0.00737671578007454,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Recall Score,0.7292054,0.008408577513467992,5
+CHD_49,BR_LogisticRegression,Predict Markedness,Subset Accuracy,0.1325648,0.003806282267515116,5
+CHD_49,BR_LogisticRegression,Predict NPV,Fmeasure Score,0.6487052,0.0010842016417622483,5
+CHD_49,BR_LogisticRegression,Predict NPV,Hamming Accuracy,0.583769,0.0012868566353716184,5
+CHD_49,BR_LogisticRegression,Predict NPV,Informedness,0.5257780000000001,0.011323717962754113,5
+CHD_49,BR_LogisticRegression,Predict NPV,Macro F1,0.5661606,0.010995473923392271,5
+CHD_49,BR_LogisticRegression,Predict NPV,Markedness,0.7347121999999999,0.002257923758677442,5
+CHD_49,BR_LogisticRegression,Predict NPV,Micro F1,0.6701976000000001,0.001042264026050974,5
+CHD_49,BR_LogisticRegression,Predict NPV,Negative Predictive Value,0.96113,0.003718249386472084,5
+CHD_49,BR_LogisticRegression,Predict NPV,Precision Score,0.5082966,0.0008022133756052745,5
+CHD_49,BR_LogisticRegression,Predict NPV,Recall Score,0.9772774,0.0019842094899480754,5
+CHD_49,BR_LogisticRegression,Predict NPV,Subset Accuracy,0.0,0.0,5
+CHD_49,BR_LogisticRegression,Predict Precision,Fmeasure Score,0.4107978,0.005662838616806951,5
+CHD_49,BR_LogisticRegression,Predict Precision,Hamming Accuracy,0.6506154000000001,0.0023895039861862757,5
+CHD_49,BR_LogisticRegression,Predict Precision,Informedness,0.5518098,0.009538019511408084,5
+CHD_49,BR_LogisticRegression,Predict Precision,Macro F1,0.3057206,0.014814285446824659,5
+CHD_49,BR_LogisticRegression,Predict Precision,Markedness,0.6871768,0.004246463140073135,5
+CHD_49,BR_LogisticRegression,Predict Precision,Micro F1,0.4143286,0.0039053960490582694,5
+CHD_49,BR_LogisticRegression,Predict Precision,Negative Predictive Value,0.6323335999999999,0.0014610247431169727,5
+CHD_49,BR_LogisticRegression,Predict Precision,Precision Score,0.7420188,0.007033424038119712,5
+CHD_49,BR_LogisticRegression,Predict Precision,Recall Score,0.2954562,0.00505844844789387,5
+CHD_49,BR_LogisticRegression,Predict Precision,Subset Accuracy,0.032408599999999996,0.004113385807336821,5
+CHD_49,BR_LogisticRegression,Predict Recall,Fmeasure Score,0.5834887999999999,9.29203960387268e-05,5
+CHD_49,BR_LogisticRegression,Predict Recall,Hamming Accuracy,0.4300578,8.873668914267049e-05,5
+CHD_49,BR_LogisticRegression,Predict Recall,Informedness,0.5,0.0,5
+CHD_49,BR_LogisticRegression,Predict Recall,Macro F1,0.5584956,0.0004723259467782903,5
+CHD_49,BR_LogisticRegression,Predict Recall,Markedness,0.215029,4.496109429273174e-05,5
+CHD_49,BR_LogisticRegression,Predict Recall,Micro F1,0.6011674,0.00011686659060652324,5
+CHD_49,BR_LogisticRegression,Predict Recall,Negative Predictive Value,0.0,0.0,5
+CHD_49,BR_LogisticRegression,Predict Recall,Precision Score,0.4300578,8.873668914267049e-05,5
+CHD_49,BR_LogisticRegression,Predict Recall,Recall Score,0.9945782,3.225213171246696e-05,5
+CHD_49,BR_LogisticRegression,Predict Recall,Subset Accuracy,0.0,0.0,5
+CHD_49,BR_LogisticRegression,Predict Subset,Fmeasure Score,0.6380814,0.006960594895553103,5
+CHD_49,BR_LogisticRegression,Predict Subset,Hamming Accuracy,0.7069484,0.0056151050123751005,5
+CHD_49,BR_LogisticRegression,Predict Subset,Informedness,0.5833678,0.005693243205765924,5
+CHD_49,BR_LogisticRegression,Predict Subset,Macro F1,0.5305994,0.022299988156947535,5
+CHD_49,BR_LogisticRegression,Predict Subset,Markedness,0.7115516,0.005133794678403127,5
+CHD_49,BR_LogisticRegression,Predict Subset,Micro F1,0.6638106,0.006490804210573601,5
+CHD_49,BR_LogisticRegression,Predict Subset,Negative Predictive Value,0.7582954,0.0036257640298287008,5
+CHD_49,BR_LogisticRegression,Predict Subset,Precision Score,0.6648075999999999,0.006807564491064334,5
+CHD_49,BR_LogisticRegression,Predict Subset,Recall Score,0.6703848,0.007417924487348237,5
+CHD_49,BR_LogisticRegression,Predict Subset,Subset Accuracy,0.1714872,0.004383776362909037,5
+CHD_49,BR_RandomForestClassifier,Marginal Scores,Average Precision,0.7974058,0.0017822534051026339,5
+CHD_49,BR_RandomForestClassifier,Marginal Scores,Coverage Score,0.4601344,0.001985404946100431,5
+CHD_49,BR_RandomForestClassifier,Marginal Scores,One-Error Score,0.758312,0.00701497441192768,5
+CHD_49,BR_RandomForestClassifier,Marginal Scores,Ranking Loss Score,0.797755,0.002418528168122084,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Fmeasure Score,0.6771226,0.001191174546403667,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Hamming Accuracy,0.6623593999999999,0.0016203158025520899,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Informedness,0.5599204,0.00825718059024991,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Macro F1,0.5929376,0.019613581042226835,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Markedness,0.7387742,0.0013595496313117896,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Micro F1,0.6979916,0.0009779674329955812,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Negative Predictive Value,0.8980218000000001,0.001423139030453448,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Precision Score,0.579528,0.0015385792147302475,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Recall Score,0.8992082,0.0016547314585756753,5
+CHD_49,BR_RandomForestClassifier,Predict Fmeasure,Subset Accuracy,0.10197439999999999,0.0037153293662877313,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Fmeasure Score,0.6324702,0.007695244583507415,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Hamming Accuracy,0.7100792,0.00489384804627196,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Informedness,0.572678,0.008860871063275875,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Macro F1,0.519147,0.01981914844285702,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Markedness,0.7146497999999999,0.005304716410893241,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Micro F1,0.661802,0.007073823895178597,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Negative Predictive Value,0.7550152000000001,0.005732837927239898,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Precision Score,0.6742862000000001,0.005441252953134948,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Recall Score,0.6517215999999999,0.009782174901319211,5
+CHD_49,BR_RandomForestClassifier,Predict Hamming,Subset Accuracy,0.1671884,0.013680563266912657,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Fmeasure Score,0.665965,0.0038456685374587316,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Hamming Accuracy,0.7052896000000001,0.0043888036296922655,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Informedness,0.5764418,0.010438568158516811,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Macro F1,0.5683128,0.017982342024886508,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Markedness,0.7191006,0.003979316059324766,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Micro F1,0.6897566,0.00434491188633324,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Negative Predictive Value,0.7976352,0.003831118270166055,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Precision Score,0.6405664,0.0049922325466668785,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Recall Score,0.7570462,0.004610452494061719,5
+CHD_49,BR_RandomForestClassifier,Predict Informedness,Subset Accuracy,0.16475279999999998,0.016173846178321342,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Fmeasure Score,0.642863,0.0028921320855036584,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Hamming Accuracy,0.6471464,0.0013047930104042882,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Informedness,0.5526394,0.009997324257019958,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Macro F1,0.5775743999999999,0.017917123187052134,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Markedness,0.7451936,0.0023775360775391027,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Micro F1,0.6754126,0.0016050508714679065,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Negative Predictive Value,0.896119,0.0018585646343348124,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Precision Score,0.5942668,0.004402031088031955,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Recall Score,0.8435838,0.00534889677410209,5
+CHD_49,BR_RandomForestClassifier,Predict Markedness,Subset Accuracy,0.0731302,0.005013843804906569,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Fmeasure Score,0.6510276,0.0007394946247268631,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Hamming Accuracy,0.5866456,0.0009445376117444628,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Informedness,0.5238966,0.01181017014272021,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Macro F1,0.5660684,0.011820167016586506,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Markedness,0.7398906000000001,0.0017801981069533106,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Micro F1,0.6724612000000001,0.0008018049638160251,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Negative Predictive Value,0.9697607999999999,0.003036024983428149,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Precision Score,0.5100226,0.0005279306772673673,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Recall Score,0.9814434000000001,0.0015340248694203562,5
+CHD_49,BR_RandomForestClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Fmeasure Score,0.41190619999999994,0.004191848601750803,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Hamming Accuracy,0.6560463999999999,0.0023804800566272085,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Informedness,0.5363366,0.00929696005692182,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Macro F1,0.2458172,0.019420939889716958,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Markedness,0.6969524,0.0042336377147790885,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Micro F1,0.42337400000000003,0.00407052091261056,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Negative Predictive Value,0.6355921999999999,0.0014544444643918185,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Precision Score,0.758312,0.00701497441192768,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Recall Score,0.2919966,0.0032803823405207085,5
+CHD_49,BR_RandomForestClassifier,Predict Precision,Subset Accuracy,0.0201426,0.0026197302914613184,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Fmeasure Score,0.5834887999999999,9.29203960387268e-05,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Hamming Accuracy,0.4300578,8.873668914267049e-05,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Informedness,0.5,0.0,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Macro F1,0.5584956,0.0004723259467782903,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Markedness,0.215029,4.496109429273174e-05,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Micro F1,0.6011674,0.00011686659060652324,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Precision Score,0.4300578,8.873668914267049e-05,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Recall Score,0.9945782,3.225213171246696e-05,5
+CHD_49,BR_RandomForestClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Fmeasure Score,0.6309694,0.006678385081739447,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Hamming Accuracy,0.7097781999999999,0.004405201550440141,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Informedness,0.5722723999999999,0.008927454833265673,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Macro F1,0.5172124,0.02028530498415049,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Markedness,0.7142908,0.004644306805110949,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Micro F1,0.6604142000000001,0.006296499082823693,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Negative Predictive Value,0.7534912,0.00513997185789962,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Precision Score,0.6750918,0.0045851025288427254,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Recall Score,0.6486318000000001,0.008576513930496485,5
+CHD_49,BR_RandomForestClassifier,Predict Subset,Subset Accuracy,0.16502599999999998,0.01204409585647673,5
+CHD_49,PCC_AdaBoostClassifier,Marginal Scores,Average Precision,0.7908638,0.0029754200879875494,5
+CHD_49,PCC_AdaBoostClassifier,Marginal Scores,Coverage Score,0.454136,0.0020337282266812426,5
+CHD_49,PCC_AdaBoostClassifier,Marginal Scores,One-Error Score,0.724013,0.012935130884533028,5
+CHD_49,PCC_AdaBoostClassifier,Marginal Scores,Ranking Loss Score,0.7878796,0.0017706001242516574,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Fmeasure Score,0.5916984000000001,0.00025541202007741765,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Hamming Accuracy,0.4484058,0.0006296480763092939,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Informedness,0.505999,0.003558773454436222,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Macro F1,0.5594956,0.0011822881628435577,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Markedness,0.2759628,0.003256821717564552,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Micro F1,0.6088924,0.00015348876180367826,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.11223380000000001,0.006356366155280859,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Precision Score,0.4396898,0.0002013571453909836,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Recall Score,0.9936238,0.001506273779895239,5
+CHD_49,PCC_AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.0,0.0,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Fmeasure Score,0.6159994,0.0028341203750017344,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Hamming Accuracy,0.7038138,0.0027443364771835045,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Informedness,0.5652942,0.009237829165989123,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Macro F1,0.4899902,0.02014563399846228,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Markedness,0.7101993999999999,0.0033150117345192337,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Micro F1,0.6455236,0.002675819182979283,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Negative Predictive Value,0.7415316,0.0024400417619376835,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Precision Score,0.678868,0.004632287501872066,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Recall Score,0.6226732,0.003334442487133361,5
+CHD_49,PCC_AdaBoostClassifier,Predict Hamming,Subset Accuracy,0.140201,0.003705567432931162,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Fmeasure Score,0.6639576,0.004247214239945962,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Hamming Accuracy,0.6462521999999999,0.0032812309732781824,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Informedness,0.5459731999999999,0.011628117719562325,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Macro F1,0.579945,0.025641755682870065,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Markedness,0.7288956,0.0035242754290775876,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Micro F1,0.6887673999999999,0.003211946574898198,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Negative Predictive Value,0.8976257999999999,0.004662136066225461,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Precision Score,0.5601676,0.002564096000542912,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Recall Score,0.8945982000000001,0.008062450632406962,5
+CHD_49,PCC_AdaBoostClassifier,Predict Informedness,Subset Accuracy,0.0728252,0.005778818192329645,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Fmeasure Score,0.6515618,0.0026518685299237615,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Hamming Accuracy,0.5977624,0.0022167174605709538,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Informedness,0.5278748,0.007757918902643946,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Macro F1,0.5641792000000001,0.015289719297619544,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Markedness,0.7391110000000001,0.00210099381246111,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Micro F1,0.6748678,0.0020947312954171047,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Negative Predictive Value,0.9570526000000001,0.003734350318328485,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Precision Score,0.5211702,0.0015569767821004778,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Recall Score,0.9619972000000001,0.00410664543149272,5
+CHD_49,PCC_AdaBoostClassifier,Predict Markedness,Subset Accuracy,0.0205842,0.005518226771346027,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Fmeasure Score,0.6497468,0.0008148043937044047,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Hamming Accuracy,0.5849719999999999,0.0010668556603402057,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Informedness,0.5248302,0.01080780938488462,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Macro F1,0.5588746,0.0034678545673081785,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Markedness,0.7368788000000001,0.001871292788421937,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Micro F1,0.6711446,0.0009213052154416635,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Negative Predictive Value,0.9647408000000001,0.0030816357182509974,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Precision Score,0.5090182000000001,0.0006668712019573062,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Recall Score,0.9790518,0.0013519373876034763,5
+CHD_49,PCC_AdaBoostClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Fmeasure Score,0.4007732,0.008317936925704606,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Hamming Accuracy,0.6446122,0.004279383799100032,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Informedness,0.5459982,0.010225404402760851,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Macro F1,0.2925762,0.018150363528039885,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Markedness,0.6763724,0.007741168794180912,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Micro F1,0.4042998,0.007232574659137646,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Negative Predictive Value,0.6287322,0.002549942881713228,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Precision Score,0.724013,0.012935130884533028,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Recall Score,0.2886712,0.00669409483798966,5
+CHD_49,PCC_AdaBoostClassifier,Predict Precision,Subset Accuracy,0.0338826,0.003927195602462397,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Fmeasure Score,0.5834887999999999,9.29203960387268e-05,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Hamming Accuracy,0.4300578,8.873668914267049e-05,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Informedness,0.5,0.0,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Macro F1,0.5584956,0.0004723259467782903,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Markedness,0.215029,4.496109429273174e-05,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Micro F1,0.6011674,0.00011686659060652324,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Precision Score,0.4300578,8.873668914267049e-05,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Recall Score,0.9945782,3.225213171246696e-05,5
+CHD_49,PCC_AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Fmeasure Score,0.627452,0.004953529297379805,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Hamming Accuracy,0.6636534000000001,0.0033312685721808497,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Informedness,0.5653646,0.008943971729606504,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Macro F1,0.5450238000000001,0.026099584876009062,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Markedness,0.6854008,0.0034106712975600466,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Micro F1,0.6580142,0.004803566664469259,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.787165,0.005721735663240661,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Precision Score,0.5836358,0.003109882827374674,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Recall Score,0.7464548,0.0076367743976105415,5
+CHD_49,PCC_AdaBoostClassifier,Predict Subset,Subset Accuracy,0.1651366,0.005606898367190186,5
+CHD_49,PCC_LogisticRegression,Marginal Scores,Average Precision,0.792906,0.00180181880332071,5
+CHD_49,PCC_LogisticRegression,Marginal Scores,Coverage Score,0.45677320000000005,0.005238833286143027,5
+CHD_49,PCC_LogisticRegression,Marginal Scores,One-Error Score,0.735195,0.010213760326148326,5
+CHD_49,PCC_LogisticRegression,Marginal Scores,Ranking Loss Score,0.7872014,0.0028277654252076554,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Fmeasure Score,0.67158,0.0035953332947029903,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Hamming Accuracy,0.6797216,0.0045840407720699645,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Informedness,0.5743752000000001,0.005972609664125044,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Macro F1,0.5668276,0.010609870748505838,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Markedness,0.71675,0.004317682711825878,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Micro F1,0.6909916,0.0037068917302775432,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.8282014,0.004933940848854981,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Precision Score,0.6052998,0.003967664388528844,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Recall Score,0.8286089999999999,0.004519656126299927,5
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,Subset Accuracy,0.1275972,0.003981123359053319,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Fmeasure Score,0.639188,0.007051910414915952,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Hamming Accuracy,0.7078458000000001,0.005152183100395393,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Informedness,0.5832354000000001,0.006691139947721905,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Macro F1,0.5400288,0.0173607274674767,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Markedness,0.7118018,0.004735753076333254,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Micro F1,0.6642256,0.006775095076823594,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Negative Predictive Value,0.7573876,0.004508947194190663,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Precision Score,0.6662178,0.005087737679951708,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Recall Score,0.669291,0.008871827094798447,5
+CHD_49,PCC_LogisticRegression,Predict Hamming,Subset Accuracy,0.1804932,0.004451373012902872,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Fmeasure Score,0.6613768,0.002671689484202849,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Hamming Accuracy,0.7040212,0.0023977816205818544,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Informedness,0.5832054,0.005870704710679967,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Macro F1,0.5620276,0.00883079743284831,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Markedness,0.7127672,0.002696136624876444,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Micro F1,0.6806788,0.002979108037651515,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Negative Predictive Value,0.779695,0.0031182164774114164,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Precision Score,0.6458388,0.0024507813447960033,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Recall Score,0.7365902,0.0033649914858733224,5
+CHD_49,PCC_LogisticRegression,Predict Informedness,Subset Accuracy,0.1585452,0.006214367280745465,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Fmeasure Score,0.6347508,0.007104627414579868,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Hamming Accuracy,0.683864,0.007444920214481808,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Informedness,0.579804,0.006394485006628727,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Macro F1,0.5465338,0.01385594454376891,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Markedness,0.7324364,0.005483035956475213,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Micro F1,0.669153,0.007615426678788257,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Negative Predictive Value,0.8179183999999999,0.006291343680009874,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Precision Score,0.6469552000000001,0.005196621806520083,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Recall Score,0.7369546,0.007421567374887891,5
+CHD_49,PCC_LogisticRegression,Predict Markedness,Subset Accuracy,0.1322272,0.0032685047345843037,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Fmeasure Score,0.6490044,0.0008222911892997356,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Hamming Accuracy,0.5841286,0.0008872814097004285,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Informedness,0.5265126,0.010389351822900265,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Macro F1,0.5611478,0.0018091218035278954,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Markedness,0.735359,0.001524012303099947,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Micro F1,0.670484,0.0007374605074171569,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Negative Predictive Value,0.9622080000000001,0.002481717852617421,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Precision Score,0.5085118,0.0005704570097737282,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Recall Score,0.9778734,0.001793947267898363,5
+CHD_49,PCC_LogisticRegression,Predict NPV,Subset Accuracy,0.0,0.0,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Fmeasure Score,0.40542680000000003,0.005088288779147679,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Hamming Accuracy,0.6483399999999999,0.0034477644206065182,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Informedness,0.5482549999999999,0.012300829890702455,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Macro F1,0.301683,0.018301982310667878,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Markedness,0.683082,0.00615336022023734,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Micro F1,0.41054880000000005,0.005702251546538435,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Negative Predictive Value,0.630969,0.00209410111981254,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Precision Score,0.735195,0.010213760326148326,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Recall Score,0.2909902,0.0033234011494250788,5
+CHD_49,PCC_LogisticRegression,Predict Precision,Subset Accuracy,0.0309732,0.002360902306322732,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Fmeasure Score,0.5834887999999999,9.29203960387268e-05,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Hamming Accuracy,0.4300578,8.873668914267049e-05,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Informedness,0.5,0.0,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Macro F1,0.5584956,0.0004723259467782903,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Markedness,0.215029,4.496109429273174e-05,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Micro F1,0.6011674,0.00011686659060652324,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Negative Predictive Value,0.0,0.0,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Precision Score,0.4300578,8.873668914267049e-05,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Recall Score,0.9945782,3.225213171246696e-05,5
+CHD_49,PCC_LogisticRegression,Predict Recall,Subset Accuracy,0.0,0.0,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Fmeasure Score,0.6395618,0.006295907297602171,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Hamming Accuracy,0.6936536,0.0051701537017771314,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Informedness,0.5798878000000001,0.007955018145799547,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Macro F1,0.5533512,0.018439448899031714,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Markedness,0.7031168,0.0045190047244941115,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Micro F1,0.662213,0.006701481664527623,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Negative Predictive Value,0.764739,0.005796515030602452,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Precision Score,0.6414944,0.003310507710306727,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Recall Score,0.6979458000000001,0.007991678716014519,5
+CHD_49,PCC_LogisticRegression,Predict Subset,Subset Accuracy,0.18921459999999998,0.011162275811858444,5
+CHD_49,PCC_RandomForestClassifier,Marginal Scores,Average Precision,0.7975424,0.0032854040542983506,5
+CHD_49,PCC_RandomForestClassifier,Marginal Scores,Coverage Score,0.4588634,0.003705207996860655,5
+CHD_49,PCC_RandomForestClassifier,Marginal Scores,One-Error Score,0.7644607999999999,0.007583026552768972,5
+CHD_49,PCC_RandomForestClassifier,Marginal Scores,Ranking Loss Score,0.798234,0.0023757711379676213,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Fmeasure Score,0.6798222,0.0016387239547891903,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Hamming Accuracy,0.662955,0.003085208663931807,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Informedness,0.5625114,0.007353324200659166,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Macro F1,0.6001428,0.01771548519516183,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Markedness,0.7429398,0.0022295876748852097,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Micro F1,0.7005893999999999,0.0017041708541105532,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Negative Predictive Value,0.9078738,0.0033204636272665226,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Precision Score,0.5780046000000001,0.0024734399729930633,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Recall Score,0.9104258,0.00453670929198686,5
+CHD_49,PCC_RandomForestClassifier,Predict Fmeasure,Subset Accuracy,0.0944618,0.009599775632794757,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Fmeasure Score,0.6333474,0.004002534047325517,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Hamming Accuracy,0.7138642,0.0026662366174066395,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Informedness,0.573878,0.008977489710381092,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Macro F1,0.516571,0.019267047724028707,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Markedness,0.7155716,0.002500990863637845,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Micro F1,0.6640924,0.00370850122016968,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Negative Predictive Value,0.7544166000000001,0.0021295227869173286,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Precision Score,0.6767272,0.003272106462204464,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Recall Score,0.6465226000000001,0.0062343082455072535,5
+CHD_49,PCC_RandomForestClassifier,Predict Hamming,Subset Accuracy,0.1736358,0.0030306343725365545,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Fmeasure Score,0.6704188,0.0025634287975288108,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Hamming Accuracy,0.7107332,0.003152828761604468,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Informedness,0.5798844,0.01087102712718533,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Macro F1,0.5717504,0.018869557819408515,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Markedness,0.7227496,0.0027386029832745158,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Micro F1,0.6951,0.0024624519284648714,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Negative Predictive Value,0.8011426,0.002255411337206574,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Precision Score,0.6443572,0.004168501253448303,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Recall Score,0.7591680000000001,0.0036651935828820896,5
+CHD_49,PCC_RandomForestClassifier,Predict Informedness,Subset Accuracy,0.172929,0.007556878853071545,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Fmeasure Score,0.649179,0.003364787734761297,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Hamming Accuracy,0.6491979999999999,0.00408042828634449,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Informedness,0.5546369999999999,0.010793464087122374,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Macro F1,0.5814552,0.018431459687176167,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Markedness,0.7471783999999999,0.00301836193986076,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Micro F1,0.6794654,0.0029700055218803635,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Negative Predictive Value,0.9010368,0.0032111992619581068,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Precision Score,0.5933212,0.0036760494691992105,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Recall Score,0.8545389999999999,0.00475009363065616,5
+CHD_49,PCC_RandomForestClassifier,Predict Markedness,Subset Accuracy,0.07524020000000001,0.00449802792343489,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Fmeasure Score,0.6504816,0.0004459924887259943,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Hamming Accuracy,0.5860458,0.000527823550061984,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Informedness,0.51985,0.009642196274708349,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Macro F1,0.5611148,0.01403878020698377,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Markedness,0.7388112,0.0009343105479443913,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Micro F1,0.671983,0.0005289026375430504,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Negative Predictive Value,0.9679616,0.001552644936873841,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Precision Score,0.5096628,0.0003320025602310779,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Recall Score,0.9802118,0.0007167616061146304,5
+CHD_49,PCC_RandomForestClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Fmeasure Score,0.41412519999999997,0.005045990061425026,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Hamming Accuracy,0.6580964,0.0025681960205560703,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Informedness,0.5352864,0.009657134424869545,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Macro F1,0.237434,0.02013560683217669,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Markedness,0.7006418,0.004572847876323879,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Micro F1,0.4267104,0.004374844145795356,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Negative Predictive Value,0.636822,0.0015676992696305027,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Precision Score,0.7644607999999999,0.007583026552768972,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Recall Score,0.2928594,0.004120097426032545,5
+CHD_49,PCC_RandomForestClassifier,Predict Precision,Subset Accuracy,0.0180124,0.0028909961604955486,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Fmeasure Score,0.5834887999999999,9.29203960387268e-05,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Hamming Accuracy,0.4300578,8.873668914267049e-05,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Informedness,0.5,0.0,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Macro F1,0.5584956,0.0004723259467782903,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Markedness,0.215029,4.496109429273174e-05,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Micro F1,0.6011674,0.00011686659060652324,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Precision Score,0.4300578,8.873668914267049e-05,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Recall Score,0.9945782,3.225213171246696e-05,5
+CHD_49,PCC_RandomForestClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Fmeasure Score,0.6533892,0.005276461806930878,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Hamming Accuracy,0.7080426,0.003438823679690496,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Informedness,0.5846882,0.007970398685134931,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Macro F1,0.5612766,0.017759320490942226,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Markedness,0.7158405999999999,0.0036404093588496673,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Micro F1,0.6799343999999999,0.003681747044542867,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Negative Predictive Value,0.7798056,0.002094094983519136,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Precision Score,0.6518740000000001,0.00626156182593447,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Recall Score,0.7121446,0.00649831441990922,5
+CHD_49,PCC_RandomForestClassifier,Predict Subset,Subset Accuracy,0.1999614,0.009236940256383604,5

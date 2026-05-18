@@ -1,0 +1,505 @@
+Dataset,Model,Predict Function of Model,Metric Function,Mean,Std,N
+VirusGO_sparse,BR_AdaBoostClassifier,Marginal Scores,Average Precision,0.9330854000000001,0.0022591881949054434,5
+VirusGO_sparse,BR_AdaBoostClassifier,Marginal Scores,Coverage Score,0.9155238000000001,0.0015617924638056573,5
+VirusGO_sparse,BR_AdaBoostClassifier,Marginal Scores,One-Error Score,0.8869507999999999,0.005652945179284853,5
+VirusGO_sparse,BR_AdaBoostClassifier,Marginal Scores,Ranking Loss Score,0.9611826000000001,0.001219819166925991,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Fmeasure Score,0.659459,0.003733791437667604,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Hamming Accuracy,0.8018487999999999,0.0017947873690217478,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Informedness,0.8171318,0.003368286760357569,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Macro F1,0.7678268,0.019089591802864722,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Markedness,0.7556428000000001,0.0018921214813008246,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Micro F1,0.6632838000000001,0.0030122071143930153,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.986965,0.0024734653828182044,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Precision Score,0.5243206,0.002534445166106425,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Recall Score,0.9644280000000001,0.0067577403767827724,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.139573,0.005620367603635907,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Fmeasure Score,0.8782808,0.003902290314674224,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Hamming Accuracy,0.9499202,0.0034108384892867502,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Informedness,0.9325365999999999,0.005313399410923305,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Macro F1,0.8767949999999999,0.0147144696982256,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Markedness,0.9246719999999999,0.0020234286495945317,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Micro F1,0.8780322,0.0070337943316534,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Negative Predictive Value,0.9704722,0.0018541896343146982,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Precision Score,0.8788718,0.0028803106082504037,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Recall Score,0.8960622,0.007815227488691586,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Hamming,Subset Accuracy,0.7990465999999999,0.018473321609824272,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Fmeasure Score,0.6704017999999999,0.0047273814845006906,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Hamming Accuracy,0.8123726,0.0032379368122308788,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Informedness,0.8255566,0.006133432709339796,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Macro F1,0.7765994,0.020838923107972716,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Markedness,0.7629940000000001,0.003099469309414102,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Micro F1,0.6744114,0.004219925864277748,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Negative Predictive Value,0.9855053999999999,0.0017107198192574053,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Precision Score,0.5404842000000001,0.0054151843181926874,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Recall Score,0.9590707999999999,0.005932422540581569,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Informedness,Subset Accuracy,0.16200140000000002,0.011488280345639205,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Fmeasure Score,0.7676702,0.008358208163236909,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Hamming Accuracy,0.8822621999999999,0.0031316514333495095,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Informedness,0.8732827999999999,0.00710269619229206,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Macro F1,0.816086,0.014574684559193727,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Markedness,0.8419080000000001,0.005694861148439023,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Micro F1,0.757687,0.006378569549671798,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Negative Predictive Value,0.9723058,0.003298530991214112,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Precision Score,0.7115123999999999,0.010060250334857487,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Recall Score,0.9072368000000001,0.008941086913792954,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Markedness,Subset Accuracy,0.46185660000000006,0.018311454579033326,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Fmeasure Score,0.384251,0.00020318464508911507,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Hamming Accuracy,0.36958,0.00014492066795318876,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Informedness,0.5907858,0.0005554576491506773,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Macro F1,0.36379459999999997,0.0034722091382864526,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Markedness,0.6217484,8.591158245541068e-05,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Micro F1,0.3912918,0.00017156106784467409,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Negative Predictive Value,1.0,0.0,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Precision Score,0.24349579999999998,0.00017360213132332385,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Recall Score,1.0,0.0,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Fmeasure Score,0.8223488,0.005870766406526495,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Hamming Accuracy,0.9260702000000001,0.002001332106373133,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Informedness,0.8859066,0.004522025740749354,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Macro F1,0.8157412,0.01403901409287703,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Markedness,0.9104241999999999,0.003461594242542046,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Micro F1,0.8011248,0.005531698627004161,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Negative Predictive Value,0.9338948,0.001272853369402767,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Precision Score,0.8869507999999999,0.005652945179284853,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Recall Score,0.791254,0.006030728024044849,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Precision,Subset Accuracy,0.7003815999999999,0.006677490980899956,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Fmeasure Score,0.331627,0.00018321981333906343,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Hamming Accuracy,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Informedness,0.5,0.0,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Macro F1,0.3052332,0.0009024636834798204,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Markedness,0.1014564,7.227931931057865e-05,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Micro F1,0.3371088,0.00015243752818778247,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Precision Score,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Recall Score,1.0,0.0,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Fmeasure Score,0.8782808,0.003902290314674224,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Hamming Accuracy,0.9499202,0.0034108384892867502,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Informedness,0.9325365999999999,0.005313399410923305,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Macro F1,0.8767949999999999,0.0147144696982256,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Markedness,0.9246719999999999,0.0020234286495945317,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Micro F1,0.8780322,0.0070337943316534,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.9704722,0.0018541896343146982,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Precision Score,0.8788718,0.0028803106082504037,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Recall Score,0.8960622,0.007815227488691586,5
+VirusGO_sparse,BR_AdaBoostClassifier,Predict Subset,Subset Accuracy,0.7990465999999999,0.018473321609824272,5
+VirusGO_sparse,BR_LogisticRegression,Marginal Scores,Average Precision,0.9385794000000001,0.00253747813783687,5
+VirusGO_sparse,BR_LogisticRegression,Marginal Scores,Coverage Score,0.9197801999999999,0.0014434847418659652,5
+VirusGO_sparse,BR_LogisticRegression,Marginal Scores,One-Error Score,0.8935701999999999,0.005822913463207277,5
+VirusGO_sparse,BR_LogisticRegression,Marginal Scores,Ranking Loss Score,0.964622,0.001452161836711073,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Fmeasure Score,0.8633355999999999,0.008160597974413406,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Hamming Accuracy,0.9468565999999999,0.0025730594241097377,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Informedness,0.9179805999999999,0.0035298315540547172,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Macro F1,0.8313485999999999,0.019914606531387966,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Markedness,0.9145835999999999,0.004443379097038662,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Micro F1,0.8704534,0.0068430739656970265,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.9708512,0.001451146339967191,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Precision Score,0.8583164,0.007525081215508539,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Recall Score,0.8909274,0.009303731579318096,5
+VirusGO_sparse,BR_LogisticRegression,Predict Fmeasure,Subset Accuracy,0.760475,0.007760558259558415,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Fmeasure Score,0.867008,0.008724366366676709,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Hamming Accuracy,0.9487698,0.0030013086645661593,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Informedness,0.9145008000000001,0.00636968109091813,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Macro F1,0.8409956,0.01681210710470283,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Markedness,0.9198532,0.0043773260902061914,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Micro F1,0.873288,0.008012263506650304,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Negative Predictive Value,0.966644,0.0028275263924497206,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Precision Score,0.8730624,0.00699216281274973,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Recall Score,0.8802132,0.010591256426883513,5
+VirusGO_sparse,BR_LogisticRegression,Predict Hamming,Subset Accuracy,0.7807132,0.011411957969603639,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Fmeasure Score,0.8835264,0.007978658207994647,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Hamming Accuracy,0.9479444000000001,0.004268750496339604,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Informedness,0.9246444,0.0027771244660619782,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Macro F1,0.8380506000000001,0.02191805116336766,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Markedness,0.9248234,0.005220041934697459,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Micro F1,0.8759482000000001,0.010053062031043069,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Negative Predictive Value,0.9746074,0.002144545709468588,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Precision Score,0.8750384,0.008346951796913657,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Recall Score,0.916023,0.007335534131881595,5
+VirusGO_sparse,BR_LogisticRegression,Predict Informedness,Subset Accuracy,0.774856,0.01175264434074308,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Fmeasure Score,0.8652694000000001,0.0071051654308679265,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Hamming Accuracy,0.9482616,0.00293860728917629,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Informedness,0.9119548,0.006200865399280973,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Macro F1,0.832666,0.013543785696768867,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Markedness,0.9207736000000001,0.003399272319188324,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Micro F1,0.8702662,0.007901895702931037,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Negative Predictive Value,0.9639846000000001,0.002644301854932578,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Precision Score,0.8775624000000001,0.005401792832014223,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Recall Score,0.8706182,0.009494097571649469,5
+VirusGO_sparse,BR_LogisticRegression,Predict Markedness,Subset Accuracy,0.7884274,0.007339621706872879,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Fmeasure Score,0.3826638,0.00020347899154461399,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Hamming Accuracy,0.3679926,0.00014491135221229824,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Informedness,0.587444,0.003722809490156567,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Macro F1,0.334671,0.0030753699777425034,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Markedness,0.6188912,8.621310805210585e-05,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Micro F1,0.3897554,0.0001745803539920802,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Negative Predictive Value,0.995238,0.0,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Precision Score,0.2425432,0.00017313636244302696,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Recall Score,0.995238,0.0,5
+VirusGO_sparse,BR_LogisticRegression,Predict NPV,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Fmeasure Score,0.8273885999999999,0.004817234922650097,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Hamming Accuracy,0.9282766,0.0019503956778048964,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Informedness,0.8741578000000001,0.00749608082266995,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Macro F1,0.7944766,0.01614776168080267,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Markedness,0.9143954000000001,0.0034963588631603806,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Micro F1,0.8069566,0.005188521398240568,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Negative Predictive Value,0.9352186,0.0011821084129638674,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Precision Score,0.8935701999999999,0.005822913463207277,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Recall Score,0.795341,0.004528473639097387,5
+VirusGO_sparse,BR_LogisticRegression,Predict Precision,Subset Accuracy,0.7012858,0.004173001042415427,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Fmeasure Score,0.331627,0.00018321981333906343,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Hamming Accuracy,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Informedness,0.5,0.0,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Macro F1,0.3052332,0.0009024636834798204,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Markedness,0.1014564,7.227931931057865e-05,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Micro F1,0.3371088,0.00015243752818778247,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Negative Predictive Value,0.0,0.0,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Precision Score,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Recall Score,1.0,0.0,5
+VirusGO_sparse,BR_LogisticRegression,Predict Recall,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Fmeasure Score,0.867008,0.008724366366676709,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Hamming Accuracy,0.9487698,0.0030013086645661593,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Informedness,0.9145008000000001,0.00636968109091813,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Macro F1,0.8409956,0.01681210710470283,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Markedness,0.9198532,0.0043773260902061914,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Micro F1,0.873288,0.008012263506650304,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Negative Predictive Value,0.966644,0.0028275263924497206,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Precision Score,0.8730624,0.00699216281274973,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Recall Score,0.8802132,0.010591256426883513,5
+VirusGO_sparse,BR_LogisticRegression,Predict Subset,Subset Accuracy,0.7807132,0.011411957969603639,5
+VirusGO_sparse,BR_RandomForestClassifier,Marginal Scores,Average Precision,0.9434694,0.003661362765419446,5
+VirusGO_sparse,BR_RandomForestClassifier,Marginal Scores,Coverage Score,0.922476,0.0029861703735721496,5
+VirusGO_sparse,BR_RandomForestClassifier,Marginal Scores,One-Error Score,0.9033798000000001,0.007327838166881173,5
+VirusGO_sparse,BR_RandomForestClassifier,Marginal Scores,Ranking Loss Score,0.9663024,0.0024705247013539424,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Fmeasure Score,0.8715882,0.004982065806470242,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Hamming Accuracy,0.934579,0.001962793290186219,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Informedness,0.9281349999999999,0.005330192726346755,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Macro F1,0.8008241999999999,0.015865706057405678,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Markedness,0.912695,0.0031217362957175012,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Micro F1,0.8550053999999999,0.0036601846674724037,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Negative Predictive Value,0.9846693999999999,0.0015039525590922205,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Precision Score,0.8407224,0.005262060936553253,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Recall Score,0.9426106000000001,0.005508471230749961,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Fmeasure,Subset Accuracy,0.7253328,0.00653297690184192,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Fmeasure Score,0.8633576,0.008777649246808688,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Hamming Accuracy,0.9475152,0.004225586196020604,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Informedness,0.9004678,0.004119522933544602,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Macro F1,0.8315706,0.012199206707815068,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Markedness,0.9211446000000001,0.004766526492111405,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Micro F1,0.8658189999999999,0.011519155372682515,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Negative Predictive Value,0.9603379999999999,0.0030465620788029993,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Precision Score,0.8819510000000002,0.006730806898136364,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Recall Score,0.863547,0.00892728575772052,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Hamming,Subset Accuracy,0.7923318,0.016540424592494638,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Fmeasure Score,0.8797713999999999,0.0035971798398189924,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Hamming Accuracy,0.9382932,0.0021044677949543325,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Informedness,0.9289994,0.004427259965260672,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Macro F1,0.8195893999999999,0.016332317848364326,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Markedness,0.9163012,0.0019112822135938286,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Micro F1,0.8616516000000001,0.004976807942848522,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Negative Predictive Value,0.9833136,0.002595960284750139,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Precision Score,0.8492892,0.0032767972473133093,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Recall Score,0.9469122000000001,0.0071863681856693135,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Informedness,Subset Accuracy,0.7293334,0.006031299055759056,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Fmeasure Score,0.8806038,0.008478411861899592,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Hamming Accuracy,0.9436972000000001,0.0028975473594058903,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Informedness,0.9139958,0.005402328729353633,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Macro F1,0.8206794000000001,0.0201216320113454,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Markedness,0.9307348,0.0049700182796444375,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Micro F1,0.8634836,0.008418887295836687,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Negative Predictive Value,0.9679106000000001,0.0034743915726354172,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Precision Score,0.8935576000000001,0.0068029744450497885,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Recall Score,0.8919908,0.010261352332904278,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Markedness,Subset Accuracy,0.7982370000000001,0.013810358358855105,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Fmeasure Score,0.38329880000000005,0.0008939995525725836,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Hamming Accuracy,0.3686274,0.0008860811475254413,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Informedness,0.5855252,0.003523753283077586,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Macro F1,0.3583416,0.010721410135798342,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Markedness,0.6200342,0.0015695679978898892,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Micro F1,0.390366,0.0007630586478115706,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Negative Predictive Value,0.9971428,0.0026082548188396414,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Precision Score,0.24292419999999998,0.0005547834712750594,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Recall Score,0.9971428,0.0026082548188396414,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Fmeasure Score,0.8389203999999999,0.007661780393616117,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Hamming Accuracy,0.9315472,0.0025741150323946166,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Informedness,0.8844234,0.003994343663231768,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Macro F1,0.8152564,0.012134653241852436,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Markedness,0.9202809999999999,0.004475274460857108,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Micro F1,0.8158616000000001,0.00724159376794915,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Negative Predictive Value,0.9371805999999999,0.0016232631641234095,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Precision Score,0.9033798000000001,0.007327838166881173,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Recall Score,0.8078172,0.007863042871560593,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Precision,Subset Accuracy,0.7167616,0.008623404884382973,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Fmeasure Score,0.331627,0.00018321981333906343,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Hamming Accuracy,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Informedness,0.5,0.0,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Macro F1,0.3052332,0.0009024636834798204,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Markedness,0.1014564,7.227931931057865e-05,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Micro F1,0.3371088,0.00015243752818778247,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Precision Score,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Recall Score,1.0,0.0,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Fmeasure Score,0.8627228,0.009336111701345533,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Hamming Accuracy,0.9473564,0.004396223527074124,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Informedness,0.9000512,0.004327164799265201,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Macro F1,0.8309358,0.011268992399500497,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Markedness,0.9206049999999999,0.005314095689766938,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Micro F1,0.8653981999999999,0.011962663570459563,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Negative Predictive Value,0.9602109999999999,0.0031762096908108006,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Precision Score,0.8809986000000001,0.007664154767487495,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Recall Score,0.8630708,0.009227578593542318,5
+VirusGO_sparse,BR_RandomForestClassifier,Predict Subset,Subset Accuracy,0.7923318,0.016540424592494638,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Marginal Scores,Average Precision,0.9345238,0.003150691781180798,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Marginal Scores,Coverage Score,0.9151811999999999,0.002340795313563285,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Marginal Scores,One-Error Score,0.8899032,0.007418483079444209,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Marginal Scores,Ranking Loss Score,0.9611584000000001,0.0023259125735934317,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Fmeasure Score,0.6652196,0.007363909477987917,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Hamming Accuracy,0.8089522,0.0059805739022271215,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Informedness,0.8234786,0.006825555090979775,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Macro F1,0.7734458,0.02295642887515392,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Markedness,0.7590218,0.005060260240343367,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Micro F1,0.6709208,0.007817371853762575,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.9868366,0.0019685501771608315,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Precision Score,0.531206,0.00907576919605162,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Recall Score,0.9619994000000001,0.004529709626455081,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.1425252,0.014194464015946496,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Fmeasure Score,0.8766845999999999,0.0040675137737934694,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Hamming Accuracy,0.9501262,0.003278270153602341,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Informedness,0.9332157999999999,0.007121109723912428,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Macro F1,0.8762108,0.014816336767230952,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Markedness,0.9247362000000001,0.002219778074493085,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Micro F1,0.8772144000000001,0.007781338625198134,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Negative Predictive Value,0.9689159999999999,0.0028839066385720697,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Precision Score,0.8805540000000001,0.002831183144906036,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Recall Score,0.8906178,0.007252235462255774,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Hamming,Subset Accuracy,0.8021891999999999,0.016403373165297382,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Fmeasure Score,0.6762352,0.005549443413532615,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Hamming Accuracy,0.8195314,0.003924059861928727,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Informedness,0.8309570000000001,0.0041930690430757546,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Macro F1,0.7851426,0.019599627070431717,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Markedness,0.7661938,0.003535421007461489,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Micro F1,0.6824652,0.004922040298494134,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Negative Predictive Value,0.9856187999999999,0.0011889504615415754,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Precision Score,0.5467698000000001,0.0068702140578004766,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Recall Score,0.9595708000000001,0.004615068981066326,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Informedness,Subset Accuracy,0.16752499999999998,0.01276331616391289,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Fmeasure Score,0.8180464000000001,0.0062184540120515525,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Hamming Accuracy,0.909285,0.003958048572213338,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Informedness,0.8955074,0.0057959536143761805,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Macro F1,0.8349616,0.019043598538616584,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Markedness,0.8784995999999999,0.00499823241756524,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Micro F1,0.8047406,0.005709384450183751,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Negative Predictive Value,0.9733957999999999,0.0023892779662484033,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Precision Score,0.7836022,0.010783849530663907,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Recall Score,0.9132686,0.005370367845874211,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Markedness,Subset Accuracy,0.5908578,0.02903854481891265,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Fmeasure Score,0.38393360000000004,0.0006459445022600376,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Hamming Accuracy,0.3692624,0.0006666054305209438,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Informedness,0.5874096,0.0010357872851121546,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Macro F1,0.40876460000000003,0.013581790504200837,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Markedness,0.621177,0.0012463159711726046,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Micro F1,0.39097919999999997,0.0006058392526074762,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Negative Predictive Value,0.9990475999999999,0.0021296311417708315,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Precision Score,0.2433052,0.00039185609603526855,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Recall Score,0.9990475999999999,0.0021296311417708315,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Fmeasure Score,0.8246502,0.007600219023159762,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Hamming Accuracy,0.9270541999999999,0.002565738918908162,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Informedness,0.8884985999999999,0.006980325443702468,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Macro F1,0.8190988000000001,0.00575847746370518,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Markedness,0.9121957999999999,0.004505465148017479,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Micro F1,0.8036188,0.007444127228896639,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Negative Predictive Value,0.9344851999999999,0.001597537386104021,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Precision Score,0.8899032,0.007418483079444209,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Recall Score,0.7932306,0.007689541293211201,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Precision,Subset Accuracy,0.7013816,0.007960344483751953,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Fmeasure Score,0.331627,0.00018321981333906343,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Hamming Accuracy,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Informedness,0.5,0.0,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Macro F1,0.3052332,0.0009024636834798204,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Markedness,0.1014564,7.227931931057865e-05,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Micro F1,0.3371088,0.00015243752818778247,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Precision Score,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Recall Score,1.0,0.0,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Fmeasure Score,0.8725645999999999,0.008659073264501188,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Hamming Accuracy,0.9470548000000001,0.00246769299143957,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Informedness,0.9294256000000001,0.0043433671039874045,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Macro F1,0.8702690000000001,0.008823400223269915,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Markedness,0.9220653999999999,0.004632971594991689,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Micro F1,0.8696654,0.006000302934019263,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.9667426000000001,0.0020127953944700846,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Precision Score,0.8773873999999999,0.008279626700522172,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Recall Score,0.8867610000000001,0.011547582495916642,5
+VirusGO_sparse,PCC_AdaBoostClassifier,Predict Subset,Subset Accuracy,0.7914746,0.013755602542237113,5
+VirusGO_sparse,PCC_LogisticRegression,Marginal Scores,Average Precision,0.9389466000000001,0.0026032451478875136,5
+VirusGO_sparse,PCC_LogisticRegression,Marginal Scores,Coverage Score,0.9199802,0.0018482619403103868,5
+VirusGO_sparse,PCC_LogisticRegression,Marginal Scores,One-Error Score,0.8945226,0.0053137752869311826,5
+VirusGO_sparse,PCC_LogisticRegression,Marginal Scores,Ranking Loss Score,0.9648087999999999,0.001846899076831219,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Fmeasure Score,0.8634942000000001,0.006379968354153488,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Hamming Accuracy,0.9462059999999999,0.002371147717878412,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Informedness,0.9171800000000001,0.0037246464261725897,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Macro F1,0.8300905999999999,0.020550044325986276,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Markedness,0.9147337999999999,0.0034950308582328816,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Micro F1,0.8691296,0.006126986110641997,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.970381,0.0007717927182864913,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Precision Score,0.8590861999999999,0.006335295036539339,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Recall Score,0.891221,0.006241943487408408,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Fmeasure,Subset Accuracy,0.7575225999999999,0.008684002896130374,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Fmeasure Score,0.867008,0.008724366366676709,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Hamming Accuracy,0.9487698,0.0030013086645661593,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Informedness,0.9145008000000001,0.00636968109091813,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Macro F1,0.8409956,0.01681210710470283,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Markedness,0.9198532,0.0043773260902061914,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Micro F1,0.873288,0.008012263506650304,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Negative Predictive Value,0.966644,0.0028275263924497206,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Precision Score,0.8730624,0.00699216281274973,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Recall Score,0.8802132,0.010591256426883513,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Hamming,Subset Accuracy,0.7807132,0.011411957969603639,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Fmeasure Score,0.883098,0.008094731156746382,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Hamming Accuracy,0.9471428,0.0042770734971472974,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Informedness,0.9238636,0.002564196521329822,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Macro F1,0.8375389999999999,0.019620039997410806,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Markedness,0.9243196000000001,0.005252728272050681,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Micro F1,0.8743478,0.010212240753135414,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Negative Predictive Value,0.9747104,0.0020398140356415366,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Precision Score,0.8739274,0.008694271694627461,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Recall Score,0.917023,0.00735306473519719,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Informedness,Subset Accuracy,0.7719509999999999,0.012458513253996268,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Fmeasure Score,0.8669330000000001,0.008091937561548536,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Hamming Accuracy,0.948444,0.0036968418278309025,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Informedness,0.9112054,0.005992547897180288,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Macro F1,0.831859,0.01442846473121796,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Markedness,0.9220756,0.004712881369183814,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Micro F1,0.8709262000000001,0.009656389112913819,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Negative Predictive Value,0.96397,0.002634211931489173,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Precision Score,0.8801814,0.00793354393067816,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Recall Score,0.8717051999999998,0.008512715618414603,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Markedness,Subset Accuracy,0.789475,0.01316813973194393,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Fmeasure Score,0.3826638,0.00020347899154461399,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Hamming Accuracy,0.3679926,0.00014491135221229824,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Informedness,0.5873648,0.0036047226245579204,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Macro F1,0.3346718,0.0032960160345483895,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Markedness,0.6188912,8.621310805210585e-05,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Micro F1,0.3897554,0.0001745803539920802,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Negative Predictive Value,0.995238,0.0,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Precision Score,0.2425432,0.00017313636244302696,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Recall Score,0.995238,0.0,5
+VirusGO_sparse,PCC_LogisticRegression,Predict NPV,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Fmeasure Score,0.8281822,0.004163894475127815,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Hamming Accuracy,0.928594,0.0018030897093600264,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Informedness,0.8751718,0.00672120857435626,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Macro F1,0.8001837999999999,0.012813845859069802,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Markedness,0.9149668,0.003203934253382852,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Micro F1,0.8077776,0.005289402924716556,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Negative Predictive Value,0.9354089999999999,0.0011069570904059648,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Precision Score,0.8945226,0.0053137752869311826,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Recall Score,0.7961349999999999,0.0036928939194079565,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Precision,Subset Accuracy,0.7022382,0.002642944891593465,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Fmeasure Score,0.331627,0.00018321981333906343,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Hamming Accuracy,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Informedness,0.5,0.0,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Macro F1,0.3052332,0.0009024636834798204,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Markedness,0.1014564,7.227931931057865e-05,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Micro F1,0.3371088,0.00015243752818778247,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Negative Predictive Value,0.0,0.0,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Precision Score,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Recall Score,1.0,0.0,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Recall,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Fmeasure Score,0.8684366000000001,0.007406457338025993,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Hamming Accuracy,0.9486034,0.0030322283555167524,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Informedness,0.9149406000000001,0.006401266577795344,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Macro F1,0.8383324,0.013816054693725014,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Markedness,0.920289,0.003485098779087924,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Micro F1,0.8733122,0.007806994665042414,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Negative Predictive Value,0.9670387999999999,0.002661509947379499,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Precision Score,0.8735386,0.005380138873672334,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Recall Score,0.882118,0.009486204641478061,5
+VirusGO_sparse,PCC_LogisticRegression,Predict Subset,Subset Accuracy,0.7835702,0.010746593678929155,5
+VirusGO_sparse,PCC_RandomForestClassifier,Marginal Scores,Average Precision,0.9442834,0.005535725137685234,5
+VirusGO_sparse,PCC_RandomForestClassifier,Marginal Scores,Coverage Score,0.9223236,0.0019481210947987966,5
+VirusGO_sparse,PCC_RandomForestClassifier,Marginal Scores,One-Error Score,0.9063321999999999,0.01203693612178781,5
+VirusGO_sparse,PCC_RandomForestClassifier,Marginal Scores,Ranking Loss Score,0.9664987999999999,0.0017292436786063368,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Fmeasure Score,0.8750164,0.005281861868697429,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Hamming Accuracy,0.931817,0.003411536677217456,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Informedness,0.9288354,0.005440196301605299,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Macro F1,0.7956844000000001,0.02106919259962284,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Markedness,0.9140523999999999,0.0037082902124834093,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Micro F1,0.8499928000000001,0.008054452600891012,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Negative Predictive Value,0.9850128,0.002801903406614865,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Precision Score,0.8430937999999999,0.005722523979853661,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Recall Score,0.9495153999999999,0.005323226305540654,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Fmeasure,Subset Accuracy,0.7272374,0.011397712130072438,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Fmeasure Score,0.8652536,0.004332141191143263,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Hamming Accuracy,0.9467528,0.0013805548522242655,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Informedness,0.9034694,0.001992392104983329,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Macro F1,0.8338601999999999,0.018627802465669425,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Markedness,0.921973,0.0027535774004011603,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Micro F1,0.864452,0.004643864608276113,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Negative Predictive Value,0.9602804,0.0014329156639523507,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Precision Score,0.8836653999999999,0.004537439839821543,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Recall Score,0.8668726,0.0042345307059932745,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Hamming,Subset Accuracy,0.7916179999999999,0.01013879531798525,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Fmeasure Score,0.8746919999999999,0.00526871293581269,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Hamming Accuracy,0.935214,0.0021260285745962576,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Informedness,0.923258,0.004896604384673107,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Macro F1,0.7990402,0.018431508991398414,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Markedness,0.9127724,0.003777411322585922,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Micro F1,0.8547946,0.004319325329261507,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Negative Predictive Value,0.9807038,0.0033411671164430183,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Precision Score,0.8448406,0.007658649802674091,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Recall Score,0.9406264,0.00842159820342904,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Informedness,Subset Accuracy,0.7283326,0.015695067801701264,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Fmeasure Score,0.8775288,0.005054273854867777,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Hamming Accuracy,0.9409438,0.0027936823727832847,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Informedness,0.9114366,0.005293277179592985,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Macro F1,0.8032313999999999,0.018331835568212978,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Markedness,0.928464,0.004108762709137643,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Micro F1,0.8573898,0.006180750456053042,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Negative Predictive Value,0.9670276,0.0016681514619482417,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Precision Score,0.889899,0.007668422197558,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Recall Score,0.8917607999999999,0.0039044058702957705,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Markedness,Subset Accuracy,0.789475,0.013970726001178288,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Fmeasure Score,0.383616,0.0010528544533789958,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Hamming Accuracy,0.36894499999999997,0.00099566158909541,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Informedness,0.5849746,0.0044644500557179355,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Macro F1,0.3593824,0.011792664279118608,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Markedness,0.6206054,0.0016391239428425913,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Micro F1,0.3906764,0.0009387402729189935,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Negative Predictive Value,0.9980952000000001,0.0026082548188396115,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Precision Score,0.24311500000000003,0.0006753239963158395,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Recall Score,0.9980952000000001,0.0026082548188396115,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Fmeasure Score,0.8415554000000001,0.010899275907141738,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Hamming Accuracy,0.932531,0.004072335877601437,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Informedness,0.8839819999999999,0.006692406816684077,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Macro F1,0.8156174,0.02233992454776871,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Markedness,0.9220528,0.00725683975295031,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Micro F1,0.818351,0.010426188733185283,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Negative Predictive Value,0.9377711999999999,0.0024815399855734393,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Precision Score,0.9063321999999999,0.01203693612178781,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Recall Score,0.8102938,0.010413295621463915,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Precision,Subset Accuracy,0.7187616,0.009150390527185191,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Fmeasure Score,0.331627,0.00018321981333906343,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Hamming Accuracy,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Informedness,0.5,0.0,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Macro F1,0.3052332,0.0009024636834798204,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Markedness,0.1014564,7.227931931057865e-05,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Micro F1,0.3371088,0.00015243752818778247,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Precision Score,0.20291299999999998,0.00014430349961106026,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Recall Score,1.0,0.0,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Fmeasure Score,0.8701738000000001,0.0013324982926818225,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Hamming Accuracy,0.9467218,0.001195994021724209,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Informedness,0.904377,0.002614024961625217,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Macro F1,0.8330742000000001,0.023588859673583217,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Markedness,0.92627,0.0014727917368045963,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Micro F1,0.8645312,0.002634446659167696,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Negative Predictive Value,0.9598264000000001,0.0019110319986855165,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Precision Score,0.892713,0.0043913728491213515,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Recall Score,0.8672534000000001,0.005224249065655281,5
+VirusGO_sparse,PCC_RandomForestClassifier,Predict Subset,Subset Accuracy,0.800285,0.007431674844878515,5

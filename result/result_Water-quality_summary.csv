@@ -1,0 +1,505 @@
+Dataset,Model,Predict Function of Model,Metric Function,Mean,Std,N
+Water-quality,BR_AdaBoostClassifier,Marginal Scores,Average Precision,0.6884378,0.0032582121938265663,5
+Water-quality,BR_AdaBoostClassifier,Marginal Scores,Coverage Score,0.323034,0.0033135461366940737,5
+Water-quality,BR_AdaBoostClassifier,Marginal Scores,One-Error Score,0.7101898,0.00798822193607565,5
+Water-quality,BR_AdaBoostClassifier,Marginal Scores,Ranking Loss Score,0.741938,0.003399201891620993,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Fmeasure Score,0.5169094000000001,0.0001542037613030423,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Hamming Accuracy,0.37602440000000004,0.0003210549797153091,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Informedness,0.5092945999999999,0.0004169374053739774,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Macro F1,0.5254626,0.00026791472523922296,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Markedness,0.26715999999999995,0.0027699630863966375,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Micro F1,0.5367792,0.00028723892493882257,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.1676234,0.005491120313742912,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Precision Score,0.3666956,6.085474509024455e-05,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Recall Score,0.9925782,0.0004490759401259744,5
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.0,0.0,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Fmeasure Score,0.5284452,0.005116283582836267,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Hamming Accuracy,0.7052286000000001,0.002850556138721024,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Informedness,0.629393,0.004100618672834633,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Macro F1,0.49842060000000005,0.007211770885157134,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Markedness,0.6741562,0.005066240341713019,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Micro F1,0.5613364,0.004622147152568804,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Negative Predictive Value,0.7428804,0.003054450572525297,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Precision Score,0.605432,0.007114157820852724,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Recall Score,0.5211296,0.00610271335554931,5
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,Subset Accuracy,0.010942,0.0005171416633766806,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Fmeasure Score,0.5571302,0.002625869608339292,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Hamming Accuracy,0.5799324,0.0013600223527574767,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Informedness,0.5904346,0.0024504683837993347,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Macro F1,0.5429337999999999,0.0027986415811961534,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Markedness,0.6463,0.002854050455055066,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Micro F1,0.5738784,0.002274211577668232,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Negative Predictive Value,0.8178874,0.004082519908095984,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Precision Score,0.47471199999999997,0.0016544092601288242,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Recall Score,0.798551,0.00530614836769571,5
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,Subset Accuracy,0.0007544,0.0010330047434547432,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Fmeasure Score,0.46802659999999996,0.0033769843499785604,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Hamming Accuracy,0.49327540000000003,0.0020378223180640706,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Informedness,0.5333806,0.0022736427379867626,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Macro F1,0.5000232,0.003495728922556798,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Markedness,0.6601678000000001,0.004549023598531876,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Micro F1,0.5178928,0.0029645454457639994,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Negative Predictive Value,0.8449557999999999,0.009400679853074497,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Precision Score,0.4753792,0.004722530857495807,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Recall Score,0.7662106,0.010861769851179858,5
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,Subset Accuracy,0.0018862,0.0013339569708202734,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Fmeasure Score,0.5305416000000001,0.0005657236958091951,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Hamming Accuracy,0.42047100000000004,0.0006359736629767183,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Informedness,0.5338132,0.000909739907885813,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Macro F1,0.5375935999999999,0.0007487725288764647,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Markedness,0.6450150000000001,0.0023985728048154177,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Micro F1,0.5508995999999999,0.0005328248305024597,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Negative Predictive Value,0.9069814,0.0044551607490638835,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Precision Score,0.38304720000000003,0.0003420273380886288,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Recall Score,0.978861,0.0014215444066226076,5
+Water-quality,BR_AdaBoostClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Fmeasure Score,0.24808560000000002,0.0021543333771726274,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Hamming Accuracy,0.6676958,0.0011412290304754725,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Informedness,0.5350216,0.0013191966494802809,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Macro F1,0.1659998,0.0029887270199869384,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Markedness,0.6873076,0.004301775482286357,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Micro F1,0.2340644,0.0025719083965024935,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Negative Predictive Value,0.6644272,0.0006138173181004171,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Precision Score,0.7101898,0.00798822193607565,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Recall Score,0.1584072,0.0012287024456718659,5
+Water-quality,BR_AdaBoostClassifier,Predict Precision,Subset Accuracy,0.0103764,0.0017647261260603584,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Fmeasure Score,0.512478,1.2247448714192533e-06,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Hamming Accuracy,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Informedness,0.5,0.0,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Macro F1,0.5209018000000001,0.00023554235287948024,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Markedness,0.181166,7.071067811872547e-07,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Micro F1,0.5317676,8.972625033958688e-05,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Precision Score,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Recall Score,0.9943405999999999,5.477225574989573e-07,5
+Water-quality,BR_AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Fmeasure Score,0.5284452,0.005116283582836267,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Hamming Accuracy,0.7052286000000001,0.002850556138721024,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Informedness,0.629393,0.004100618672834633,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Macro F1,0.49842060000000005,0.007211770885157134,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Markedness,0.6741562,0.005066240341713019,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Micro F1,0.5613364,0.004622147152568804,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.7428804,0.003054450572525297,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Precision Score,0.605432,0.007114157820852724,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Recall Score,0.5211296,0.00610271335554931,5
+Water-quality,BR_AdaBoostClassifier,Predict Subset,Subset Accuracy,0.010942,0.0005171416633766806,5
+Water-quality,BR_LogisticRegression,Marginal Scores,Average Precision,0.687057,0.0007536023487224551,5
+Water-quality,BR_LogisticRegression,Marginal Scores,Coverage Score,0.32426699999999997,0.0018000329163657025,5
+Water-quality,BR_LogisticRegression,Marginal Scores,One-Error Score,0.7016983999999999,0.0018151964907413773,5
+Water-quality,BR_LogisticRegression,Marginal Scores,Ranking Loss Score,0.7445534,0.0010799040698136263,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Fmeasure Score,0.5820696,0.0004229696206585499,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Hamming Accuracy,0.6150814,0.0008024352310311022,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Informedness,0.6110228,0.0009725472739152826,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Macro F1,0.5690801999999999,0.0017098127675274932,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Markedness,0.654237,0.0005587933428379368,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Micro F1,0.6056584,0.0005590982024653652,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.8255682,0.0007814174300589706,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Precision Score,0.4829034,0.0006229175707908705,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Recall Score,0.8196812,0.0007888879514861586,5
+Water-quality,BR_LogisticRegression,Predict Fmeasure,Subset Accuracy,0.0015088,0.0005165023717273716,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Fmeasure Score,0.47633179999999997,0.0019920146083801816,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Hamming Accuracy,0.705646,0.0008864753239656585,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Informedness,0.60128,0.0011029236147621403,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Macro F1,0.41290639999999995,0.001963249933146562,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Markedness,0.6802212,0.0016605627660525061,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Micro F1,0.5121076,0.0016180904795467846,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Negative Predictive Value,0.7257326,0.0008319728360950065,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Precision Score,0.6347092,0.002498750627813831,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Recall Score,0.42917740000000004,0.002623938604464657,5
+Water-quality,BR_LogisticRegression,Predict Hamming,Subset Accuracy,0.013772800000000002,0.0025497888540034056,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Fmeasure Score,0.5754395999999999,0.00119332028391378,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Hamming Accuracy,0.6660508,0.0011778016386471883,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Informedness,0.6089466,0.0011716634755764978,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Macro F1,0.5271038,0.0015777605014703757,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Markedness,0.6601928,0.001104628761168239,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Micro F1,0.5953926,0.0012668223237691815,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Negative Predictive Value,0.7845474,0.0010047603196782669,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Precision Score,0.5358394,0.0017411072052002095,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Recall Score,0.697328,0.0021089126345109495,5
+Water-quality,BR_LogisticRegression,Predict Informedness,Subset Accuracy,0.0026406,0.00042127520696096034,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Fmeasure Score,0.3644988,0.004167980950052435,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Hamming Accuracy,0.6644606,0.001516927585615059,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Informedness,0.5570032,0.0019207609689911882,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Macro F1,0.3367032,0.0032408353398468343,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Markedness,0.6910930000000001,0.0024038850846078096,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Micro F1,0.41325199999999995,0.0033653886848327087,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Negative Predictive Value,0.7140234000000001,0.0019651071980937946,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Precision Score,0.668162,0.004819737544721688,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Recall Score,0.3388818,0.004884914195766391,5
+Water-quality,BR_LogisticRegression,Predict Markedness,Subset Accuracy,0.012074999999999999,0.0007897483776494895,5
+Water-quality,BR_LogisticRegression,Predict NPV,Fmeasure Score,0.5295221999999999,0.0004910984626325042,5
+Water-quality,BR_LogisticRegression,Predict NPV,Hamming Accuracy,0.4191772,0.0006957921385011467,5
+Water-quality,BR_LogisticRegression,Predict NPV,Informedness,0.5292899999999999,0.000865041617495921,5
+Water-quality,BR_LogisticRegression,Predict NPV,Macro F1,0.5360714,0.0006999602131549758,5
+Water-quality,BR_LogisticRegression,Predict NPV,Markedness,0.640138,0.0026244367014656837,5
+Water-quality,BR_LogisticRegression,Predict NPV,Micro F1,0.5498974000000001,0.0005557061273730776,5
+Water-quality,BR_LogisticRegression,Predict NPV,Negative Predictive Value,0.8979248,0.004874676676457589,5
+Water-quality,BR_LogisticRegression,Predict NPV,Precision Score,0.382351,0.0003759295146699629,5
+Water-quality,BR_LogisticRegression,Predict NPV,Recall Score,0.9767129999999999,0.0009039062451382834,5
+Water-quality,BR_LogisticRegression,Predict NPV,Subset Accuracy,0.0,0.0,5
+Water-quality,BR_LogisticRegression,Predict Precision,Fmeasure Score,0.2440654,0.0003159379685951002,5
+Water-quality,BR_LogisticRegression,Predict Precision,Hamming Accuracy,0.6664824,0.0002589503813474498,5
+Water-quality,BR_LogisticRegression,Predict Precision,Informedness,0.5291032,0.0003513384408230668,5
+Water-quality,BR_LogisticRegression,Predict Precision,Macro F1,0.1446382,0.0015255534077835463,5
+Water-quality,BR_LogisticRegression,Predict Precision,Markedness,0.6827358,0.0009766904320202543,5
+Water-quality,BR_LogisticRegression,Predict Precision,Micro F1,0.23116820000000002,0.0006830715189495042,5
+Water-quality,BR_LogisticRegression,Predict Precision,Negative Predictive Value,0.6637736000000001,0.00013927598500819205,5
+Water-quality,BR_LogisticRegression,Predict Precision,Precision Score,0.7016983999999999,0.0018151964907413773,5
+Water-quality,BR_LogisticRegression,Predict Precision,Recall Score,0.1557264,0.0002723514273874858,5
+Water-quality,BR_LogisticRegression,Predict Precision,Subset Accuracy,0.010753599999999999,0.0005165939411181667,5
+Water-quality,BR_LogisticRegression,Predict Recall,Fmeasure Score,0.512478,1.2247448714192533e-06,5
+Water-quality,BR_LogisticRegression,Predict Recall,Hamming Accuracy,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,BR_LogisticRegression,Predict Recall,Informedness,0.5,0.0,5
+Water-quality,BR_LogisticRegression,Predict Recall,Macro F1,0.5209018000000001,0.00023554235287948024,5
+Water-quality,BR_LogisticRegression,Predict Recall,Markedness,0.181166,7.071067811872547e-07,5
+Water-quality,BR_LogisticRegression,Predict Recall,Micro F1,0.5317676,8.972625033958688e-05,5
+Water-quality,BR_LogisticRegression,Predict Recall,Negative Predictive Value,0.0,0.0,5
+Water-quality,BR_LogisticRegression,Predict Recall,Precision Score,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,BR_LogisticRegression,Predict Recall,Recall Score,0.9943405999999999,5.477225574989573e-07,5
+Water-quality,BR_LogisticRegression,Predict Recall,Subset Accuracy,0.0,0.0,5
+Water-quality,BR_LogisticRegression,Predict Subset,Fmeasure Score,0.47633179999999997,0.0019920146083801816,5
+Water-quality,BR_LogisticRegression,Predict Subset,Hamming Accuracy,0.705646,0.0008864753239656585,5
+Water-quality,BR_LogisticRegression,Predict Subset,Informedness,0.60128,0.0011029236147621403,5
+Water-quality,BR_LogisticRegression,Predict Subset,Macro F1,0.41290639999999995,0.001963249933146562,5
+Water-quality,BR_LogisticRegression,Predict Subset,Markedness,0.6802212,0.0016605627660525061,5
+Water-quality,BR_LogisticRegression,Predict Subset,Micro F1,0.5121076,0.0016180904795467846,5
+Water-quality,BR_LogisticRegression,Predict Subset,Negative Predictive Value,0.7257326,0.0008319728360950065,5
+Water-quality,BR_LogisticRegression,Predict Subset,Precision Score,0.6347092,0.002498750627813831,5
+Water-quality,BR_LogisticRegression,Predict Subset,Recall Score,0.42917740000000004,0.002623938604464657,5
+Water-quality,BR_LogisticRegression,Predict Subset,Subset Accuracy,0.013772800000000002,0.0025497888540034056,5
+Water-quality,BR_RandomForestClassifier,Marginal Scores,Average Precision,0.73114,0.001936822268562668,5
+Water-quality,BR_RandomForestClassifier,Marginal Scores,Coverage Score,0.3594194,0.003089691780744489,5
+Water-quality,BR_RandomForestClassifier,Marginal Scores,One-Error Score,0.7583014,0.006977147791182272,5
+Water-quality,BR_RandomForestClassifier,Marginal Scores,Ranking Loss Score,0.7823764,0.0010855126899303846,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Fmeasure Score,0.6099526,0.0013648286705663661,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Hamming Accuracy,0.655633,0.0015890141597858908,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Informedness,0.657864,0.001814898206511869,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Macro F1,0.599265,0.00200318783442789,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Markedness,0.6789926,0.0013014992508641953,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Micro F1,0.6313806,0.0014781218826605549,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Negative Predictive Value,0.8362488000000001,0.0022861854036800963,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Precision Score,0.5217368,0.0007054018003946057,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Recall Score,0.8190066,0.0020533055788167624,5
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,Subset Accuracy,0.006036,0.00183893800874309,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Fmeasure Score,0.5572668000000001,0.0032778619098430104,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Hamming Accuracy,0.73407,0.0023304326851467556,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Informedness,0.6486232000000001,0.0029740748477468156,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Macro F1,0.5124558,0.005460878885307755,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Markedness,0.7066228000000001,0.0026157772649826223,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Micro F1,0.5891232000000001,0.0033503545633260965,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Negative Predictive Value,0.7546668000000001,0.0018673571431304346,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Precision Score,0.6585788,0.003789456979568425,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Recall Score,0.5299874,0.003530277227074364,5
+Water-quality,BR_RandomForestClassifier,Predict Hamming,Subset Accuracy,0.0239626,0.001713484986803212,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Fmeasure Score,0.6057494,0.002203786468785042,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Hamming Accuracy,0.6998644,0.00139438025660147,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Informedness,0.6546704,0.0017075389600240958,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Macro F1,0.5716284,0.0031940866143547212,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Markedness,0.6854864,0.00169668494423685,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Micro F1,0.6252850000000001,0.0019178673051074328,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Negative Predictive Value,0.7980746,0.0015122429698960558,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Precision Score,0.5728983999999999,0.0022587354426757936,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Recall Score,0.712604,0.0037975372940894244,5
+Water-quality,BR_RandomForestClassifier,Predict Informedness,Subset Accuracy,0.0058476,0.0022519052599965215,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Fmeasure Score,0.4370172,0.0005124389719761827,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Hamming Accuracy,0.6835176,0.0016443023748690376,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Informedness,0.5963656,0.0017542725842924292,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Macro F1,0.42895700000000003,0.0034013473065830735,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Markedness,0.7251946,0.0024376698504924997,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Micro F1,0.49152779999999996,0.002671999101796272,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Negative Predictive Value,0.7460224,0.0017290158472380048,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Precision Score,0.704368,0.005772330855035962,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Recall Score,0.42529459999999997,0.00255736589091199,5
+Water-quality,BR_RandomForestClassifier,Predict Markedness,Subset Accuracy,0.019245199999999997,0.002271979027191932,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Fmeasure Score,0.5318484,0.0005787454535458479,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Hamming Accuracy,0.42219660000000003,0.0007928387604046766,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Informedness,0.5348772,0.0012447187232463624,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Macro F1,0.5384066,0.0005914776411666025,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Markedness,0.6515172,0.0029913742995486188,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Micro F1,0.552228,0.0006172467091852523,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Negative Predictive Value,0.9190562,0.005556659401115016,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Precision Score,0.3839766,0.00042751526288543174,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Recall Score,0.9808747999999999,0.0008968696672315294,5
+Water-quality,BR_RandomForestClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Fmeasure Score,0.268376,0.0028105430080324206,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Hamming Accuracy,0.674569,0.00099706694860474,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Informedness,0.5399142,0.001051153509245928,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Macro F1,0.17058279999999998,0.002113700712021443,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Markedness,0.7132145999999999,0.003757315903673766,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Micro F1,0.24985240000000003,0.002367521340980893,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Negative Predictive Value,0.6681286,0.0005363616317373862,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Precision Score,0.7583014,0.006977147791182272,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Recall Score,0.17226780000000003,0.0022542871822374437,5
+Water-quality,BR_RandomForestClassifier,Predict Precision,Subset Accuracy,0.0128294,0.001838527753394003,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Fmeasure Score,0.512478,1.2247448714192533e-06,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Hamming Accuracy,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Informedness,0.5,0.0,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Macro F1,0.5209018000000001,0.00023554235287948024,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Markedness,0.181166,7.071067811872547e-07,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Micro F1,0.5317676,8.972625033958688e-05,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Precision Score,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Recall Score,0.9943405999999999,5.477225574989573e-07,5
+Water-quality,BR_RandomForestClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Fmeasure Score,0.5547017999999999,0.003344211596176238,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Hamming Accuracy,0.733922,0.0020444354966591785,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Informedness,0.6473328,0.002708657545722597,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Macro F1,0.5088394,0.0048159816029549165,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Markedness,0.7065634000000001,0.0025951134464604077,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Micro F1,0.5864654,0.002976372338938821,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Negative Predictive Value,0.753276,0.0016751656634494683,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Precision Score,0.6598518,0.003929096804610445,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Recall Score,0.5250092000000001,0.003474417821736488,5
+Water-quality,BR_RandomForestClassifier,Predict Subset,Subset Accuracy,0.023774,0.002044790453811833,5
+Water-quality,PCC_AdaBoostClassifier,Marginal Scores,Average Precision,0.6878468,0.0026831921660589483,5
+Water-quality,PCC_AdaBoostClassifier,Marginal Scores,Coverage Score,0.3243976,0.003402644163000337,5
+Water-quality,PCC_AdaBoostClassifier,Marginal Scores,One-Error Score,0.7113208,0.0038319612732907373,5
+Water-quality,PCC_AdaBoostClassifier,Marginal Scores,Ranking Loss Score,0.7419146,0.003629336206525945,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Fmeasure Score,0.5170698,0.00021240809777407177,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Hamming Accuracy,0.376064,0.0005631749284192387,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Informedness,0.509408,0.0005653768654623075,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Macro F1,0.5255582000000001,0.00036136089993245703,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Markedness,0.267166,0.003318950059883394,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Micro F1,0.536878,0.00034543668016004685,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.1675258,0.00648074221829568,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Precision Score,0.36680640000000003,0.00018432118706215338,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Recall Score,0.9930616000000001,0.00021963902203393275,5
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.0,0.0,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Fmeasure Score,0.5394466,0.0020755969743666744,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Hamming Accuracy,0.7016574,0.0007456375124683787,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Informedness,0.6281568,0.0012011907425549962,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Macro F1,0.5046774,0.0029389949472566554,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Markedness,0.6717288,0.00147840309117636,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Micro F1,0.5688824,0.0014888916347404345,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Negative Predictive Value,0.7480870000000001,0.0014209438764427383,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Precision Score,0.5953712,0.001847568050167577,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Recall Score,0.5460084000000001,0.003412954262805222,5
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,Subset Accuracy,0.0103762,0.002751008942188302,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Fmeasure Score,0.5578027999999999,0.0023147757342774503,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Hamming Accuracy,0.5819266,0.001542175346709947,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Informedness,0.5894286,0.0017633731312458926,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Macro F1,0.5422948,0.0015707712118573896,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Markedness,0.648523,0.0018153976148491408,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Micro F1,0.5743004,0.001431572841318233,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Negative Predictive Value,0.8196403999999999,0.001960603810054441,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Precision Score,0.47740679999999996,0.001771791099424536,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Recall Score,0.7966804,0.003405966940532433,5
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,Subset Accuracy,0.0011316,0.0010330047434547432,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Fmeasure Score,0.4661596,0.003130037348019967,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Hamming Accuracy,0.499394,0.003087630564040971,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Informedness,0.5350438,0.0010771033840815613,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Macro F1,0.49849119999999997,0.002189753228105885,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Markedness,0.6628612,0.00265003682993276,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Micro F1,0.5169086,0.002199249144594578,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Negative Predictive Value,0.8429694,0.005929358717433103,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Precision Score,0.48275480000000004,0.006869452722015038,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Recall Score,0.7540084,0.00845043562782418,5
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,Subset Accuracy,0.002641,0.001230403592322454,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Fmeasure Score,0.5305489999999999,0.00020813817525866115,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Hamming Accuracy,0.4205526,0.0003010868645424511,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Informedness,0.5339224,0.000478329698011744,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Macro F1,0.5376796,0.000341689625244908,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Markedness,0.64532,0.0011350281934824607,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Micro F1,0.5509584000000001,0.00019057623146656477,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Negative Predictive Value,0.9075466000000001,0.002109171353873371,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Precision Score,0.383091,0.00016267605847204155,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Recall Score,0.9786306,0.0004557310610436568,5
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Fmeasure Score,0.24900540000000002,0.0024041150762806654,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Hamming Accuracy,0.6678572,0.0005467729876283228,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Informedness,0.5339262,0.0011394330607806555,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Macro F1,0.1603002,0.0032010462664572624,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Markedness,0.687917,0.002063259920611087,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Micro F1,0.2344036,0.0012100145866889322,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Negative Predictive Value,0.6645137999999999,0.00029511302919390706,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Precision Score,0.7113208,0.0038319612732907373,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Recall Score,0.1590394,0.0019913739729141757,5
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,Subset Accuracy,0.010753200000000001,0.0012653537845203607,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Fmeasure Score,0.512478,1.2247448714192533e-06,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Hamming Accuracy,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Informedness,0.5,0.0,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Macro F1,0.5209018000000001,0.00023554235287948024,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Markedness,0.181166,7.071067811872547e-07,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Micro F1,0.5317676,8.972625033958688e-05,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Precision Score,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Recall Score,0.9943405999999999,5.477225574989573e-07,5
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Fmeasure Score,0.4902634,0.0043005324437795055,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Hamming Accuracy,0.6988678,0.002333813552964362,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Informedness,0.620546,0.003121679595986746,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Macro F1,0.4734502,0.005436951461986791,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Markedness,0.6648026,0.0025977576484344403,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Micro F1,0.532606,0.004511524188120885,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.7332677999999999,0.00257194939685836,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Precision Score,0.596337,0.003476382458821237,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Recall Score,0.47577959999999997,0.00596181489145711,5
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,Subset Accuracy,0.013961399999999999,0.0032954036626792775,5
+Water-quality,PCC_LogisticRegression,Marginal Scores,Average Precision,0.6871424,0.0005096850007603171,5
+Water-quality,PCC_LogisticRegression,Marginal Scores,Coverage Score,0.32495,0.0017371754373119881,5
+Water-quality,PCC_LogisticRegression,Marginal Scores,One-Error Score,0.7009436,0.0021097301486209348,5
+Water-quality,PCC_LogisticRegression,Marginal Scores,Ranking Loss Score,0.744932,0.0008537151164176286,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Fmeasure Score,0.581947,0.0007951264050451479,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Hamming Accuracy,0.6150274,0.0008697650832264932,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Informedness,0.6103216,0.0007422171515129497,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Macro F1,0.5683212,0.0011922544610946163,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Markedness,0.6541386,0.0007806300660363698,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Micro F1,0.605378,0.00042192949648020794,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.8249748,0.0010459580297507013,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Precision Score,0.4833016,0.0008553661788964968,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Recall Score,0.818772,0.00083314554550814,5
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,Subset Accuracy,0.0015090000000000001,0.000516685107197798,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Fmeasure Score,0.47490760000000004,0.0024667519737500945,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Hamming Accuracy,0.705822,0.0009714352783382039,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Informedness,0.6009439999999999,0.001188909584451231,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Macro F1,0.4118328,0.0029437626772550697,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Markedness,0.6804859999999999,0.00127565571374097,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Micro F1,0.5113733999999999,0.00219574174255532,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Negative Predictive Value,0.7256402,0.0009806871060638643,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Precision Score,0.635332,0.0019688209669749047,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Recall Score,0.4272984,0.003538216047671503,5
+Water-quality,PCC_LogisticRegression,Predict Hamming,Subset Accuracy,0.014339,0.0020458283163550164,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Fmeasure Score,0.5749958000000001,0.001595373216523342,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Hamming Accuracy,0.6662396,0.0014215439845463456,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Informedness,0.6078042,0.0014217850400113287,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Macro F1,0.5256724,0.0020150452352242455,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Markedness,0.6603606,0.0016998025767718066,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Micro F1,0.5948439999999999,0.0015717534793981136,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Negative Predictive Value,0.783948,0.0012995378024512987,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Precision Score,0.5367724,0.0022045174755487926,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Recall Score,0.6958342,0.001888023490319946,5
+Water-quality,PCC_LogisticRegression,Predict Informedness,Subset Accuracy,0.003773,0.001333957083267674,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Fmeasure Score,0.3669314,0.004058834475560686,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Hamming Accuracy,0.6635176,0.0019087818890591017,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Informedness,0.556692,0.0020327172700599764,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Macro F1,0.3392932,0.00418710779655836,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Markedness,0.6918252,0.002068540113219954,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Micro F1,0.4169636,0.0034501109112606556,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Negative Predictive Value,0.7152398,0.000950109835755868,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Precision Score,0.6684102000000001,0.003663563661245703,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Recall Score,0.3444724,0.004239189934409663,5
+Water-quality,PCC_LogisticRegression,Predict Markedness,Subset Accuracy,0.012452399999999999,0.0007896285835758484,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Fmeasure Score,0.5295894,0.0004918214106766917,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Hamming Accuracy,0.4192588,0.0006973519197650662,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Informedness,0.5294464,0.0010368415018699722,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Macro F1,0.5361882,0.0009707881849301451,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Markedness,0.640443,0.0026296770714291126,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Micro F1,0.5499601999999999,0.0005821681028706226,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Negative Predictive Value,0.8984904,0.0048840887379325675,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Precision Score,0.3823948,0.00037553788091216467,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Recall Score,0.9768902,0.000509633888198157,5
+Water-quality,PCC_LogisticRegression,Predict NPV,Subset Accuracy,0.0,0.0,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Fmeasure Score,0.24379499999999998,0.000820073472318178,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Hamming Accuracy,0.666375,0.000301198439570996,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Informedness,0.52886,0.00029470748209031,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Macro F1,0.1440976,0.0011788381144160534,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Markedness,0.6823294,0.0011355880855310214,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Micro F1,0.23092419999999997,0.000689313934285384,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Negative Predictive Value,0.6637162,0.0001630113492981753,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Precision Score,0.7009436,0.0021097301486209348,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Recall Score,0.155503,0.0006914159384914485,5
+Water-quality,PCC_LogisticRegression,Predict Precision,Subset Accuracy,0.010564800000000001,0.00042217022633056413,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Fmeasure Score,0.512478,1.2247448714192533e-06,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Hamming Accuracy,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Informedness,0.5,0.0,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Macro F1,0.5209018000000001,0.00023554235287948024,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Markedness,0.181166,7.071067811872547e-07,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Micro F1,0.5317676,8.972625033958688e-05,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Negative Predictive Value,0.0,0.0,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Precision Score,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Recall Score,0.9943405999999999,5.477225574989573e-07,5
+Water-quality,PCC_LogisticRegression,Predict Recall,Subset Accuracy,0.0,0.0,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Fmeasure Score,0.353301,0.002822733249883865,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Hamming Accuracy,0.6879242,0.001432634356700957,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Informedness,0.5806334,0.0014562143729547003,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Macro F1,0.3579416,0.0036360632970288205,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Markedness,0.6010641999999999,0.0018107000579886184,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Micro F1,0.42935680000000004,0.0035680663811089473,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Negative Predictive Value,0.7045440000000001,0.0012680575696709892,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Precision Score,0.49758499999999994,0.0033027799654230527,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Recall Score,0.3237988,0.003027443508969261,5
+Water-quality,PCC_LogisticRegression,Predict Subset,Subset Accuracy,0.014338800000000002,0.0012298669440228087,5
+Water-quality,PCC_RandomForestClassifier,Marginal Scores,Average Precision,0.7329402,0.0022540578297816864,5
+Water-quality,PCC_RandomForestClassifier,Marginal Scores,Coverage Score,0.3616546,0.002521930470889314,5
+Water-quality,PCC_RandomForestClassifier,Marginal Scores,One-Error Score,0.7586790000000001,0.00464141654023853,5
+Water-quality,PCC_RandomForestClassifier,Marginal Scores,Ranking Loss Score,0.7835878000000001,0.0017318513793048457,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Fmeasure Score,0.6103152,0.0021927230103230234,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Hamming Accuracy,0.6504852,0.0023376379531484318,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Informedness,0.6549024,0.002530130688324232,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Macro F1,0.5983398,0.0023976033241552026,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Markedness,0.6780951999999999,0.002627832129341607,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Micro F1,0.6309496,0.0020113117112968795,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Negative Predictive Value,0.8380867999999999,0.0032073518204275356,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Precision Score,0.5181039999999999,0.0021804578647614827,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Recall Score,0.8296162,0.0022143077247753027,5
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,Subset Accuracy,0.0052814,0.0014306579954692176,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Fmeasure Score,0.551993,0.001952853297101416,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Hamming Accuracy,0.7342052,0.00140984350195334,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Informedness,0.6447684,0.0017724929619041757,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Macro F1,0.5017362000000001,0.0028707527235901386,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Markedness,0.708317,0.001541519218173995,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Micro F1,0.583755,0.0020411417148252955,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Negative Predictive Value,0.751914,0.0012021825984432984,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Precision Score,0.6647187999999999,0.002055536718232009,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Recall Score,0.5185762,0.0022158308148412225,5
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,Subset Accuracy,0.023207,0.002172512945876273,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Fmeasure Score,0.607519,0.0010989322090102017,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Hamming Accuracy,0.7012666000000001,0.0012703945450134482,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Informedness,0.653465,0.0008664614821213799,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Macro F1,0.5700770000000001,0.0012866691493931476,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Markedness,0.6871092,0.0011516000607849893,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Micro F1,0.6262786,0.00085198139651054,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Negative Predictive Value,0.7983627999999999,0.0005350884973534294,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Precision Score,0.5758574000000001,0.0019701888995728354,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Recall Score,0.7132248,0.0007064684706340523,5
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,Subset Accuracy,0.0054708,0.002441609755878281,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Fmeasure Score,0.43242259999999993,0.004347314837920077,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Hamming Accuracy,0.6798924,0.003578776089670863,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Informedness,0.591024,0.0033204211329287982,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Macro F1,0.420777,0.005876510103794592,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Markedness,0.726169,0.0020492321732785,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Micro F1,0.4852292,0.005149566797314129,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Negative Predictive Value,0.745535,0.0012462293127671103,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Precision Score,0.7068022,0.0042996547768396854,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Recall Score,0.42267780000000005,0.004804928428187017,5
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,Subset Accuracy,0.0175464,0.0015788672521779652,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Fmeasure Score,0.5319628,0.0003402986923277818,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Hamming Accuracy,0.4223854,0.00041061393059659506,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Informedness,0.5346413999999999,0.0004938813622723614,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Macro F1,0.5387048,0.0004957476172408974,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Markedness,0.6522284,0.0015495363177415171,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Micro F1,0.5523772,0.00034673794139094096,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Negative Predictive Value,0.920377,0.0028771900354338277,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Precision Score,0.38407779999999997,0.00022122997084481796,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Recall Score,0.9808832000000001,0.0008138241210482878,5
+Water-quality,PCC_RandomForestClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Fmeasure Score,0.269901,0.0028327676396061913,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Hamming Accuracy,0.6746228000000001,0.0006635127730495729,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Informedness,0.5391368,0.0007271012309163342,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Macro F1,0.166568,0.0020629276526335084,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Markedness,0.7134178,0.0024998325343910935,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Micro F1,0.24996039999999997,0.0015709991406744985,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Negative Predictive Value,0.6681566,0.00035698011149080326,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Precision Score,0.7586790000000001,0.00464141654023853,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Recall Score,0.1738414,0.002265272676743344,5
+Water-quality,PCC_RandomForestClassifier,Predict Precision,Subset Accuracy,0.014339000000000001,0.0013987962682249335,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Fmeasure Score,0.512478,1.2247448714192533e-06,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Hamming Accuracy,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Informedness,0.5,0.0,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Macro F1,0.5209018000000001,0.00023554235287948024,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Markedness,0.181166,7.071067811872547e-07,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Micro F1,0.5317676,8.972625033958688e-05,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Precision Score,0.36233180000000004,8.366600265324242e-07,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Recall Score,0.9943405999999999,5.477225574989573e-07,5
+Water-quality,PCC_RandomForestClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Fmeasure Score,0.533402,0.0025338866391375766,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Hamming Accuracy,0.7306602,0.0013929869705061981,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Informedness,0.6416348000000001,0.0019806518371485297,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Macro F1,0.49601379999999995,0.004247587044428898,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Markedness,0.7009336,0.001745793888178114,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Micro F1,0.5708333999999999,0.0027600599268856607,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Negative Predictive Value,0.7475988,0.0017207953684270814,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Precision Score,0.654267,0.003188901848599325,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Recall Score,0.4991456,0.0031320956722297104,5
+Water-quality,PCC_RandomForestClassifier,Predict Subset,Subset Accuracy,0.0235846,0.004057972621888916,5

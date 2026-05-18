@@ -1,0 +1,505 @@
+Dataset,Model,Predict Function of Model,Metric Function,Mean,Std,N
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Marginal Scores,Average Precision,0.8305372,0.0008162638666510025,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Marginal Scores,Coverage Score,0.84368,0.0005355254429063074,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Marginal Scores,One-Error Score,0.30704760000000003,0.0013973806925816517,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Marginal Scores,Ranking Loss Score,0.899699,0.00046205465044732924,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Fmeasure Score,0.1712812,3.8232185393975924e-05,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Hamming Accuracy,0.1059912,0.0002321781643479891,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Informedness,0.5004350000000001,0.00011011584808736744,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Macro F1,0.1832738,9.679876032265236e-06,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Markedness,0.056154800000000005,0.0009406969224994878,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Micro F1,0.1903476,3.6432128677860596e-05,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.007111000000000001,0.0018510795498843373,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Precision Score,0.1051988,2.9439769020836557e-05,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Recall Score,0.5463274,1.0406728592593362e-05,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Fmeasure Score,0.47260840000000004,0.0010607333783755747,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Hamming Accuracy,0.893493,0.0001433492239253891,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Informedness,0.5459346,0.0005617448709156042,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Macro F1,0.16614400000000001,0.0020906988066194503,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Markedness,0.6986356,0.0005204548971813193,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Micro F1,0.20211260000000003,0.0011820064720634957,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Negative Predictive Value,0.9058078,0.00010668739381948512,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Precision Score,0.491464,0.0010696541497138335,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Recall Score,0.46587860000000003,0.0011494230291759435,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Hamming,Subset Accuracy,0.4362876,0.0011782484033513521,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Fmeasure Score,0.2475002,0.0007894515184607599,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Hamming Accuracy,0.5257054,0.0032014708026155605,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Informedness,0.613672,0.001996050099571735,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Macro F1,0.2374302,0.001676506397243981,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Markedness,0.5766557999999999,0.00036317860619810275,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Micro F1,0.2829412,0.0013888603961521603,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Negative Predictive Value,0.9760662,0.00022270990099223606,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Precision Score,0.17724520000000002,0.0006634283684015871,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Recall Score,0.4919652,0.0008370359609956928,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Informedness,Subset Accuracy,0.0056652000000000004,0.0001929396278632254,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Fmeasure Score,0.229663,0.0007272152363640357,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Hamming Accuracy,0.41072600000000004,0.002409529310882112,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Informedness,0.5764084,0.0008568017857124398,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Macro F1,0.20958179999999998,0.0006341306647687114,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Markedness,0.580291,0.0003639656577205901,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Micro F1,0.24014220000000003,0.0006254468002955979,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Negative Predictive Value,0.9799066,0.00029203732638136213,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Precision Score,0.1806754,0.0008268913471551109,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Recall Score,0.4894274,0.0007798527425097495,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Markedness,Subset Accuracy,0.0372722,0.0005304966540893532,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Fmeasure Score,0.18828419999999998,0.00010763921218589859,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Hamming Accuracy,0.2273486,0.00011136785891809024,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Informedness,0.5445978,0.0013694041404932412,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Macro F1,0.1937386,0.00015604582660231587,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Markedness,0.5537702,0.0002524642548956136,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Micro F1,0.21164719999999998,0.00011094683411436989,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Negative Predictive Value,0.9889979999999999,0.0004432792573536539,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Precision Score,0.1185418,6.321154957758598e-05,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Recall Score,0.5399834,0.00036409106003857994,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Fmeasure Score,0.24492560000000002,0.0012773125302759758,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Hamming Accuracy,0.8466623999999999,0.00034914438274156193,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Informedness,0.5859208,0.0012964986309286764,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Macro F1,0.2599358,0.0022272943676128597,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Markedness,0.6153991999999999,0.0007984041583058243,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Micro F1,0.3335764,0.0014977649348279093,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Negative Predictive Value,0.9237508,0.00019949862154913033,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Precision Score,0.30704760000000003,0.0013973806925816517,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Recall Score,0.21856179999999997,0.0012006230465887314,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Precision,Subset Accuracy,0.147757,0.0009568030100287074,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Fmeasure Score,0.1711482,8.366600265342903e-07,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Hamming Accuracy,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Informedness,0.5,0.0,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Macro F1,0.18323019999999998,7.293833011519352e-06,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Markedness,0.0525498,8.366600265346013e-07,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Micro F1,0.190197,3.0000000000030003e-06,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Precision Score,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Recall Score,0.5463354,5.477225575428752e-07,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Fmeasure Score,0.47260840000000004,0.0010607333783755747,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Hamming Accuracy,0.893493,0.0001433492239253891,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Informedness,0.5459346,0.0005617448709156042,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Macro F1,0.16614400000000001,0.0020906988066194503,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Markedness,0.6986356,0.0005204548971813193,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Micro F1,0.20211260000000003,0.0011820064720634957,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.9058078,0.00010668739381948512,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Precision Score,0.491464,0.0010696541497138335,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Recall Score,0.46587860000000003,0.0011494230291759435,5
+chest_xray_nih__resnet,BR_AdaBoostClassifier,Predict Subset,Subset Accuracy,0.4362876,0.0011782484033513521,5
+chest_xray_nih__resnet,BR_LogisticRegression,Marginal Scores,Average Precision,0.8482540000000001,0.0003779503935704131,5
+chest_xray_nih__resnet,BR_LogisticRegression,Marginal Scores,Coverage Score,0.8574046,0.00015397175065575506,5
+chest_xray_nih__resnet,BR_LogisticRegression,Marginal Scores,One-Error Score,0.3320668,0.0006155556026875343,5
+chest_xray_nih__resnet,BR_LogisticRegression,Marginal Scores,Ranking Loss Score,0.9125551999999999,0.00014259628326148115,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Fmeasure Score,0.5081442,0.0003899034495872096,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Hamming Accuracy,0.8684752,0.00018770242406531033,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Informedness,0.6078022,0.0005359684692218366,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Macro F1,0.3020894,0.0013909553551426585,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Markedness,0.7112109999999999,0.00013748636296011363,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Micro F1,0.3677254,0.00039124327470256435,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.9280709999999999,5.4277066980485905e-05,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Precision Score,0.4943516,0.0002666792080384349,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Recall Score,0.5525021999999999,0.0005907247243852403,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Fmeasure,Subset Accuracy,0.3985628,0.000489533144945258,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Fmeasure Score,0.4888592,0.0009083263180157146,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Hamming Accuracy,0.8972328,0.00010730191051423632,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Informedness,0.5536274,0.00046993808102773794,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Macro F1,0.1870174,0.0013654359377136625,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Markedness,0.7083958,0.0005156948710235215,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Micro F1,0.22653620000000002,0.001551780171287154,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Negative Predictive Value,0.9074842000000001,0.00010788975855012767,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Precision Score,0.5093082000000001,0.0009296019040428312,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Recall Score,0.4815828,0.0008898784748492306,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Hamming,Subset Accuracy,0.4493278,0.0009498477246380184,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Fmeasure Score,0.40916040000000004,0.0004995155653230478,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Hamming Accuracy,0.8220216,0.00017281435125589793,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Informedness,0.6598516,0.0008269439521515673,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Macro F1,0.3519232,0.0013606750897992015,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Markedness,0.673207,0.00019778650105603722,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Micro F1,0.42874540000000005,0.0005544784035469782,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Negative Predictive Value,0.9511727999999999,0.00012913636203643668,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Precision Score,0.39524020000000004,0.00038559525412017577,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Recall Score,0.47262380000000004,0.0006430238720296563,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Informedness,Subset Accuracy,0.21193179999999998,0.0008432056095638922,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Fmeasure Score,0.4955978,0.0009191173483293687,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Hamming Accuracy,0.8827210000000001,8.411004696231052e-05,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Informedness,0.6029975999999999,0.00028479957865137483,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Macro F1,0.295465,0.0004436716127948513,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Markedness,0.7257766,0.0004912629642055448,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Micro F1,0.3776568,0.00035104871456822866,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Negative Predictive Value,0.9246068000000001,4.389419095963856e-05,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Precision Score,0.5269478,0.0009928392115544223,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Recall Score,0.495352,0.0009500744707653011,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Markedness,Subset Accuracy,0.3997736,0.0008948333923138926,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Fmeasure Score,0.18890020000000002,5.168849001470163e-05,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Hamming Accuracy,0.2280652,6.065228767326018e-05,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Informedness,0.5480596,0.0004723571741807589,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Macro F1,0.1946094,9.770260999584177e-05,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Markedness,0.5554082,0.00013830654359067672,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Micro F1,0.2123792,6.116126224988707e-05,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Negative Predictive Value,0.991865,0.0002412809565630995,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Precision Score,0.11895119999999999,3.5442911844258815e-05,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Recall Score,0.5415756,0.000140432546085282,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict NPV,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Fmeasure Score,0.2663338,0.0006011586313112095,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Hamming Accuracy,0.8529175999999999,0.0001531740839699207,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Informedness,0.5987682000000001,0.00029600878365349106,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Macro F1,0.2857602,0.0007152535913925899,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Markedness,0.6296964,0.0003523645839183992,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Micro F1,0.3607624,0.0006942667354842919,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Negative Predictive Value,0.9273246,8.768295159263957e-05,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Precision Score,0.3320668,0.0006155556026875343,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Recall Score,0.23836859999999999,0.0005976468857109495,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Precision,Subset Accuracy,0.1631256,0.0006043867139505908,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Fmeasure Score,0.1711482,8.366600265342903e-07,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Hamming Accuracy,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Informedness,0.5,0.0,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Macro F1,0.18323019999999998,7.293833011519352e-06,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Markedness,0.0525498,8.366600265346013e-07,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Micro F1,0.190197,3.0000000000030003e-06,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Negative Predictive Value,0.0,0.0,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Precision Score,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Recall Score,0.5463354,5.477225575428752e-07,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Recall,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Fmeasure Score,0.4888592,0.0009083263180157146,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Hamming Accuracy,0.8972328,0.00010730191051423632,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Informedness,0.5536274,0.00046993808102773794,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Macro F1,0.1870174,0.0013654359377136625,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Markedness,0.7083958,0.0005156948710235215,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Micro F1,0.22653620000000002,0.001551780171287154,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Negative Predictive Value,0.9074842000000001,0.00010788975855012767,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Precision Score,0.5093082000000001,0.0009296019040428312,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Recall Score,0.4815828,0.0008898784748492306,5
+chest_xray_nih__resnet,BR_LogisticRegression,Predict Subset,Subset Accuracy,0.4493278,0.0009498477246380184,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Marginal Scores,Average Precision,0.8435534,0.00042409704078192673,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Marginal Scores,Coverage Score,0.8525628,0.0008079051305691423,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Marginal Scores,One-Error Score,0.3257298,0.0007950211946860327,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Marginal Scores,Ranking Loss Score,0.9082549999999999,0.0005731243320606993,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Fmeasure Score,0.48031939999999995,0.0010493077718191047,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Hamming Accuracy,0.8242428,0.0006366880711934428,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Informedness,0.6049132,0.0010193567579606074,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Macro F1,0.2798816,0.0016972175169965669,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Markedness,0.6936880000000001,0.0006825023809482292,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Micro F1,0.33816199999999996,0.0018379211082089368,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Negative Predictive Value,0.9340802,0.0003049142502409538,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Precision Score,0.4532936,0.0011251074615342335,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Recall Score,0.5620724,0.0009926984940050985,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Fmeasure,Subset Accuracy,0.35703260000000003,0.001003649739700062,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Fmeasure Score,0.47167919999999997,0.0014373156229583193,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Hamming Accuracy,0.8965734,0.00014719137202974785,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Informedness,0.5212918,0.0004243084962619012,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Macro F1,0.08675920000000001,0.0013915987927560084,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Markedness,0.6912081999999999,0.0007067394852418846,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Micro F1,0.1168418,0.0018828135064312727,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Negative Predictive Value,0.9007,0.00011249888888336067,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Precision Score,0.4817158,0.0013164194620256752,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Recall Score,0.467751,0.0014962539891341658,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Hamming,Subset Accuracy,0.4544702,0.0014529343412556315,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Fmeasure Score,0.38077360000000005,0.0012678344923530195,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Hamming Accuracy,0.7956146000000001,0.0003739295388171523,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Informedness,0.6476292,0.0006190906234146786,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Macro F1,0.33151,0.0010713230138478143,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Markedness,0.6546314,0.0006977250891289573,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Micro F1,0.4065228,0.0008042889406177354,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Negative Predictive Value,0.9538204,0.00016559981884048953,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Precision Score,0.35544380000000003,0.0013730408588239586,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Recall Score,0.4663744,0.001008508453112829,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Informedness,Subset Accuracy,0.16944779999999998,0.0014720917770302277,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Fmeasure Score,0.4782756,0.0014325080453526093,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Hamming Accuracy,0.8560146,0.0005068025256448619,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Informedness,0.6018802,0.00035443010594477973,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Macro F1,0.28388599999999997,0.0005367811472099201,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Markedness,0.7145857999999999,0.000738204375495005,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Micro F1,0.3679872,0.0010245875755639834,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Negative Predictive Value,0.9308568000000002,0.0002445418164649891,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Precision Score,0.49831640000000005,0.0013644087730588612,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Recall Score,0.5004636,0.0018745228192796138,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Markedness,Subset Accuracy,0.3702766,0.0015341930452195435,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Fmeasure Score,0.1881426,0.00014407740974906868,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Hamming Accuracy,0.2272024,0.00016122747904745162,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Informedness,0.5379746,0.001368319334073692,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Macro F1,0.1921656,0.0002100388059383317,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Markedness,0.5534358,0.0003701975148485297,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Micro F1,0.2114974,0.00016502060477406133,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Negative Predictive Value,0.9884124,0.0006460606008726963,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Precision Score,0.1184584,9.22594168635352e-05,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Recall Score,0.5395886,0.0003751743594650376,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Fmeasure Score,0.26078260000000003,0.0007333630069753854,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Hamming Accuracy,0.8513324000000001,0.00019886251532150488,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Informedness,0.584859,0.0007562049986610816,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Macro F1,0.2634436,0.001771113011639866,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Markedness,0.6260742,0.00045414447040561536,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Micro F1,0.3538804,0.0008233555125217889,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Negative Predictive Value,0.9264192,0.00011374620872803008,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Precision Score,0.3257298,0.0007950211946860327,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Recall Score,0.2331778,0.0007408290626048698,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Precision,Subset Accuracy,0.1589456,0.0009065551830969849,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Fmeasure Score,0.1711482,8.366600265342903e-07,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Hamming Accuracy,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Informedness,0.5,0.0,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Macro F1,0.18323019999999998,7.293833011519352e-06,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Markedness,0.0525498,8.366600265346013e-07,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Micro F1,0.190197,3.0000000000030003e-06,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Precision Score,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Recall Score,0.5463354,5.477225575428752e-07,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Fmeasure Score,0.471237,0.0012744828362908826,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Hamming Accuracy,0.8965882000000001,0.00011747850867281061,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Informedness,0.5205316,0.00033774887120456787,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Macro F1,0.0837802,0.001161820640202265,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Markedness,0.6906798000000001,0.0006121614982992535,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Micro F1,0.11232539999999999,0.0014869222575508109,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Negative Predictive Value,0.9004504000000001,8.213281926245665e-05,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Precision Score,0.4809092,0.0011507118231773063,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Recall Score,0.4674228,0.0013188857797398741,5
+chest_xray_nih__resnet,BR_RandomForestClassifier,Predict Subset,Subset Accuracy,0.4548062,0.0013634398409904248,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Marginal Scores,Average Precision,0.823864,0.0008455031046661158,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Marginal Scores,Coverage Score,0.8401582,0.0004790555291404334,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Marginal Scores,One-Error Score,0.29601500000000003,0.00176377110192904,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Marginal Scores,Ranking Loss Score,0.896274,0.00048237796384165344,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Fmeasure Score,0.17125300000000002,1.0816653826388887e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Hamming Accuracy,0.10582620000000001,8.118620572486618e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Informedness,0.5003506,4.513645976366841e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Macro F1,0.1832684,9.099450532859484e-06,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Markedness,0.0554968,0.00032142837460311525,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Micro F1,0.19032,1.05118980208113e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Negative Predictive Value,0.0058130000000000005,0.000634574266733217,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Precision Score,0.1051794,9.864076236527925e-06,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Recall Score,0.5463274,1.0406728592593362e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Fmeasure,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Fmeasure Score,0.46772,0.0019912817480206243,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Hamming Accuracy,0.8860758000000001,0.0005924012153937764,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Informedness,0.560359,0.0009322172493576802,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Macro F1,0.20000279999999998,0.002967984703464623,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Markedness,0.7047041999999999,0.0010108299560262187,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Micro F1,0.29701659999999996,0.0021812162432918026,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Negative Predictive Value,0.9141134,0.00020667922004884802,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Precision Score,0.495296,0.0019246801032898747,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Recall Score,0.4609008,0.001973314267925917,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Hamming,Subset Accuracy,0.40044500000000005,0.0020418463458350715,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Fmeasure Score,0.24830480000000002,0.0006147736982012159,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Hamming Accuracy,0.5317567999999999,0.001398248976398667,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Informedness,0.6099952,0.0013025479645679186,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Macro F1,0.24027760000000004,0.0011014282999814418,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Markedness,0.5769376,0.0003426474864930858,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Micro F1,0.2837534,0.0008161502925319614,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Negative Predictive Value,0.9749218,0.00022210515527557547,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Precision Score,0.17895339999999998,0.000521293871055482,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Recall Score,0.4877744,0.0007436503210514909,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Informedness,Subset Accuracy,0.0066566,0.0001942184337286243,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Fmeasure Score,0.229407,0.00035246205469525576,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Hamming Accuracy,0.42208940000000006,0.0013909873471746775,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Informedness,0.5710818,0.0009954007735580679,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Macro F1,0.2088062,0.00030201109251152045,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Markedness,0.581271,0.00020809853435330088,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Micro F1,0.2388912,0.0002023022491224493,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Negative Predictive Value,0.9774458000000001,0.00031646674390839674,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Precision Score,0.18509579999999998,0.00013243186927623833,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Recall Score,0.47845960000000004,0.001153420911896434,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Markedness,Subset Accuracy,0.0380688,0.0007594180008401162,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Fmeasure Score,0.1883256,8.417422408314304e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Hamming Accuracy,0.22739759999999998,9.150300541511472e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Informedness,0.5455266,0.0009491002581392726,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Macro F1,0.1944952,0.00014628294500726444,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Markedness,0.5538822,0.00020847829623245372,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Micro F1,0.21169639999999998,9.385787127353186e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Negative Predictive Value,0.9891933999999999,0.00036448635091043604,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Precision Score,0.1185694,5.188737804129067e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Recall Score,0.5400881999999999,0.00024537868693106914,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Fmeasure Score,0.23434340000000004,0.0014529350639309422,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Hamming Accuracy,0.843905,0.00044104251495746295,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Informedness,0.570264,0.0013494545194262576,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Macro F1,0.23390260000000002,0.0030690212283397507,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Markedness,0.6090944,0.0010080723188343034,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Micro F1,0.321582,0.0018897085754157996,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Negative Predictive Value,0.9221738,0.00025268992856856243,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Precision Score,0.29601500000000003,0.00176377110192904,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Recall Score,0.2082522,0.0013231106151792365,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Precision,Subset Accuracy,0.138334,0.001036195686151985,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Fmeasure Score,0.1711482,8.366600265342903e-07,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Hamming Accuracy,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Informedness,0.5,0.0,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Macro F1,0.18323019999999998,7.293833011519352e-06,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Markedness,0.0525498,8.366600265346013e-07,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Micro F1,0.190197,3.0000000000030003e-06,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Precision Score,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Recall Score,0.5463354,5.477225575428752e-07,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Fmeasure Score,0.46759199999999995,0.0009139480291570315,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Hamming Accuracy,0.8945942,5.823830354671036e-05,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Informedness,0.5308106,0.0008978796133112634,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Macro F1,0.110131,0.0025314935314947953,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Markedness,0.6881342,0.0004738372083321554,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Micro F1,0.1174612,0.002158084961256163,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Negative Predictive Value,0.9006328,0.00015019221018416513,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Precision Score,0.4756348,0.0008422809507521932,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Recall Score,0.46525340000000004,0.0010201021027328807,5
+chest_xray_nih__resnet,PCC_AdaBoostClassifier,Predict Subset,Subset Accuracy,0.449196,0.0008430830326842084,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Marginal Scores,Average Precision,0.8484465999999999,0.0002987696437056148,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Marginal Scores,Coverage Score,0.8575162000000001,0.00018761449837364258,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Marginal Scores,One-Error Score,0.3324032,0.0005396454391542647,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Marginal Scores,Ranking Loss Score,0.912621,0.00013821902908069285,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Fmeasure Score,0.5047116,0.00035484686838130954,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Hamming Accuracy,0.8757916,0.00014218227737663536,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Informedness,0.5944418,0.0004524154064574214,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Macro F1,0.2823458,0.001367942323345552,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Markedness,0.7082158,0.00020866288601475552,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Micro F1,0.3398324,0.0006797373021984272,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Negative Predictive Value,0.9227768,7.874769837906828e-05,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Precision Score,0.49365380000000003,0.000403028162787648,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Recall Score,0.5407968000000001,0.00037604547597333706,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Fmeasure,Subset Accuracy,0.4146516,0.0006024315728777679,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Fmeasure Score,0.4888542,0.000948020147465228,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Hamming Accuracy,0.8971942,0.00011525059652772669,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Informedness,0.5535486,0.0005321642603557553,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Macro F1,0.1869342,0.0015634163552937588,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Markedness,0.7080818,0.0005479883210435011,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Micro F1,0.22674319999999998,0.0015119030061482145,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Negative Predictive Value,0.9075416000000001,0.00010606271729499741,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Precision Score,0.5086228,0.0009972966960739404,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Recall Score,0.48201320000000003,0.0009012461927797565,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Hamming,Subset Accuracy,0.4496022,0.0009703005719879007,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Fmeasure Score,0.4129416,0.0003613727991977175,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Hamming Accuracy,0.8298463999999999,0.00014571307422462485,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Informedness,0.6571228,0.0008915911058326779,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Macro F1,0.35166020000000003,0.0012546912767689201,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Markedness,0.6768904,0.00011478588763428897,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Micro F1,0.43135320000000005,0.0007443172710612083,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Negative Predictive Value,0.9492014,0.00020164523302078913,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Precision Score,0.4045784,0.00026803973586019236,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Recall Score,0.4676116,0.0007231274438160905,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Informedness,Subset Accuracy,0.223941,0.0005525708099420349,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Fmeasure Score,0.4991544,0.0015307579168503363,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Hamming Accuracy,0.8858906000000001,0.0002034841517170243,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Informedness,0.5978274,0.0005896815242145562,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Macro F1,0.28735140000000003,0.0011371810761703642,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Markedness,0.7256282000000001,0.000824248870184239,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Micro F1,0.3666144,0.0013360092814048874,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Negative Predictive Value,0.9225901999999999,0.00015699904458307443,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Precision Score,0.528667,0.0015158560287837296,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Recall Score,0.49821980000000005,0.0018190166849152089,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Markedness,Subset Accuracy,0.41059539999999994,0.0010424995443644072,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Fmeasure Score,0.1889074,5.797671946566239e-05,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Hamming Accuracy,0.2280776,6.725548304784901e-05,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Informedness,0.5480992,0.0005298232724220328,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Macro F1,0.194652,8.922723799379068e-05,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Markedness,0.5554356,0.00015441923455322614,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Micro F1,0.212391,6.698134068529698e-05,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Negative Predictive Value,0.9919118000000001,0.00026929760489091925,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Precision Score,0.11895820000000001,3.918162834798593e-05,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Recall Score,0.541566,0.00012759898118712965,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict NPV,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Fmeasure Score,0.2665984,0.0005245186364658285,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Hamming Accuracy,0.8530018,0.0001353706024216575,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Informedness,0.5987072,0.00024294793680951858,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Macro F1,0.285759,0.0006862372038879767,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Markedness,0.6298876,0.00030837850119614524,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Micro F1,0.3611252,0.0006151281980205697,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Negative Predictive Value,0.9273720000000001,7.745643937079853e-05,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Precision Score,0.3324032,0.0005396454391542647,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Recall Score,0.23860019999999998,0.0005130367433235193,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Precision,Subset Accuracy,0.1632672,0.00047318146624737354,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Fmeasure Score,0.1711482,8.366600265342903e-07,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Hamming Accuracy,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Informedness,0.5,0.0,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Macro F1,0.18323019999999998,7.293833011519352e-06,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Markedness,0.0525498,8.366600265346013e-07,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Micro F1,0.190197,3.0000000000030003e-06,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Negative Predictive Value,0.0,0.0,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Precision Score,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Recall Score,0.5463354,5.477225575428752e-07,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Recall,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Fmeasure Score,0.4810346,0.000630073249709917,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Hamming Accuracy,0.8969808,5.653052272887681e-05,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Informedness,0.5423846,0.00018943547714192968,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Macro F1,0.152232,0.0006939120981795868,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Markedness,0.6989278,0.00032543002320007357,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Micro F1,0.1736544,0.0006777520195469805,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Negative Predictive Value,0.9041418,3.747932763535935e-05,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Precision Score,0.4937126,0.0006157258318440276,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Recall Score,0.47713339999999993,0.0006183205479360916,5
+chest_xray_nih__resnet,PCC_LogisticRegression,Predict Subset,Subset Accuracy,0.45399340000000005,0.0007852428286842307,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Marginal Scores,Average Precision,0.8444737999999999,0.0009092830692363793,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Marginal Scores,Coverage Score,0.8533305999999999,0.0005206690887694751,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Marginal Scores,One-Error Score,0.326739,0.0017680975651812856,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Marginal Scores,Ranking Loss Score,0.9090648,0.0005304155917768461,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Fmeasure Score,0.4801304,0.0008375030149199616,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Hamming Accuracy,0.8254178,0.0003718631468699232,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Informedness,0.6032658,0.0007977804835918287,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Macro F1,0.2777292,0.0010409712772214393,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Markedness,0.6933404,0.00038084944531926996,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Micro F1,0.3349754,0.0008125557211662631,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Negative Predictive Value,0.9331775999999999,0.00024332344728775457,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Precision Score,0.4535028,0.000636689641819312,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Recall Score,0.5605394,0.0014581732750259598,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Fmeasure,Subset Accuracy,0.3594,0.0005030710685380369,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Fmeasure Score,0.4721938,0.0004981076188937439,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Hamming Accuracy,0.8967176,3.246998614100667e-05,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Informedness,0.5218972,0.0001892728189677155,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Macro F1,0.088929,0.0006315512647441955,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Markedness,0.6914872,0.0002799101641598575,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Micro F1,0.1185908,0.0011943984678489852,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Negative Predictive Value,0.9008296,7.779652948558229e-05,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Precision Score,0.482146,0.0005162547820601703,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Recall Score,0.4683304,0.0005333716340414118,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Hamming,Subset Accuracy,0.45487579999999994,0.00038443621057333946,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Fmeasure Score,0.382622,0.0009448867657026732,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Hamming Accuracy,0.797231,0.00047844801180482944,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Informedness,0.6487128,0.0008457678168386134,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Macro F1,0.3339188,0.001036007094570293,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Markedness,0.6557066,0.0006359357671966247,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Micro F1,0.40802060000000007,0.0009586872795651214,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Negative Predictive Value,0.9538004000000001,0.00017309332742771827,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Precision Score,0.3576114,0.001157858065567624,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Recall Score,0.46752779999999994,0.0006903344841451751,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Informedness,Subset Accuracy,0.1720258,0.0011901920853374772,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Fmeasure Score,0.48000499999999996,0.001374031659023902,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Hamming Accuracy,0.8563312,0.0002537394332775071,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Informedness,0.6022502000000001,0.000654213802972721,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Macro F1,0.2845966,0.0012273372804571761,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Markedness,0.715183,0.0006045456971975215,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Micro F1,0.3683904,0.001200768628837378,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Negative Predictive Value,0.931019,0.0002955148050436638,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Precision Score,0.49934779999999995,0.001000855484073511,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Recall Score,0.5026896,0.0017646698841425942,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Markedness,Subset Accuracy,0.3726132,0.0017525517681369815,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Fmeasure Score,0.1881724,0.0001436029247613059,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Hamming Accuracy,0.2272252,0.0001541547923354995,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Informedness,0.5390288,0.0009281641557397024,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Macro F1,0.1922228,0.0001667324203626809,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Markedness,0.5534896,0.0003531115970907852,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Micro F1,0.21152120000000002,0.00015660683254570395,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Negative Predictive Value,0.9885058000000001,0.0006183237016321058,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Precision Score,0.1184712,8.849689260080942e-05,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Recall Score,0.5397187999999999,0.0004335910515682185,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict NPV,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Fmeasure Score,0.2618294,0.0016062699959844852,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Hamming Accuracy,0.8515848,0.00044188765540579156,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Informedness,0.585433,0.0010627556163107514,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Macro F1,0.26467399999999996,0.0019021786193730475,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Markedness,0.6266514,0.0010099268785411918,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Micro F1,0.3549758,0.0018846662038674053,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Negative Predictive Value,0.9265637999999999,0.00025164697494704677,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Precision Score,0.326739,0.0017680975651812856,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Recall Score,0.234206,0.0015560960767253354,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Precision,Subset Accuracy,0.1598598,0.001468753621272127,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Fmeasure Score,0.1711482,8.366600265342903e-07,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Hamming Accuracy,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Informedness,0.5,0.0,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Macro F1,0.18323019999999998,7.293833011519352e-06,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Markedness,0.0525498,8.366600265346013e-07,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Micro F1,0.190197,3.0000000000030003e-06,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Negative Predictive Value,0.0,0.0,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Precision Score,0.1050996,8.944271909996467e-07,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Recall Score,0.5463354,5.477225575428752e-07,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Recall,Subset Accuracy,0.0,0.0,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Fmeasure Score,0.47091859999999997,0.000664297598972047,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Hamming Accuracy,0.8966014,5.6619784528024665e-05,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Informedness,0.5204372,0.0001714779869254416,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Macro F1,0.0835708,0.0006623176730240572,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Markedness,0.6900918,0.0003325502969476784,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Micro F1,0.10992379999999999,0.0011615733726286985,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Negative Predictive Value,0.9003682,6.519739258587823e-05,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Precision Score,0.4798164,0.0006246041146197979,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Recall Score,0.4674884,0.0006885192807757896,5
+chest_xray_nih__resnet,PCC_RandomForestClassifier,Predict Subset,Subset Accuracy,0.4552212,0.0005234569705333991,5
