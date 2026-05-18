@@ -8,4 +8,5 @@ datasets/nih_feature_vectors__labels.npy
 slurm/logs/
 # per-job CSVs from slurm/submit_all.sh; aggregated result_*.csv is the source of truth
 result/*/
+!result/figs/
 .claude/
