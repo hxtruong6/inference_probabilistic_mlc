@@ -6,7 +6,7 @@
 #SBATCH --job-name=pcc_eval
 #SBATCH --output=slurm/logs/%x_%j.out
 #SBATCH --error=slurm/logs/%x_%j.err
-#SBATCH --partition=compute
+#SBATCH --partition=DEF
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=10
 #SBATCH --mem=32G
@@ -19,7 +19,10 @@ set -euo pipefail
 : "${ESTIMATOR:=all}"
 : "${OUTPUT_DIR:=result}"
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Slurm copies this script into /var/spool/slurm/slurmd/, so BASH_SOURCE
+# can't locate the repo. SLURM_SUBMIT_DIR is the dir sbatch was called from
+# (submit_all.sh cd's to the repo root before submitting).
+REPO_ROOT="${SLURM_SUBMIT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 cd "${REPO_ROOT}"
 
 # Activate the conda env that has the pinned requirements; adjust as needed.

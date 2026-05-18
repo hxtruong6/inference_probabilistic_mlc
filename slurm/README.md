@@ -56,7 +56,7 @@ DATASETS="emotions" SEEDS="$(seq 1 10)" ./slurm/submit_all.sh
 |---|---|---|---|
 | `chest_xray_nih__*` (N≈112k, L=8) | 48h | 64G | 16 |
 | `yeast`, `Water-quality` (L=14)   | 24h | 32G | 10 |
-| Everything else                   |  4h | 16G |  8 |
+| Everything else                   |  4h | 24G | 10 |
 
 `inference_evaluate_models.py` honours `SLURM_CPUS_PER_TASK` for joblib's fold
 parallelism — set `--cpus-per-task` to the number of folds you want in

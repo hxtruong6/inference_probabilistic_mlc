@@ -18,31 +18,60 @@ DATASETS="${DATASETS:-flags emotions scene CHD_49 VirusGO_sparse PlantPseAAC Wat
 SEEDS="${SEEDS:-1 2 3 4 5}"
 ESTIMATORS="${ESTIMATORS:-lr rf adaboost}"
 OUTPUT_DIR="${OUTPUT_DIR:-result}"
-CONDA_ENV_NAME="${CONDA_ENV_NAME:-inference_prob_mlc}"
+CONDA_ENV_NAME="${CONDA_ENV_NAME:-inference_mlc_env}"
+
+# Snapshot job names already in the queue so we don't double-submit combos
+# that are pending/running. Resubmitting a finished combo is also a no-op
+# because we skip when the per-job CSV already exists.
+in_queue="$(squeue -h -u "$USER" -o '%j' 2>/dev/null || true)"
 
 submitted=0
+skipped_done=0
+skipped_queued=0
+blocked=0
 for dataset in ${DATASETS}; do
     # Heavier resources for L=14 + the 112k-sample chest-xray rows.
     case "${dataset}" in
         chest_xray_nih__*)        time_lim="48:00:00"; mem="64G"; cpus="16" ;;
-        yeast|Water-quality)      time_lim="24:00:00"; mem="32G"; cpus="10" ;;
-        *)                        time_lim="04:00:00"; mem="16G"; cpus="8"  ;;
+        yeast|Water-quality)      time_lim="24:00:00"; mem="64G"; cpus="10" ;;
+        *)                        time_lim="04:00:00"; mem="24G"; cpus="10" ;;
     esac
 
     for seed in ${SEEDS}; do
         for est in ${ESTIMATORS}; do
             job_name="pcc_${dataset}_s${seed}_${est}"
-            sbatch \
+            out_csv="${OUTPUT_DIR}/${dataset}/seed${seed}_${est}.csv"
+
+            if [[ -f "${out_csv}" ]]; then
+                skipped_done=$((skipped_done + 1))
+                continue
+            fi
+            if grep -qx "${job_name}" <<<"${in_queue}"; then
+                skipped_queued=$((skipped_queued + 1))
+                continue
+            fi
+
+            if sbatch \
                 --job-name="${job_name}" \
                 --time="${time_lim}" \
                 --mem="${mem}" \
                 --cpus-per-task="${cpus}" \
                 --export=ALL,DATASET="${dataset}",SEED="${seed}",ESTIMATOR="${est}",OUTPUT_DIR="${OUTPUT_DIR}",CONDA_ENV="${CONDA_ENV_NAME}" \
-                slurm/run_eval.sbatch
-            submitted=$((submitted + 1))
+                slurm/run_eval.sbatch >/dev/null 2>&1
+            then
+                submitted=$((submitted + 1))
+                in_queue="${in_queue}"$'\n'"${job_name}"
+            else
+                # Most likely cause: QOSMaxSubmitJobPerUserLimit. Stop the
+                # loop early so the next invocation retries from here.
+                blocked=$((blocked + 1))
+                echo "sbatch refused ${job_name}; stopping early (re-run later to pick up the rest)." >&2
+                break 3
+            fi
         done
     done
 done
 
-echo "Submitted ${submitted} jobs. Tail logs under slurm/logs/. When all complete:"
+echo "Submitted: ${submitted}  | already-done (CSV present): ${skipped_done}  | already-queued: ${skipped_queued}  | blocked: ${blocked}"
+echo "Logs: slurm/logs/. Re-run this script to submit any remaining combos. When all complete:"
 echo "    python slurm/aggregate.py --result-dir ${OUTPUT_DIR}"
