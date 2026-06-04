@@ -1,0 +1,4 @@
+Bayes-optimal per-metric inference for any probabilistic multi-label classifier
+Divide-and-conquer plus fusion: exact optima over two whole metric families
+Seven predict-rules, each verified against brute-force enumeration
+pip-installable and Dockerised, one-command reproduction of paper tables

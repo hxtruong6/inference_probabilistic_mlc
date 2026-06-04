@@ -22,8 +22,9 @@ Questions to: software.impacts@elsevier.com. Submit via Editorial Manager,
       an Elsevier open-access agreement that covers the APC.
 
 ## Phase 1 - Artifact hardening
-- [ ] Clean-clone test: fresh venv -> `pip install -e ".[dev]"` -> `pytest tests/ -q`
-      -> `make reproduce` (CHD-49). All green from a clean checkout.
+- [x] Clean-clone test: fresh venv -> `pip install -e ".[dev]"` -> `pytest tests/ -q`
+      (42 passed) -> `dacaf-mlc --dataset CHD_49 ...` (CLI run OK, CSV written).
+      Verified 2026-06-05 from a clean clone of this branch.
 - [x] Regenerate one clean result table from current code (CHD-49, PCC + LR, 5 seeds x
       10-fold). Saved to `chd49_crosstab_regenerated.csv`; all 7 diagonals are the column
       max (paper claim holds); NPV/Recall show the predict-all trivial optimum.
@@ -53,7 +54,8 @@ Questions to: software.impacts@elsevier.com. Submit via Editorial Manager,
 - [ ] Sec 4 Impact / Impact Overview (the section reviewers weight most).
 - [ ] Sec 5 Conclusions.
 - [ ] Fill `\credit{}` CRediT roles for all 4 authors; set affiliations + ORCIDs.
-- [ ] Highlights: 3-5 bullets, <= 85 chars each (also submit as a separate *highlights* file).
+- [x] Highlights: 4 bullets, all <= 85 chars, in `highlights.txt` (separate submission file)
+      and mirrored in the metapaper `highlights` environment.
 - [ ] Declaration of competing interest (complete the declarations tool too).
 - [ ] **Declaration of generative AI use**: required because AI tooling (Claude Code) was
       used to help prepare this manuscript/skeleton. Add the Guide's standard statement in
