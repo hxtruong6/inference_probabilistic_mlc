@@ -1,203 +1,142 @@
-# Bayes-Optimal Inference for Probabilistic Classifier Chains
+# Probabilistic Multi-Label Classification via Divide-and-Conquer and Fusion (DaCaF)
 
-> Reference implementation and reproducibility artifact for loss-specific Bayes-optimal inference in multi-label classification with Probabilistic Classifier Chains (PCC) [[Dembczyński et al., 2010](#references)].
+[![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.inffus.2026.104517-blue)](https://doi.org/10.1016/j.inffus.2026.104517)
+[![Journal](https://img.shields.io/badge/Information%20Fusion-2026-green)](https://doi.org/10.1016/j.inffus.2026.104517)
+[![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
 
-This repository accompanies our study of metric-aware decoding for PCC. It provides exact inference rules for eight target losses, two corrected derivations relative to the original literature, a batched joint-inference algorithm that reduces the complexity of exact PCC prediction by orders of magnitude, and a fully reproducible evaluation pipeline over eleven standard multi-label benchmarks.
+Official code for the paper **published in _Information Fusion_ (2026)**:
 
----
-
-## Highlights
-
-1. **Eight Bayes-optimal inference rules** for PCC — Hamming, subset 0/1, precision, recall, NPV, F-β, Markedness, and Informedness — all sharing the same joint estimator, enabling a clean isolation of *inference* from *modelling*.
-2. **Two corrected derivations** with respect to the published PCC line of work:
-   - **Markedness**: original closed form assumed vacuous precision = 1; we re-derive it consistently with the scikit-learn convention (`zero_division = 0`) standard in the modern multi-label literature.
-   - **Informedness**: original rule was degenerate (always predicted ŷ = 0); we provide a correct decomposition based on the joint pairwise distribution P(y_j = 1, |y| = s | x).
-   Both derivations are verified against brute-force enumeration in the test suite.
-3. **Prefix-tree batched PCC inference**: the naive predictor performs N · L · 2^L base-classifier calls; our implementation performs exactly **L** — empirical speed-up ≈ 300× at L = 6 and ≈ 8000× at L = 10, with numerical equivalence (atol = 1e-12) to the reference enumeration up to L = 7.
-4. **Full reproducibility**: stratified 10-fold cross-validation, five seeds, three base learners (Logistic Regression, Random Forest, AdaBoost), eleven MULAN benchmarks; pinned dependencies; Slurm submission scripts; paper-format aggregation utilities.
-5. **Both binary-prediction and ranking metric families** reported (example-based, label-based, ranking-based; all in higher-is-better form).
+> **Probabilistic multi-label classification via a divide-and-conquer and fusion approach**
+> Vu-Linh Nguyen, Xuan-Truong Hoang, Anh Hoang, Van-Nam Huynh.
+> *Information Fusion*, 2026, Article 104517. <https://doi.org/10.1016/j.inffus.2026.104517>
 
 ---
 
-## Contents
+## What is this about? (in one picture)
 
-- [Method](#method)
-  - [Models](#models)
-  - [Bayes-optimal inference rules](#bayes-optimal-inference-rules)
-  - [Corrected derivations](#corrected-derivations)
-  - [Evaluation metrics](#evaluation-metrics)
-- [Algorithmic contribution: batched joint inference](#algorithmic-contribution-batched-joint-inference)
-- [Reproducibility](#reproducibility)
-- [Project layout](#project-layout)
-- [Testing](#testing)
-- [Limitations and scope](#limitations-and-scope)
-- [References](#references)
+In multi-label classification, each instance can carry *any subset* of the labels, and **different evaluation metrics want different predictions**. A model that is great for one metric (e.g. F₁) can be poor for another (e.g. subset accuracy).
 
----
+**DaCaF** is a generic recipe that, given a probabilistic model `P(y | x)`, finds the **Bayes-optimal prediction (BOP)** for a chosen metric — the prediction `ŷ` that maximises the *expected* score of that metric.
 
-## Method
+```mermaid
+flowchart TD
+    A[Training data] -->|learn| B[Probabilistic classifier PCC<br/>estimates P of y given x]
+    B -->|inference, per instance x| C[Probabilistic prediction<br/>P of y given x]
+    C --> D{DaCaF}
+    D --> E[Divide and Conquer<br/>split predictions by number of relevant labels,<br/>solve each group by sorting]
+    D --> F[Fusion<br/>estimate the needed probabilities<br/>by fusing the chain binary classifiers]
+    E --> G[Bayes-optimal prediction y-hat<br/>for the chosen metric]
+    F --> G
+```
 
-### Models
+**Two building blocks:**
 
-| Model | Joint distribution | Role |
-|---|---|---|
-| `ProbabilisticClassifierChainCustom` (PCC) | P(y \| x) = Π_j P(y_j \| x, y_<j) | Chain rule — captures label dependencies |
-| `BinaryRelevance` (BR) | P(y \| x) = Π_j P(y_j \| x) | Independence baseline (no chain) |
+1. **Divide & Conquer** — partition the `2^L` possible predictions into `L+1` groups (by how many labels are predicted relevant). Within each group the best prediction is found just by **sorting labels by a score**; the global best is the best across groups.
+2. **Fusion** — the scores need certain marginal/pairwise probabilities. These are estimated by **fusing the predictions of the dependent binary classifiers** that make up the chain (via ancestral sampling).
 
-Both classes expose the **same inference interface**; they differ only in how the joint label distribution is constructed. This isolates the contribution of chain-aware inference for each target metric. Any scikit-learn-compatible base estimator supporting `predict_proba` is admissible.
-
-### Bayes-optimal inference rules
-
-For a given joint P(y | x), each rule returns the prediction ŷ that maximises the expected value of its target metric. Let L denote the number of labels.
-
-| Method | Optimises | Decision rule |
-|---|---|---|
-| `predict_hamming` | Hamming accuracy | ŷ_j = 1 ⇔ P(y_j = 1 \| x) > ½ |
-| `predict_subset` | Subset accuracy (0/1) | ŷ = arg max_y P(y \| x) over all 2^L vectors |
-| `predict_precision` | Precision | Predict only the label with the highest marginal |
-| `predict_recall` | Recall | ŷ = 1 (trivially optimal; recall = 1) |
-| `predict_npv` | Negative predictive value | All ones except the label with the lowest marginal |
-| `predict_markedness` | Markedness = ½(Precision + NPV) | arg max over top-l candidates — see [below](#corrected-derivations) |
-| `predict_fmeasure` | F-β | Pairwise probability aggregation [Dembczyński et al., 2011] |
-| `predict_informedness` | Informedness = ½(Sens. + Spec.) | Per-label threshold on q_sens + q_spec_cost — see [below](#corrected-derivations) |
-| `predict_marginal_scores` | — (continuous) | Returns marginals; consumed by ranking metrics |
-
-### Corrected derivations
-
-Two rules from the original PCC formulation are inconsistent with the metric conventions adopted by scikit-learn (`zero_division = 0`) and the broader modern multi-label literature. We provide corrected derivations and verify them against brute-force enumeration.
-
-#### `predict_markedness`
-
-The original closed form assumed Precision = 1 in the degenerate case `|ŷ| = 0 ∧ ∃ y_j = 1` (vacuous precision). Under the scikit-learn convention, the same case returns 0. Re-deriving the expected markedness under that convention, for the candidate "predict the top-l labels by marginal" with sorted marginals π_(1) ≥ … ≥ π_(L) and A_l = Σ_{i ≤ l} π_(i):
-
-- l = 0: E[M | x] = ½ · ( P(y = 0 | x) + 1 − Σ π_j / L )
-- 0 < l < L: E[M | x] = ½ · ( A_l / l + 1 − (Σ π_j − A_l) / (L − l) )
-- l = L: E[M | x] = ½ · ( Σ π_j / L + P(y = 1 | x) )
-
-Verified against brute-force enumeration on toy cases in `tests/`.
-
-#### `predict_informedness`
-
-The original implementation produced all-zero predictions because E[ŷ = 0] was set to 1 + P(y = 0 | x), dominating every alternative. Starting from the joint pairwise distribution P(y_j = 1, |y| = s | x), we obtain:
-
-**Include label j iff q_sens[j] + q_spec_cost[j] > C**, where
-
-- q_sens[j] = Σ_{s = 1..L} P(y_j = 1, |y| = s | x) / s
-- q_spec_cost[j] = Σ_{s = 1..L − 1} P(y_j = 1, |y| = s | x) / (L − s)
-- C = P(|y| = 0 | x) / L + Σ_{s = 1..L − 1} P(|y| = s | x) / ( s · (L − s) )
-
-Verified on five samples against brute-force enumeration; in every case the predicted ŷ matched the enumeration-based optimum.
-
-### Evaluation metrics
-
-All metrics are reported in **higher-is-better** form (e.g. `coverage_score` = 1 − normalised coverage error) to remove sign ambiguity from cross-tabulations.
-
-- **Binary-prediction metrics** — applied to each `predict_*` output: `hamming_accuracy`, `subset_accuracy`, `precision_score`, `recall_score`, `negative_predictive_value`, `f_beta`, `macro_f1`, `micro_f1`, `markedness`, `informedness`.
-- **Ranking metrics** — applied to marginal scores [Schapire & Singer, 2000]: `one_error_score`, `coverage_score`, `ranking_loss_score`, `average_precision_score`.
-
-Edge-case behaviour matches scikit-learn (`zero_division = 0`) and is documented per metric. The example-based Precision/NPV adopt the "vacuous = 0 when there are unpredicted positives" convention, standard in the multi-label literature; this is precisely the convention that conflicts with the original Markedness derivation, motivating the correction above.
+The paper proves this works for **two whole families of metrics** (so it covers many metrics at once, not one at a time) and shows when a metric's optimal prediction is *trivial* — a useful warning sign when choosing a metric.
 
 ---
 
-## Algorithmic contribution: batched joint inference
+## Headline empirical finding
 
-The naive PCC predictor invokes the base estimator `N · L · 2^L` times — once per sample, per chain level, per candidate prefix. Our implementation performs a **single batched `predict_proba` call per chain level**, exploiting the prefix-tree structure of the chain. At level j, all `N · 2^j` (sample, prefix) pairs are passed to the j-th base classifier together; outputs are expanded via an interleaved sample-major layout that preserves the canonical MSB-first index ↔ label-vector mapping.
-
-Total `predict_proba` calls: **N · L · 2^L → L**.
-
-| L | Speed-up vs. reference enumeration (50 samples, 10 features) |
-|---:|---|
-| 6 | ~300× |
-| 10 | ~8000× |
-
-Numerical equivalence (atol = 1e-12) to the reference is verified by `tests/test_predict_equivalence.py` for L ∈ {2, 3, 5, 7}.
+**Mismatch hurts.** When you evaluate with metric *E* but optimise for a different metric *T* during prediction, performance usually drops. Optimising the metric you actually care about is (almost always) best — verified on 5 tabular datasets + a chest-X-ray image dataset, using the *exact* computation paradigm (no approximation blurring the picture).
 
 ---
 
-## Reproducibility
+## The metrics and their optimal predictions
 
-### Environment
+For a probabilistic prediction `P(y | x)` over `L` labels, each rule returns the prediction that maximises the expected metric. `pⱼ = P(yⱼ = 1 | x)` is the marginal.
+
+| Metric | Optimal prediction (BOP) | Needs | Cost |
+|---|---|---|---|
+| **Hamming** | `ŷⱼ = 1 ⇔ pⱼ > ½` | marginals | `O(L)` |
+| **Subset 0/1** | the single most probable label vector | full joint | intractable |
+| **F-β / F₁** | sort by an F-score, pick best prefix size | pairwise `P(yⱼ=1, |y|=s)` | `O(L³)` |
+| **Markedness** | rank by marginals, compare prefix sizes | marginals | `O(L log L)` |
+| **Precision** | predict only the top-marginal label | marginals | `O(L)` *(near-trivial)* |
+| **NPV** | all ones except the lowest-marginal label | marginals | `O(L)` *(near-trivial)* |
+| **Recall** | always predict `1…1` | — | trivial |
+| **Specificity** | always predict `0…0` | — | trivial |
+
+> **Why "trivial" matters:** Recall/Specificity (and near-trivial Precision/NPV) have optimal predictions you can write down *without looking at any data*. The paper argues such metrics are weak *standalone* evaluation metrics — a practical takeaway when designing a metric for a new domain.
+
+---
+
+## How to cite
+
+```bibtex
+@article{nguyen2026probabilistic,
+  title   = {Probabilistic multi-label classification via a divide-and-conquer and fusion approach},
+  author  = {Nguyen, Vu-Linh and Hoang, Xuan-Truong and Hoang, Anh and Huynh, Van-Nam},
+  journal = {Information Fusion},
+  year    = {2026},
+  pages   = {104517},
+  issn    = {1566-2535},
+  doi     = {10.1016/j.inffus.2026.104517}
+}
+```
+
+---
+
+## Quickstart
 
 ```bash
 conda create -n inference_prob_mlc python=3.10
 conda activate inference_prob_mlc
 pip install -r requirements.txt
+
+# one (dataset, seed, model) run:
+python inference_evaluate_models.py --dataset emotions --seed 1 --estimator lr --output-dir result
 ```
 
-Pinned versions (subset): `numpy==1.26.4`, `pandas==2.0.3`, `scikit-learn==1.2.2`, `scipy==1.12.0`, `joblib==1.3.2`.
-
-### Protocol
-
-| Setting | Value |
-|---|---|
-| Global random seed | `SEED = 6` |
-| Cross-validation | `KFold`, `n_splits = 10`, `shuffle = True` |
-| Feature scaling | `StandardScaler` fit on training fold only (no leakage) |
-| LogisticRegression | `max_iter = 5 × 10⁶`, default L2 |
-| RandomForestClassifier | `n_estimators = 100`, `n_jobs = 1` (outer joblib parallelism) |
-| AdaBoostClassifier | `n_estimators = 50` |
-| Fold parallelism | `joblib.Parallel(n_jobs = −1)` |
-
-### Running the evaluation
-
-Single (dataset, seed, estimator) combination:
-
-```bash
-python inference_evaluate_models.py \
-    --dataset emotions --seed 1 --estimator lr --output-dir result
-```
-
-Writes `result/<dataset>/seed<S>_<est-tag>.csv` (and `_crosstab.csv`) for that one combination.
-
-Full paper sweep (no arguments) — iterates over `DEFAULT_DATASET_NAMES × DEFAULT_SEEDS × all estimators`. Practical only for small datasets on a workstation; for the full sweep we recommend Slurm:
-
-```bash
-python inference_evaluate_models.py     # local
-# or: see slurm/README.md                # cluster, one job per (dataset × seed × estimator)
-python slurm/aggregate.py                # aggregate once jobs finish
-```
-
-After aggregation, per dataset:
-
-- `result/result_<dataset>.csv` — long format, one row per `(dataset, model, inference_rule, metric, seed)`.
-- `result/result_<dataset>_summary.csv` — mean ± std across seeds.
-- `result/result_<dataset>_crosstab.csv` — pivot: rows = `(model × inference_rule)`, cols = metrics, cells = `mean ± std`.
-
-### Benchmarks
-
-| Dataset | L | N | Source | Notes |
-|---|---:|---:|---|---|
-| `flags` | 7 | 194 | MULAN | |
-| `emotions` | 6 | 593 | MULAN | |
-| `scene` | 6 | 2407 | MULAN | |
-| `CHD_49` | 6 | 555 | MULAN | |
-| `Water-quality` | 14 | 1060 | MULAN | HPC recommended |
-| `yeast` | 14 | 2417 | MULAN | HPC recommended |
-| `VirusGO_sparse` | 6 | 207 | MULAN | sparse ARFF (`src/arff_dataset.py`) |
-| `PlantPseAAC` | 12 | 978 | MULAN | sparse ARFF |
-| `chest_xray_nih__{densenet,resnet,resnetae}` | 8 | ~112k | NIH ChestX-ray14 | pre-extracted `.npy` features — see [`src/chest_xray_dataset/Readme.md`](src/chest_xray_dataset/Readme.md) |
-
-For `L = 14`, exact enumeration over `2^L = 16 384` label vectors is required. The batched implementation makes this tractable on a single CPU; for `L ≥ 18`, approximate inference is recommended.
-
-The NIH ChestX-ray14 features are **not redistributed** in this repository (50 MB+ per backbone). To regenerate `datasets/nih_feature_vectors_{densenet,resnet,resnetae}.npy`, follow the instructions in `src/chest_xray_dataset/Readme.md`.
+This writes `result/emotions/seed1_lr.csv` and a cross-tab of **target metric × evaluation metric** — the table at the heart of the paper.
 
 ---
 
-## Project layout
+## Reproducing the paper's results
+
+The paper uses **Probabilistic Classifier Chains (PCC)** with an **L2-regularised logistic-regression** base learner, **10-fold cross-validation**, and the **exact computation paradigm** (enumerate all `2^L` labelings, so it is limited to a small/moderate number of labels).
+
+**Datasets in the paper (6):**
+
+| Dataset | #labels (L) | #instances | Type |
+|---|---:|---:|---|
+| Emotions | 6 | 593 | tabular |
+| CHD-49 | 6 | 555 | tabular |
+| Scene | 6 | 2407 | tabular |
+| Water-quality | 14 | 1060 | tabular |
+| Yeast | 14 | 2417 | tabular |
+| ChestX-ray8 | 8 | 25596 | image (ResNet / resnetAE / DenseNet features) |
+
+For the chest-X-ray data we extract features with a pretrained backbone via [TorchXRayVision](https://github.com/mlmed/torchxrayvision); the raw NIH features are **not redistributed** (see [`src/chest_xray_dataset/Readme.md`](src/chest_xray_dataset/Readme.md)).
+
+**Full sweep** (heavy — use a cluster):
+
+```bash
+python inference_evaluate_models.py        # local, small datasets
+# or: see slurm/README.md                  # one job per (dataset × seed × estimator)
+python slurm/aggregate.py                  # aggregate when jobs finish
+```
+
+Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
+
+---
+
+## Repository layout
 
 ```
 src/
-  probability_classifier_chains.py   # PCC, BinaryRelevance, predict_* rules
-  evaluation_metrics.py              # all metrics (binary + ranking)
+  probability_classifier_chains.py   # PCC + per-metric Bayes-optimal predict_* rules
+  evaluation_metrics.py              # all metrics (higher-is-better form)
   arff_dataset.py                    # MULAN ARFF loader + 10-fold CV
-  utils.py                           # result aggregation
-  skmultiflow/                       # vendored ClassifierChain base
   chest_xray_dataset/                # NIH feature loader
+  utils.py                           # result aggregation
 inference_evaluate_models.py         # pipeline: train × predict × evaluate
 slurm/                               # cluster submission + aggregation
-tests/                               # 46 unit tests + equivalence test
-datasets/                            # ARFF + .npy feature files
-result/                              # per-dataset CSVs
+tests/                               # unit tests + brute-force equivalence checks
+result/                              # output CSVs
+paper/                               # local copy of the paper source (not tracked)
 ```
 
 ---
@@ -208,24 +147,27 @@ result/                              # per-dataset CSVs
 python -m pytest tests/ -v
 ```
 
-The suite contains **46 unit tests** covering every metric (including documented edge cases) and **parametrised equivalence tests** that verify the batched predictor against the brute-force reference at L ∈ {2, 3, 5, 7}. The corrected Markedness and Informedness rules are validated against enumeration-based optima on the same suite.
+Every inference rule is checked against **brute-force enumeration** of the expected metric, so the closed-form rules are provably correct on small cases. A batched predictor (one `predict_proba` call per chain level instead of `N·L·2^L`) is verified numerically equivalent to the reference enumeration.
 
 ---
 
-## Limitations and scope
+## Beyond the paper (also in this code)
 
-- **Exact enumeration** over `2^L` scales poorly for `L ≥ 18` even with the batched implementation (memory ≈ `N · 2^L · 8` bytes for the joint cache). Approximate inference (e.g. ε-A, beam search, Monte-Carlo) is the natural extension and is intentionally outside the scope of this artifact.
-- All base estimators must implement `predict_proba`. `SGDClassifier` is admissible with `loss = "log_loss"`; probability calibration is the user's responsibility.
+The repository ships a few extras not used in the published experiments, handy for further study:
+
+- a **Binary Relevance** baseline (label-independence) sharing the same inference interface, to isolate the effect of chain-aware inference;
+- additional MULAN benchmarks (`flags`, `VirusGO`, `PlantPseAAC`, …) and base learners (Random Forest, AdaBoost);
+- an **Informedness** rule with a corrected derivation (the paper's appendix discusses it; it is not part of the main experiments).
 
 ---
 
 ## References
 
-- K. Dembczyński, W. Cheng, E. Hüllermeier. **Bayes Optimal Multilabel Classification via Probabilistic Classifier Chains**. *ICML 2010*.
-- K. Dembczyński, W. Waegeman, W. Cheng, E. Hüllermeier. **An Exact Algorithm for F-Measure Maximization**. *NeurIPS 2011*.
-- R. E. Schapire, Y. Singer. **BoosTexter: A Boosting-Based System for Text Categorization**. *Machine Learning, 39(2/3):135–168, 2000*. (one-error, coverage, ranking loss, average precision.)
-- D. M. W. Powers. **Evaluation: From Precision, Recall and F-Measure to ROC, Informedness, Markedness & Correlation**. *Journal of Machine Learning Technologies, 2(1):37–63, 2011*.
-- G. Tsoumakas, I. Katakis, I. Vlahavas. **Mining Multi-label Data**. *Data Mining and Knowledge Discovery Handbook*, 2010. (MULAN.)
+- K. Dembczyński, W. Cheng, E. Hüllermeier. *Bayes Optimal Multilabel Classification via Probabilistic Classifier Chains.* ICML 2010.
+- K. Dembczyński, W. Waegeman, W. Cheng, E. Hüllermeier. *An Exact Algorithm for F-Measure Maximization.* NeurIPS 2011.
+- W. Waegeman et al. *On the Bayes-optimality of F-measure maximizers.* JMLR 2014.
+- D. M. W. Powers. *Evaluation: From Precision, Recall and F-Measure to ROC, Informedness, Markedness & Correlation.* 2011.
+- G. Tsoumakas, I. Katakis, I. Vlahavas. *Mining Multi-label Data.* 2010 (MULAN).
 
 ## License
 

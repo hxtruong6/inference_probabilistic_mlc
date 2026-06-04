@@ -10,3 +10,5 @@ slurm/logs/
 result/*/
 !result/figs/
 .claude/
+# local reference copy of the paper; not tracked
+paper/
