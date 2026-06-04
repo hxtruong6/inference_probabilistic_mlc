@@ -2,7 +2,7 @@
 # Loop submitter: one sbatch per (dataset × seed × estimator).
 #
 # Defaults reproduce the paper's full sweep. Override any axis with env vars:
-#   DATASETS="emotions scene" SEEDS="1 2" ESTIMATORS="lr" ./slurm/submit_all.sh
+#   DATASETS="emotions scene" SEEDS="1 2" ESTIMATORS="lr" ./scripts/submit_all.sh
 #
 # Per-dataset overrides for chest_xray (heavier) are baked into the script
 # to bump time/mem; tweak below if your cluster needs different limits.
@@ -12,7 +12,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "${REPO_ROOT}"
 
-mkdir -p slurm/logs
+mkdir -p scripts/logs
 
 DATASETS="${DATASETS:-flags emotions scene CHD_49 VirusGO_sparse PlantPseAAC Water-quality yeast chest_xray_nih__densenet chest_xray_nih__resnet chest_xray_nih__resnetae}"
 SEEDS="${SEEDS:-1 2 3 4 5}"
@@ -57,7 +57,7 @@ for dataset in ${DATASETS}; do
                 --mem="${mem}" \
                 --cpus-per-task="${cpus}" \
                 --export=ALL,DATASET="${dataset}",SEED="${seed}",ESTIMATOR="${est}",OUTPUT_DIR="${OUTPUT_DIR}",CONDA_ENV="${CONDA_ENV_NAME}" \
-                slurm/run_eval.sbatch >/dev/null 2>&1
+                scripts/run_eval.sbatch >/dev/null 2>&1
             then
                 submitted=$((submitted + 1))
                 in_queue="${in_queue}"$'\n'"${job_name}"
@@ -73,5 +73,5 @@ for dataset in ${DATASETS}; do
 done
 
 echo "Submitted: ${submitted}  | already-done (CSV present): ${skipped_done}  | already-queued: ${skipped_queued}  | blocked: ${blocked}"
-echo "Logs: slurm/logs/. Re-run this script to submit any remaining combos. When all complete:"
-echo "    python slurm/aggregate.py --result-dir ${OUTPUT_DIR}"
+echo "Logs: scripts/logs/. Re-run this script to submit any remaining combos. When all complete:"
+echo "    python scripts/aggregate.py --result-dir ${OUTPUT_DIR}"

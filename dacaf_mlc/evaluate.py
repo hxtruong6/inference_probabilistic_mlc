@@ -40,7 +40,7 @@ def main():
         return
 
     # Full sweep — kept for local interactive use; on the cluster prefer
-    # slurm/submit_all.sh which launches one --dataset job at a time.
+    # scripts/submit_all.sh which launches one --dataset job at a time.
     for dataset_name in DEFAULT_DATASET_NAMES:
         for seed in DEFAULT_SEEDS:
             run_single(dataset_name, seed, estimator_names, args.output_dir)

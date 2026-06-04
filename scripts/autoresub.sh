@@ -7,14 +7,14 @@
 #   FAILED/other  -> retry once at same resources, log the .err tail
 # Exits when all 165 CSVs exist or after MAX_TICKS iterations.
 #
-# Resource baselines come from slurm/submit_all.sh (must match).
+# Resource baselines come from scripts/submit_all.sh (must match).
 
 set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "${REPO_ROOT}"
-LOG="slurm/logs/autoresub.log"
-RETRY_DB="slurm/logs/autoresub_retries.tsv"   # name<TAB>attempts<TAB>last_mem<TAB>last_time
+LOG="scripts/logs/autoresub.log"
+RETRY_DB="scripts/logs/autoresub_retries.tsv"   # name<TAB>attempts<TAB>last_mem<TAB>last_time
 touch "${RETRY_DB}"
 
 DATASETS="flags emotions scene CHD_49 VirusGO_sparse PlantPseAAC Water-quality yeast chest_xray_nih__densenet chest_xray_nih__resnet chest_xray_nih__resnetae"
@@ -82,7 +82,7 @@ resubmit_combo() {
         FAILED|NODE_FAIL|CANCELLED*|"")
             # log .err tail if we can find it
             local err
-            err="$(ls -t "slurm/logs/${name}"_*.err 2>/dev/null | head -1)"
+            err="$(ls -t "scripts/logs/${name}"_*.err 2>/dev/null | head -1)"
             if [[ -n "${err}" ]]; then
                 log "FAILED ${name} (state=${last_state}); last .err tail:"
                 tail -3 "${err}" | sed 's/^/    /' >> "${LOG}"
@@ -109,7 +109,7 @@ resubmit_combo() {
 
     if sbatch --job-name="${name}" --time="${time}" --mem="${mem}" --cpus-per-task="${cpus}" \
               --export=ALL,DATASET="${ds}",SEED="${seed}",ESTIMATOR="${est}",OUTPUT_DIR=result,CONDA_ENV=inference_mlc_env \
-              slurm/run_eval.sbatch >/dev/null 2>>"${LOG}"
+              scripts/run_eval.sbatch >/dev/null 2>>"${LOG}"
     then
         attempts=$((attempts + 1))
         printf "%s\t%d\t%s\t%s\n" "${name}" "${attempts}" "${mem}" "${time}" >> "${RETRY_DB}"

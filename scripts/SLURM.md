@@ -16,15 +16,15 @@ and submits one Slurm job per **(dataset × seed)** combination.
 
 ```bash
 # 1. Submit the full paper sweep (11 datasets × 5 seeds × 3 estimators = 165 jobs).
-./slurm/submit_all.sh
+./scripts/submit_all.sh
 
 # 2. Watch progress.
 squeue -u $USER
-tail -f slurm/logs/pcc_emotions_s1_lr_*.out
+tail -f scripts/logs/pcc_emotions_s1_lr_*.out
 
 # 3. When all jobs are COMPLETE, aggregate per-job CSVs into per-dataset
 #    summaries with mean ± std across seeds.
-python slurm/aggregate.py --result-dir result
+python scripts/aggregate.py --result-dir result
 ```
 
 ## Per-job invocation (no Slurm)
@@ -44,10 +44,10 @@ Override any axis at submission time via env vars to `submit_all.sh`:
 
 ```bash
 # Only LR baseline on the two L=14 MULAN datasets, 3 seeds:
-DATASETS="Water-quality yeast" SEEDS="1 2 3" ESTIMATORS="lr" ./slurm/submit_all.sh
+DATASETS="Water-quality yeast" SEEDS="1 2 3" ESTIMATORS="lr" ./scripts/submit_all.sh
 
 # Single dataset, all estimators, seeds 1..10:
-DATASETS="emotions" SEEDS="$(seq 1 10)" ./slurm/submit_all.sh
+DATASETS="emotions" SEEDS="$(seq 1 10)" ./scripts/submit_all.sh
 ```
 
 ## Resource notes (defaults baked into `submit_all.sh`)

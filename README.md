@@ -114,8 +114,8 @@ For the chest-X-ray data we extract features with a pretrained backbone via [Tor
 
 ```bash
 dacaf-mlc                                  # local, small datasets (or: python -m dacaf_mlc.evaluate)
-# or: see slurm/README.md                  # one job per (dataset × seed × estimator)
-python slurm/aggregate.py                  # aggregate when jobs finish
+# or: see scripts/SLURM.md                 # one job per (dataset × seed)
+python scripts/aggregate.py                # aggregate when jobs finish
 ```
 
 Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
@@ -126,7 +126,7 @@ Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_s
 make reproduce          # = bash scripts/reproduce_tabular.sh
 ```
 
-The exact published protocol is recorded in [`configs/paper.yaml`](configs/paper.yaml).
+The exact published protocol is recorded in [`docs/paper.yaml`](docs/paper.yaml).
 
 ---
 
@@ -168,11 +168,10 @@ dacaf_mlc/                           # installable package
   chest_xray_dataset/                # NIH feature extractor + loader ([image] extra)
   skmultiflow/                       # vendored ClassifierChain base
 pyproject.toml                       # packaging + deps (core / [image] / [dev])
-configs/paper.yaml                   # published protocol manifest
-scripts/reproduce_tabular.sh         # one-command tabular reproduction
-slurm/                               # cluster submission + aggregation
+scripts/                             # reproduce_tabular.sh + Slurm cluster scripts
 tests/                               # unit tests + brute-force optimality + e2e
-docs/                                # reproduction notes + rendered result tables (.tex)
+docs/                                # reproduction notes, result tables (.tex), paper.yaml manifest
+datasets/                            # the paper's MULAN ARFFs (+ chest-xray label CSV)
 result/                              # aggregated result CSVs
 CONVENTIONS.md  CONTRIBUTING.md  CITATION.cff
 paper/                               # local copy of the paper source (not tracked)

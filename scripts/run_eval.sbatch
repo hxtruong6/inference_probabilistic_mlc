@@ -1,11 +1,11 @@
 #!/bin/bash
 # One Slurm job = one (DATASET, SEED, ESTIMATOR) combo.
-# Submitted by slurm/submit_all.sh; do not invoke directly without env vars.
+# Submitted by scripts/submit_all.sh; do not invoke directly without env vars.
 #
 # JAIST HPC defaults — adjust partition / time / mem / account for your project.
 #SBATCH --job-name=pcc_eval
-#SBATCH --output=slurm/logs/%x_%j.out
-#SBATCH --error=slurm/logs/%x_%j.err
+#SBATCH --output=scripts/logs/%x_%j.out
+#SBATCH --error=scripts/logs/%x_%j.err
 #SBATCH --partition=DEF
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=10

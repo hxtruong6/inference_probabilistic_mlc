@@ -6,8 +6,8 @@ __pycache__/
 # via dacaf_mlc/chest_xray_dataset/ (see its Readme.md).
 datasets/NIH
 datasets/nih_*
-slurm/logs/
-# per-job CSVs from slurm/submit_all.sh; aggregated result_*.csv is the source of truth
+scripts/logs/
+# per-job CSVs from scripts/submit_all.sh; aggregated result_*.csv is the source of truth
 result/*/
 .claude/
 .vscode/
