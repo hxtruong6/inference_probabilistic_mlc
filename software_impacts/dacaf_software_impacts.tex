@@ -1,106 +1,136 @@
-%% DaCaF -- Software Impacts metapaper (SKELETON)
+%% DaCaF -- Software Impacts: Original Software Publication (OSP) -- SKELETON
+%% Built on the OFFICIAL Elsevier CAS double-column class (cas-dc, v2.4),
+%% els-cas/ copied from els-cas-templates.zip (Guide for Authors).
+%%
 %% Companion to: Nguyen, Hoang, Hoang, Huynh, "Probabilistic multi-label
 %% classification via a divide-and-conquer and fusion approach",
 %% Information Fusion (2026), DOI 10.1016/j.inffus.2026.104517
 %%
-%% NOTE: bullet points are placeholders / talking points only.
-%% Replace each bullet with your own prose. Target: <= 3 pages, ~1300-1500 words.
-%% Before submission, swap this preamble for the OFFICIAL Software Impacts
-%% template (elsarticle) downloaded from the journal Guide for Authors.
+%% NOTE: bullet points are PLACEHOLDERS / talking points. Replace each with
+%% your own prose. Targets from the Guide for Authors:
+%%   - ~3 pages total, including an Impact Overview and references
+%%   - Abstract <= 250 words; 1-7 keywords; 3-5 highlights (<=85 chars each)
+%%   - CRediT \credit{} per author; competing-interest + GenAI declarations
+%% Compile from the software_impacts/ directory (needs els-cas/ on TEXINPUTS):
+%%   TEXINPUTS=.//:els-cas//: pdflatex dacaf_software_impacts
 
-\documentclass[3p,twocolumn]{elsarticle}
+\documentclass[a4paper,fleqn]{els-cas/cas-dc}
 
-\usepackage{lipsum} % remove before submission
 \usepackage{booktabs}
 \usepackage{listings}
-\usepackage{amsmath}
-\usepackage{url}
-
-\journal{Software Impacts}
+\usepackage[authoryear,longnamesfirst]{natbib}
 
 \begin{document}
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
 
-\begin{frontmatter}
+\shorttitle{DaCaF: Bayes-optimal per-metric inference for probabilistic MLC}
+\shortauthors{V.-L. Nguyen et al.}
 
-\title{DaCaF: Bayes-optimal per-metric inference for probabilistic multi-label classification}
+\title[mode=title]{DaCaF: Bayes-optimal per-metric inference for probabilistic multi-label classification}
 
-\author[a]{Vu-Linh Nguyen}
-\author[b]{Xuan-Truong Hoang}
-\author[c]{Anh Hoang}
-\author[d]{Van-Nam Huynh}
-\address[a]{TODO affiliation}
-\address[b]{TODO affiliation}
-\address[c]{TODO affiliation}
-\address[d]{TODO affiliation}
+%% ----- Authors. TODO: fill affiliations, ORCIDs, CRediT, corresponding author.
+\author[1]{Vu-Linh Nguyen}
+\credit{} % TODO CRediT, e.g. Conceptualization, Methodology, Software
+\affiliation[1]{organization={TODO}, country={TODO}}
 
+\author[2]{Xuan-Truong Hoang}
+\cormark[1]
+\ead{hxtruong@jaist.ac.jp}
+\credit{} % TODO CRediT, e.g. Software, Validation, Writing -- original draft
+\affiliation[2]{organization={Japan Advanced Institute of Science and Technology (JAIST)},
+                country={Japan}}
+
+\author[3]{Anh Hoang}
+\credit{} % TODO
+\affiliation[3]{organization={TODO}, country={TODO}}
+
+\author[4]{Van-Nam Huynh}
+\credit{} % TODO
+\affiliation[4]{organization={Japan Advanced Institute of Science and Technology (JAIST)},
+                country={Japan}}
+
+\cortext[1]{Corresponding author}
+
+%% ----- Abstract (<= 250 words). TODO prose. Talking points:
+%% - Different MLC metrics want different predictions; one model cannot be optimal for all.
+%% - DaCaF: given P(y|x), returns the Bayes-optimal prediction (BOP) for a chosen metric.
+%% - Divide-and-conquer (sort within label-count groups) + fusion (probabilities from
+%%   the chain's binary classifiers); exact, covers two whole metric families.
+%% - Ships 7 verified predict_* rules, CLI + library, reproducible eval, tests vs brute force.
 \begin{abstract}
-%% TODO prose (~80-100 words). Talking points:
-%% - In multi-label classification, different metrics want different predictions.
-%% - DaCaF: given P(y|x), returns the Bayes-optimal prediction for a chosen metric.
-%% - Divide-and-conquer (sort within label-count groups) + fusion (estimate the
-%%   needed probabilities from the chain's binary classifiers).
-%% - Exact computation; covers two whole metric families; ships 7 predict_* rules,
-%%   each verified against brute-force enumeration.
+TODO abstract (<= 250 words).
 \end{abstract}
 
-\begin{keyword}
+%% ----- Highlights (3-5 bullets, <= 85 chars each). TODO tighten to <=85 chars.
+%% (Also submit separately as a *highlights* file per the Guide.)
+\begin{highlights}
+\item Bayes-optimal per-metric inference for any probabilistic multi-label classifier
+\item Divide-and-conquer + fusion: exact optima covering two whole metric families
+\item Seven predict\_* rules, each verified against brute-force enumeration
+\item pip-installable, Dockerised, one-command reproduction of paper tables
+\end{highlights}
+
+%% ----- Keywords (1-7). Guide prefers single-word keywords; kept domain terms.
+\begin{keywords}
 multi-label classification \sep probabilistic classifier chains \sep
 Bayes-optimal inference \sep evaluation metrics
-\end{keyword}
+\end{keywords}
 
-\end{frontmatter}
+\maketitle
 
 %% ======================================================================
-%% REQUIRED METADATA -- Current code version
+%% REQUIRED METADATA -- Current code version (C1-C9)
 %% ======================================================================
 \begin{table}[h]
 \caption{Code metadata}
 \label{tab:codeMetadata}
-\small
-\begin{tabular}{@{}p{0.32\linewidth}p{0.58\linewidth}@{}}
+\footnotesize
+\begin{tabular}{@{}p{0.30\linewidth}p{0.60\linewidth}@{}}
 \toprule
-\textbf{Nr.} \textbf{Code metadata description} & \\
+\textbf{Nr.} & \textbf{Code metadata description} \\
 \midrule
-C1 Current code version & v1.0.0 \\
-C2 Permanent link to code/repository &
-  \url{https://github.com/hxtruong6/inference_probabilistic_mlc} \newline
-  Zenodo: TODO software DOI \\
-C3 Permanent link to Reproducible Capsule & TODO Code Ocean (optional) \\
-C4 Legal Code License & MIT \\
-C5 Code versioning system used & git \\
-C6 Software code languages, tools, services & Python ($\geq$3.10); NumPy, SciPy,
-  scikit-learn, pandas, joblib; optional PyTorch / torchvision / torchxrayvision
-  ([image] extra) \\
-C7 Compilation requirements, operating environments, dependencies &
-  \texttt{pip install -e .} (core) or \texttt{".[image]"}; Linux/macOS; Docker
-  image provided \\
-C8 Link to developer documentation / manual & README.md, CONVENTIONS.md, docs/ \\
-C9 Support email for questions & hxtruong@jaist.ac.jp \\
+C1 & Current code version: v1.0.0 \\
+C2 & Permanent link to code/repository: \newline
+     \url{https://github.com/hxtruong6/inference_probabilistic_mlc} \newline
+     Zenodo: TODO software DOI \\
+C3 & Permanent link to Reproducible Capsule: TODO Code Ocean capsule \\
+C4 & Legal Code License: MIT \\
+C5 & Code versioning system used: git \\
+C6 & Software code languages, tools, services used: Python ($\geq$3.10);
+     NumPy, SciPy, scikit-learn, pandas, joblib; optional PyTorch /
+     torchvision / torchxrayvision ([image] extra) \\
+C7 & Compilation requirements, operating environments, dependencies:
+     \texttt{pip install -e .} (core) or \texttt{".[image]"}; Linux/macOS;
+     Docker image provided \\
+C8 & Link to developer documentation/manual: README.md, CONVENTIONS.md, docs/ \\
+C9 & Support email for questions: hxtruong@jaist.ac.jp \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 %% ======================================================================
-\section{Motivation and significance}
+\section{Motivation and significance}\label{sec:motivation}
 %% TODO prose (~250 words). Talking points:
 \begin{itemize}
   \item Multi-label classification: each instance carries any subset of $L$ labels.
   \item Key fact: different evaluation metrics are optimised by different predictions;
         a model great for $F_1$ can be poor for subset accuracy.
-  \item Right thing to do per instance is the Bayes-optimal prediction (BOP):
-        the $\hat{y}$ maximising the \emph{expected} score of the target metric.
+  \item Right per-instance choice is the Bayes-optimal prediction (BOP): the $\hat{y}$
+        maximising the \emph{expected} score of the target metric.
   \item Computing BOP naively is intractable ($2^L$ candidate predictions).
-  \item Gap: no reusable, exact, multi-metric BOP tool for probabilistic MLC;
-        prior work treats one metric at a time and/or approximates.
-  \item DaCaF closes this: a generic recipe + reference implementation that, given
-        any probabilistic model $P(y\mid x)$, returns the exact BOP for a chosen metric.
-  \item Significance: lets practitioners optimise the metric they actually care about,
-        and lets researchers study metric-mismatch effects without approximation noise.
-  \item Tie to the published paper (Information Fusion 2026): proves correctness for
-        two metric families; this software is the artifact behind those results.
+  \item Gap: no reusable, exact, multi-metric BOP tool for probabilistic MLC; prior
+        work treats one metric at a time and/or approximates.
+  \item DaCaF closes this: a generic recipe + reference implementation that, given any
+        probabilistic model $P(y\mid x)$, returns the exact BOP for a chosen metric.
+  \item Significance: optimise the metric you actually care about; study metric-mismatch
+        effects without approximation noise.
+  \item Tie to the published paper (Information Fusion 2026, \citealp{dacaf2026}): proves
+        correctness for two metric families; this software is the artifact behind it.
 \end{itemize}
 
-\section{Software description}
+\section{Software description}\label{sec:description}
 
 \subsection{Software architecture}
 %% TODO prose. Talking points:
@@ -112,10 +142,10 @@ C9 Support email for questions & hxtruong@jaist.ac.jp \\
   \item Two algorithmic building blocks behind every inference rule:
   \begin{itemize}
     \item Divide-and-conquer: partition the $2^L$ predictions into $L{+}1$ groups by
-          number of relevant labels; best-in-group found by sorting labels by a score;
+          number of relevant labels; best-in-group by sorting labels by a score;
           global best = best across groups.
-    \item Fusion: the scores need marginal/pairwise probabilities, estimated by fusing
-          the chain's dependent binary classifiers (ancestral sampling).
+    \item Fusion: scores need marginal/pairwise probabilities, estimated by fusing the
+          chain's dependent binary classifiers (ancestral sampling).
   \end{itemize}
   \item Supporting modules: \texttt{evaluation\_metrics.py}, \texttt{metrics\_registry.py},
         \texttt{pipeline.py} (train / k-fold / run\_single), \texttt{evaluate.py} (CLI),
@@ -130,19 +160,19 @@ C9 Support email for questions & hxtruong@jaist.ac.jp \\
   \item Seven per-metric Bayes-optimal rules: \texttt{predict\_fmeasure},
         \texttt{predict\_hamming}, \texttt{predict\_markedness}, \texttt{predict\_precision},
         \texttt{predict\_npv}, \texttt{predict\_recall}, \texttt{predict\_subset}.
-  \item Each \texttt{predict\_*} returns the prediction maximising the expected value of
-        its target metric; conventions documented in CONVENTIONS.md.
-  \item Covers two whole metric families at once, not one metric at a time; flags when a
-        metric's optimum is \emph{trivial} (a useful metric-choice diagnostic).
+  \item Each returns the prediction maximising the expected value of its target metric;
+        conventions in CONVENTIONS.md.
+  \item Covers two whole metric families at once; flags when a metric's optimum is
+        \emph{trivial} (a metric-choice diagnostic).
   \item Batched predictor: one \texttt{predict\_proba} per chain level instead of
         $N\cdot L\cdot 2^L$; verified numerically equal to brute-force enumeration.
   \item Reproducible evaluation: CLI + scripts (\texttt{reproduce\_tabular.sh}, Slurm)
         over MULAN tabular datasets and an NIH ChestX-ray14 image dataset.
   \item Correctness harness: every rule checked against brute-force expected-metric
-        enumeration on small cases (\texttt{tests/}); CI on Python 3.10/3.12.
+        enumeration on small cases; CI on Python 3.10/3.12.
 \end{itemize}
 
-\section{Illustrative examples}
+\section{Illustrative examples}\label{sec:examples}
 %% TODO prose. Talking points:
 \begin{itemize}
   \item Minimal library usage (fit once, query any metric's BOP):
@@ -161,36 +191,59 @@ y_ham = pcc.predict_hamming(X_test)           # BOP for Hamming
 print(EM.f_beta(Y_test, y_f1), EM.hamming(Y_test, y_ham))
 \end{lstlisting}
 \begin{itemize}
-  \item Headline experiment (mismatch hurts): TODO insert clean CHD-49 cross-tab table
-        (rows = metric optimised for, cols = metric evaluated; bold diagonal = column max).
+  \item Headline experiment (mismatch hurts): Table~\ref{tab:chd49}, rows = metric
+        optimised for, columns = metric evaluated; bold diagonal = column maximum.
   \item One command reproduces it: \texttt{make reproduce} (CHD-49, fastest dataset).
-  \item Note the chest-xray path scales the same API to real DenseNet/ResNet features.
+  \item The chest-xray path scales the same API to real DenseNet/ResNet features.
 \end{itemize}
 
-%% Optional: drop the regenerated CHD-49 cross-tab here as a \begin{table}.
+%% Regenerated from the shipped code (PCC + Logistic Regression, mean over 5 seeds
+%% x 10-fold CV). Source: software_impacts/chd49_crosstab_regenerated.csv
+\begin{table*}[t]
+\centering
+\caption{CHD-49, PCC + logistic regression, mean over 5 seeds $\times$ 10-fold CV
+(\%, higher is better). Read each column: the bold diagonal entry (optimise the
+metric you evaluate) is the maximum of its column. NPV and Recall collapse to the
+predict-all trivial optimum.}
+\label{tab:chd49}
+\footnotesize
+\begin{tabular}{@{}lccccccc@{}}
+\toprule
+Target $\downarrow$ / Eval $\rightarrow$ & $F_1$ & Hamming & Markedness & NPV & Precision & Recall & Subset \\
+\midrule
+Predict $F_1$       & \textbf{67.07} & 69.29 & 71.91 & 81.09 & 62.74 & 79.22 & 15.06 \\
+Predict Hamming     & 63.92 & \textbf{70.78} & 71.27 & 75.74 & 66.62 & 66.93 & 18.05 \\
+Predict Markedness  & 34.20 & 63.70 & \textbf{76.96} & 71.10 & 33.37 & 40.45 & 8.39 \\
+Predict NPV         & 58.35 & 43.01 & 71.50 & \textbf{100.00} & 43.01 & 99.46 & 0.00 \\
+Predict Precision   & 40.54 & 64.83 & 68.31 & 63.10 & \textbf{73.52} & 29.10 & 3.10 \\
+Predict Recall      & 58.35 & 43.01 & 71.50 & 100.00 & 43.01 & \textbf{99.46} & 0.00 \\
+Predict Subset      & 63.96 & 69.37 & 70.35 & 76.47 & 64.15 & 69.79 & \textbf{18.92} \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
-\section{Impact}
-%% TODO prose (~300-400 words; this section is weighted most by reviewers). Talking points:
+\section{Impact}\label{sec:impact}
+%% TODO prose (~300-400 words; the Impact Overview is weighted most by reviewers).
 \begin{itemize}
-  \item Enables a research question that was hard before: how much does optimising the
-        wrong metric cost, measured exactly (no approximation blurring the picture)?
-  \item Model-agnostic: works with \emph{any} probabilistic MLC model, not a specific
-        classifier; drop-in BOP layer on top of existing $P(y\mid x)$ estimators.
-  \item Breadth: a single tool covers two whole metric families, so adding a metric in
-        a family is cheap; the trivial-optimum diagnostic guides metric selection.
+  \item Enables an exact research question: how much does optimising the wrong metric
+        cost, measured without approximation blurring the picture?
+  \item Model-agnostic: works with \emph{any} probabilistic MLC model; a drop-in BOP
+        layer on top of existing $P(y\mid x)$ estimators.
+  \item Breadth: one tool covers two whole metric families; the trivial-optimum
+        diagnostic guides metric selection.
   \item Reuse beyond the paper: clinical/image MLC (NIH ChestX-ray14 demo), benchmarking,
         and teaching Bayes-optimal decision-making in MLC.
-  \item Trust: closed-form rules verified against brute-force enumeration, so downstream
-        users can rely on correctness; CI keeps it reproducible.
-  \item Lowers the barrier: pip-installable, Dockerised, scripted reproduction, MULAN
-        datasets bundled; a newcomer reproduces a paper table in minutes.
-  \item Extensibility: clear registry pattern to add metrics/datasets; vendored base
-        keeps installs self-contained.
+  \item Trust: closed-form rules verified against brute-force enumeration; CI keeps it
+        reproducible.
+  \item Low barrier: pip-installable, Dockerised, scripted reproduction, MULAN datasets
+        bundled; a newcomer reproduces a paper table in minutes.
+  \item Extensibility: registry pattern to add metrics/datasets; vendored base keeps
+        installs self-contained.
   \item Who benefits: MLC researchers, applied ML practitioners choosing a deployment
         metric, and educators.
 \end{itemize}
 
-\section{Conclusions}
+\section{Conclusions}\label{sec:conclusions}
 %% TODO prose (~2-3 sentences). Talking points:
 \begin{itemize}
   \item DaCaF turns a proved theoretical recipe into a reusable, verified, exact
@@ -198,18 +251,34 @@ print(EM.f_beta(Y_test, y_f1), EM.hamming(Y_test, y_ham))
   \item Future: more base models, more metric families, optional approximate fast paths.
 \end{itemize}
 
-\section*{Acknowledgements}
-%% TODO funding / grants.
+%% ----- Required declarations (Guide for Authors) -----
 
 \section*{Declaration of competing interest}
-The authors declare no competing interests. %% TODO confirm/edit.
+The authors declare no competing interests. %% TODO confirm/edit; complete the
+%% declarations tool in Editorial Manager.
 
-%% References: keep short. Either \bibliography{refs} or a manual list.
+\section*{Declaration of generative AI and AI-assisted technologies in the manuscript preparation process}
+%% TODO: required if AI tools were used. Template wording from the Guide:
+%% During the preparation of this work the author(s) used [TOOL] in order to [REASON].
+%% After using this tool/service, the author(s) reviewed and edited the content as
+%% needed and take(s) full responsibility for the content of the published article.
+TODO statement (or remove if not applicable).
+
+\section*{Acknowledgements}
+%% TODO funding sources (use the Guide's standard wording), or state none.
+
+%% Data/software availability: code at the GitHub + Zenodo links in Table 1;
+%% datasets bundled (MULAN ARFFs) or fetched via script (NIH ChestX-ray14).
+
+%% References -- keep short. Cite the software itself AND the associated article.
 \begin{thebibliography}{9}
 \bibitem{dacaf2026} V.-L. Nguyen, X.-T. Hoang, A. Hoang, V.-N. Huynh,
   Probabilistic multi-label classification via a divide-and-conquer and fusion
   approach, Information Fusion (2026), Article 104517.
   \url{https://doi.org/10.1016/j.inffus.2026.104517}.
+\bibitem{software} X.-T. Hoang, V.-L. Nguyen, A. Hoang, V.-N. Huynh,
+  DaCaF: probabilistic multi-label classification (v1.0.0) [Computer software],
+  Zenodo, TODO DOI. \url{https://github.com/hxtruong6/inference_probabilistic_mlc}.
 \bibitem{pcc2010} K. Dembczy\'nski, W. Cheng, E. H\"ullermeier,
   Bayes optimal multilabel classification via probabilistic classifier chains, ICML 2010.
 \bibitem{fmax2011} K. Dembczy\'nski, W. Waegeman, W. Cheng, E. H\"ullermeier,

@@ -1,0 +1,8 @@
+Dataset,Base Model,Predict Func,Fmeasure Score,Hamming Accuracy,Markedness,Negative Predictive Value,Precision Score,Recall Score,Subset Accuracy
+CHD_49,PCC_LogisticRegression,Predict Fmeasure,67.07 ± 0.26,69.29 ± 0.35,71.91 ± 0.31,81.09 ± 0.33,62.74 ± 0.42,79.22 ± 0.41,15.06 ± 0.45
+CHD_49,PCC_LogisticRegression,Predict Hamming,63.92 ± 0.71,70.78 ± 0.52,71.27 ± 0.45,75.74 ± 0.45,66.62 ± 0.51,66.93 ± 0.89,18.05 ± 0.45
+CHD_49,PCC_LogisticRegression,Predict Markedness,34.20 ± 1.05,63.70 ± 0.61,76.96 ± 0.37,71.10 ± 0.66,33.37 ± 1.04,40.45 ± 1.11,8.39 ± 0.21
+CHD_49,PCC_LogisticRegression,Predict NPV,58.35 ± 0.01,43.01 ± 0.01,71.50 ± 0.00,100.00 ± 0.00,43.01 ± 0.01,99.46 ± 0.00,0.00 ± 0.00
+CHD_49,PCC_LogisticRegression,Predict Precision,40.54 ± 0.51,64.83 ± 0.34,68.31 ± 0.62,63.10 ± 0.21,73.52 ± 1.02,29.10 ± 0.33,3.10 ± 0.24
+CHD_49,PCC_LogisticRegression,Predict Recall,58.35 ± 0.01,43.01 ± 0.01,71.50 ± 0.00,100.00 ± 0.00,43.01 ± 0.01,99.46 ± 0.00,0.00 ± 0.00
+CHD_49,PCC_LogisticRegression,Predict Subset,63.96 ± 0.63,69.37 ± 0.52,70.35 ± 0.49,76.47 ± 0.58,64.15 ± 0.33,69.79 ± 0.80,18.92 ± 1.12
