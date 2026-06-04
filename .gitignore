@@ -19,3 +19,11 @@ paper/
 build/
 dist/
 .venv/
+# Software Impacts LaTeX build artifacts
+software_impacts/*.aux
+software_impacts/*.log
+software_impacts/*.out
+software_impacts/*.pdf
+software_impacts/*.spl
+software_impacts/*.bbl
+software_impacts/*.blg

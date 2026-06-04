@@ -1,0 +1,220 @@
+%% DaCaF -- Software Impacts metapaper (SKELETON)
+%% Companion to: Nguyen, Hoang, Hoang, Huynh, "Probabilistic multi-label
+%% classification via a divide-and-conquer and fusion approach",
+%% Information Fusion (2026), DOI 10.1016/j.inffus.2026.104517
+%%
+%% NOTE: bullet points are placeholders / talking points only.
+%% Replace each bullet with your own prose. Target: <= 3 pages, ~1300-1500 words.
+%% Before submission, swap this preamble for the OFFICIAL Software Impacts
+%% template (elsarticle) downloaded from the journal Guide for Authors.
+
+\documentclass[3p,twocolumn]{elsarticle}
+
+\usepackage{lipsum} % remove before submission
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{url}
+
+\journal{Software Impacts}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{DaCaF: Bayes-optimal per-metric inference for probabilistic multi-label classification}
+
+\author[a]{Vu-Linh Nguyen}
+\author[b]{Xuan-Truong Hoang}
+\author[c]{Anh Hoang}
+\author[d]{Van-Nam Huynh}
+\address[a]{TODO affiliation}
+\address[b]{TODO affiliation}
+\address[c]{TODO affiliation}
+\address[d]{TODO affiliation}
+
+\begin{abstract}
+%% TODO prose (~80-100 words). Talking points:
+%% - In multi-label classification, different metrics want different predictions.
+%% - DaCaF: given P(y|x), returns the Bayes-optimal prediction for a chosen metric.
+%% - Divide-and-conquer (sort within label-count groups) + fusion (estimate the
+%%   needed probabilities from the chain's binary classifiers).
+%% - Exact computation; covers two whole metric families; ships 7 predict_* rules,
+%%   each verified against brute-force enumeration.
+\end{abstract}
+
+\begin{keyword}
+multi-label classification \sep probabilistic classifier chains \sep
+Bayes-optimal inference \sep evaluation metrics
+\end{keyword}
+
+\end{frontmatter}
+
+%% ======================================================================
+%% REQUIRED METADATA -- Current code version
+%% ======================================================================
+\begin{table}[h]
+\caption{Code metadata}
+\label{tab:codeMetadata}
+\small
+\begin{tabular}{@{}p{0.32\linewidth}p{0.58\linewidth}@{}}
+\toprule
+\textbf{Nr.} \textbf{Code metadata description} & \\
+\midrule
+C1 Current code version & v1.0.0 \\
+C2 Permanent link to code/repository &
+  \url{https://github.com/hxtruong6/inference_probabilistic_mlc} \newline
+  Zenodo: TODO software DOI \\
+C3 Permanent link to Reproducible Capsule & TODO Code Ocean (optional) \\
+C4 Legal Code License & MIT \\
+C5 Code versioning system used & git \\
+C6 Software code languages, tools, services & Python ($\geq$3.10); NumPy, SciPy,
+  scikit-learn, pandas, joblib; optional PyTorch / torchvision / torchxrayvision
+  ([image] extra) \\
+C7 Compilation requirements, operating environments, dependencies &
+  \texttt{pip install -e .} (core) or \texttt{".[image]"}; Linux/macOS; Docker
+  image provided \\
+C8 Link to developer documentation / manual & README.md, CONVENTIONS.md, docs/ \\
+C9 Support email for questions & hxtruong@jaist.ac.jp \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ======================================================================
+\section{Motivation and significance}
+%% TODO prose (~250 words). Talking points:
+\begin{itemize}
+  \item Multi-label classification: each instance carries any subset of $L$ labels.
+  \item Key fact: different evaluation metrics are optimised by different predictions;
+        a model great for $F_1$ can be poor for subset accuracy.
+  \item Right thing to do per instance is the Bayes-optimal prediction (BOP):
+        the $\hat{y}$ maximising the \emph{expected} score of the target metric.
+  \item Computing BOP naively is intractable ($2^L$ candidate predictions).
+  \item Gap: no reusable, exact, multi-metric BOP tool for probabilistic MLC;
+        prior work treats one metric at a time and/or approximates.
+  \item DaCaF closes this: a generic recipe + reference implementation that, given
+        any probabilistic model $P(y\mid x)$, returns the exact BOP for a chosen metric.
+  \item Significance: lets practitioners optimise the metric they actually care about,
+        and lets researchers study metric-mismatch effects without approximation noise.
+  \item Tie to the published paper (Information Fusion 2026): proves correctness for
+        two metric families; this software is the artifact behind those results.
+\end{itemize}
+
+\section{Software description}
+
+\subsection{Software architecture}
+%% TODO prose. Talking points:
+\begin{itemize}
+  \item Installable Python package \texttt{dacaf\_mlc} (pip / Docker; console script
+        \texttt{dacaf-mlc}).
+  \item Core: \texttt{ProbabilisticClassifierChainCustom} (PCC) wraps any scikit-learn
+        base estimator; estimates $P(y\mid x)$ via a classifier chain.
+  \item Two algorithmic building blocks behind every inference rule:
+  \begin{itemize}
+    \item Divide-and-conquer: partition the $2^L$ predictions into $L{+}1$ groups by
+          number of relevant labels; best-in-group found by sorting labels by a score;
+          global best = best across groups.
+    \item Fusion: the scores need marginal/pairwise probabilities, estimated by fusing
+          the chain's dependent binary classifiers (ancestral sampling).
+  \end{itemize}
+  \item Supporting modules: \texttt{evaluation\_metrics.py}, \texttt{metrics\_registry.py},
+        \texttt{pipeline.py} (train / k-fold / run\_single), \texttt{evaluate.py} (CLI),
+        \texttt{arff\_dataset.py} (MULAN ARFF + 10-fold CV), \texttt{datasets.py},
+        \texttt{chest\_xray\_dataset/} (NIH feature extractor, [image] extra).
+  \item Vendored \texttt{skmultiflow} ClassifierChain base for a self-contained install.
+\end{itemize}
+
+\subsection{Software functionalities}
+%% TODO prose. Talking points:
+\begin{itemize}
+  \item Seven per-metric Bayes-optimal rules: \texttt{predict\_fmeasure},
+        \texttt{predict\_hamming}, \texttt{predict\_markedness}, \texttt{predict\_precision},
+        \texttt{predict\_npv}, \texttt{predict\_recall}, \texttt{predict\_subset}.
+  \item Each \texttt{predict\_*} returns the prediction maximising the expected value of
+        its target metric; conventions documented in CONVENTIONS.md.
+  \item Covers two whole metric families at once, not one metric at a time; flags when a
+        metric's optimum is \emph{trivial} (a useful metric-choice diagnostic).
+  \item Batched predictor: one \texttt{predict\_proba} per chain level instead of
+        $N\cdot L\cdot 2^L$; verified numerically equal to brute-force enumeration.
+  \item Reproducible evaluation: CLI + scripts (\texttt{reproduce\_tabular.sh}, Slurm)
+        over MULAN tabular datasets and an NIH ChestX-ray14 image dataset.
+  \item Correctness harness: every rule checked against brute-force expected-metric
+        enumeration on small cases (\texttt{tests/}); CI on Python 3.10/3.12.
+\end{itemize}
+
+\section{Illustrative examples}
+%% TODO prose. Talking points:
+\begin{itemize}
+  \item Minimal library usage (fit once, query any metric's BOP):
+\end{itemize}
+\begin{lstlisting}[language=Python,basicstyle=\scriptsize\ttfamily]
+from sklearn.linear_model import LogisticRegression
+from dacaf_mlc.probability_classifier_chains \
+    import ProbabilisticClassifierChainCustom
+from dacaf_mlc.evaluation_metrics import EvaluationMetrics as EM
+
+pcc = ProbabilisticClassifierChainCustom(
+    LogisticRegression(max_iter=10_000))
+pcc.fit(X_train, Y_train)            # Y: (n, L) binary
+y_f1  = pcc.predict_fmeasure(X_test, beta=1)  # BOP for F1
+y_ham = pcc.predict_hamming(X_test)           # BOP for Hamming
+print(EM.f_beta(Y_test, y_f1), EM.hamming(Y_test, y_ham))
+\end{lstlisting}
+\begin{itemize}
+  \item Headline experiment (mismatch hurts): TODO insert clean CHD-49 cross-tab table
+        (rows = metric optimised for, cols = metric evaluated; bold diagonal = column max).
+  \item One command reproduces it: \texttt{make reproduce} (CHD-49, fastest dataset).
+  \item Note the chest-xray path scales the same API to real DenseNet/ResNet features.
+\end{itemize}
+
+%% Optional: drop the regenerated CHD-49 cross-tab here as a \begin{table}.
+
+\section{Impact}
+%% TODO prose (~300-400 words; this section is weighted most by reviewers). Talking points:
+\begin{itemize}
+  \item Enables a research question that was hard before: how much does optimising the
+        wrong metric cost, measured exactly (no approximation blurring the picture)?
+  \item Model-agnostic: works with \emph{any} probabilistic MLC model, not a specific
+        classifier; drop-in BOP layer on top of existing $P(y\mid x)$ estimators.
+  \item Breadth: a single tool covers two whole metric families, so adding a metric in
+        a family is cheap; the trivial-optimum diagnostic guides metric selection.
+  \item Reuse beyond the paper: clinical/image MLC (NIH ChestX-ray14 demo), benchmarking,
+        and teaching Bayes-optimal decision-making in MLC.
+  \item Trust: closed-form rules verified against brute-force enumeration, so downstream
+        users can rely on correctness; CI keeps it reproducible.
+  \item Lowers the barrier: pip-installable, Dockerised, scripted reproduction, MULAN
+        datasets bundled; a newcomer reproduces a paper table in minutes.
+  \item Extensibility: clear registry pattern to add metrics/datasets; vendored base
+        keeps installs self-contained.
+  \item Who benefits: MLC researchers, applied ML practitioners choosing a deployment
+        metric, and educators.
+\end{itemize}
+
+\section{Conclusions}
+%% TODO prose (~2-3 sentences). Talking points:
+\begin{itemize}
+  \item DaCaF turns a proved theoretical recipe into a reusable, verified, exact
+        per-metric inference tool for probabilistic MLC.
+  \item Future: more base models, more metric families, optional approximate fast paths.
+\end{itemize}
+
+\section*{Acknowledgements}
+%% TODO funding / grants.
+
+\section*{Declaration of competing interest}
+The authors declare no competing interests. %% TODO confirm/edit.
+
+%% References: keep short. Either \bibliography{refs} or a manual list.
+\begin{thebibliography}{9}
+\bibitem{dacaf2026} V.-L. Nguyen, X.-T. Hoang, A. Hoang, V.-N. Huynh,
+  Probabilistic multi-label classification via a divide-and-conquer and fusion
+  approach, Information Fusion (2026), Article 104517.
+  \url{https://doi.org/10.1016/j.inffus.2026.104517}.
+\bibitem{pcc2010} K. Dembczy\'nski, W. Cheng, E. H\"ullermeier,
+  Bayes optimal multilabel classification via probabilistic classifier chains, ICML 2010.
+\bibitem{fmax2011} K. Dembczy\'nski, W. Waegeman, W. Cheng, E. H\"ullermeier,
+  An exact algorithm for F-measure maximization, NeurIPS 2011.
+%% TODO add Waegeman 2014 (JMLR), Powers 2011, Tsoumakas 2010 (MULAN) as needed.
+\end{thebibliography}
+
+\end{document}
