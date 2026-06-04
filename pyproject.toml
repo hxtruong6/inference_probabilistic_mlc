@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dacaf-mlc"
+version = "1.0.0"
+description = "Bayes-optimal inference for probabilistic multi-label classification (DaCaF)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Vu-Linh Nguyen" },
+    { name = "Xuan-Truong Hoang", email = "hxtruong6@gmail.com" },
+    { name = "Anh Hoang" },
+    { name = "Van-Nam Huynh" },
+]
+keywords = ["multi-label classification", "probabilistic classifier chains", "bayes-optimal inference"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.26,<2",
+    "scipy>=1.12",
+    "scikit-learn>=1.2",
+    "pandas>=2.0",
+    "joblib>=1.3",
+]
+
+[project.optional-dependencies]
+# Image experiments (ChestX-ray feature extraction) — heavy, opt-in.
+image = [
+    "torch>=2.2",
+    "torchvision>=0.17",
+    "torchxrayvision>=1.2",
+    "scikit-image>=0.22",
+    "Pillow>=10.2",
+]
+dev = [
+    "pytest>=7",
+    "ruff>=0.4",
+]
+
+[project.urls]
+Paper = "https://doi.org/10.1016/j.inffus.2026.104517"
+Repository = "https://github.com/hxtruong6/inference_probabilistic_mlc"
+
+[project.scripts]
+dacaf-mlc = "dacaf_mlc.evaluate:main"
+
+[tool.setuptools.packages.find]
+include = ["dacaf_mlc*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+# Vendored third-party code and standalone data-prep scripts are kept as-is.
+extend-exclude = [
+    "dacaf_mlc/skmultiflow",
+    "dacaf_mlc/chest_xray_dataset/chest_xray_dataset.py",
+    "dacaf_mlc/chest_xray_dataset/create_test_set.py",
+    "dacaf_mlc/chest_xray_dataset/fix-csv.py",
+]
+
+[tool.ruff.lint]
+# `l` matches the paper's notation for the prediction size; allow it.
+ignore = ["E741"]

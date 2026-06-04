@@ -1,16 +1,55 @@
-Dataset,Base Model,Predict Func,F-beta Score,Hamming Loss,Markedness,Negative Predictive Value,Precision Score,Recall Score,Subset Accuracy,All
-Water-quality,AdaBoostClassifier,Predict Fmeasure,0.52398,0.40499,0.67005,0.96383,0.37626,0.97792,0.0,0.5595757142857143
-Water-quality,AdaBoostClassifier,Predict Hamming Loss,0.53439,0.69946,0.6715,0.74523,0.594,0.53923,0.01226,0.5422957142857142
-Water-quality,AdaBoostClassifier,Predict Mar,0.042,0.63632,0.81816,0.6653,0.03329,0.06227,0.00566,0.3232857142857143
-Water-quality,AdaBoostClassifier,Predict Neg,0.51248,0.36233,0.68116,1.0,0.36233,1.0,0.0,0.559757142857143
-Water-quality,AdaBoostClassifier,Predict Pre,0.24766,0.66705,0.68487,0.66408,0.70566,0.15842,0.01037,0.4483014285714286
-Water-quality,AdaBoostClassifier,Predict Recall,0.51248,0.36233,0.68116,1.0,0.36233,1.0,0.0,0.559757142857143
-Water-quality,AdaBoostClassifier,Predict Subset,0.47919,0.6936,0.67765,0.72881,0.58402,0.4656,0.01321,0.5202971428571429
-Water-quality,LogisticRegression,Predict Fmeasure,0.51192,0.69508,0.67245,0.73134,0.61357,0.48489,0.00755,0.5309714285714285
-Water-quality,LogisticRegression,Predict Hamming Loss,0.47475,0.70613,0.68747,0.72545,0.63629,0.42565,0.01698,0.5246742857142858
-Water-quality,LogisticRegression,Predict Mar,0.03091,0.63511,0.81755,0.65667,0.02466,0.04623,0.00566,0.3166842857142857
-Water-quality,LogisticRegression,Predict Neg,0.51248,0.36233,0.68116,1.0,0.36233,1.0,0.0,0.559757142857143
-Water-quality,LogisticRegression,Predict Pre,0.24526,0.66678,0.68385,0.66393,0.70377,0.15671,0.01132,0.44737428571428567
-Water-quality,LogisticRegression,Predict Recall,0.51248,0.36233,0.68116,1.0,0.36233,1.0,0.0,0.559757142857143
-Water-quality,LogisticRegression,Predict Subset,0.35399,0.68915,0.73469,0.7047,0.50242,0.32369,0.01604,0.4749542857142857
-All,,,0.39242642857142856,0.5673564285714285,0.7030628571428571,0.8035242857142857,0.44451857142857143,0.5457578571428571,0.007075,0.4948173469387755
+Dataset,Base Model,Predict Func,Average Precision,Coverage Score,Fmeasure Score,Hamming Accuracy,Informedness,Macro F1,Markedness,Micro F1,Negative Predictive Value,One-Error Score,Precision Score,Ranking Loss Score,Recall Score,Subset Accuracy
+Water-quality,BR_AdaBoostClassifier,Marginal Scores,68.84 ± 0.33,32.30 ± 0.33,,,,,,,,71.02 ± 0.80,,74.19 ± 0.34,,
+Water-quality,BR_AdaBoostClassifier,Predict Fmeasure,,,51.69 ± 0.02,37.60 ± 0.03,50.93 ± 0.04,52.55 ± 0.03,26.72 ± 0.28,53.68 ± 0.03,16.76 ± 0.55,,36.67 ± 0.01,,99.26 ± 0.04,0.00 ± 0.00
+Water-quality,BR_AdaBoostClassifier,Predict Hamming,,,52.84 ± 0.51,70.52 ± 0.29,62.94 ± 0.41,49.84 ± 0.72,67.42 ± 0.51,56.13 ± 0.46,74.29 ± 0.31,,60.54 ± 0.71,,52.11 ± 0.61,1.09 ± 0.05
+Water-quality,BR_AdaBoostClassifier,Predict Informedness,,,55.71 ± 0.26,57.99 ± 0.14,59.04 ± 0.25,54.29 ± 0.28,64.63 ± 0.29,57.39 ± 0.23,81.79 ± 0.41,,47.47 ± 0.17,,79.86 ± 0.53,0.08 ± 0.10
+Water-quality,BR_AdaBoostClassifier,Predict Markedness,,,46.80 ± 0.34,49.33 ± 0.20,53.34 ± 0.23,50.00 ± 0.35,66.02 ± 0.45,51.79 ± 0.30,84.50 ± 0.94,,47.54 ± 0.47,,76.62 ± 1.09,0.19 ± 0.13
+Water-quality,BR_AdaBoostClassifier,Predict NPV,,,53.05 ± 0.06,42.05 ± 0.06,53.38 ± 0.09,53.76 ± 0.07,64.50 ± 0.24,55.09 ± 0.05,90.70 ± 0.45,,38.30 ± 0.03,,97.89 ± 0.14,0.00 ± 0.00
+Water-quality,BR_AdaBoostClassifier,Predict Precision,,,24.81 ± 0.22,66.77 ± 0.11,53.50 ± 0.13,16.60 ± 0.30,68.73 ± 0.43,23.41 ± 0.26,66.44 ± 0.06,,71.02 ± 0.80,,15.84 ± 0.12,1.04 ± 0.18
+Water-quality,BR_AdaBoostClassifier,Predict Recall,,,51.25 ± 0.00,36.23 ± 0.00,50.00 ± 0.00,52.09 ± 0.02,18.12 ± 0.00,53.18 ± 0.01,0.00 ± 0.00,,36.23 ± 0.00,,99.43 ± 0.00,0.00 ± 0.00
+Water-quality,BR_AdaBoostClassifier,Predict Subset,,,52.84 ± 0.51,70.52 ± 0.29,62.94 ± 0.41,49.84 ± 0.72,67.42 ± 0.51,56.13 ± 0.46,74.29 ± 0.31,,60.54 ± 0.71,,52.11 ± 0.61,1.09 ± 0.05
+Water-quality,BR_LogisticRegression,Marginal Scores,68.71 ± 0.08,32.43 ± 0.18,,,,,,,,70.17 ± 0.18,,74.46 ± 0.11,,
+Water-quality,BR_LogisticRegression,Predict Fmeasure,,,58.21 ± 0.04,61.51 ± 0.08,61.10 ± 0.10,56.91 ± 0.17,65.42 ± 0.06,60.57 ± 0.06,82.56 ± 0.08,,48.29 ± 0.06,,81.97 ± 0.08,0.15 ± 0.05
+Water-quality,BR_LogisticRegression,Predict Hamming,,,47.63 ± 0.20,70.56 ± 0.09,60.13 ± 0.11,41.29 ± 0.20,68.02 ± 0.17,51.21 ± 0.16,72.57 ± 0.08,,63.47 ± 0.25,,42.92 ± 0.26,1.38 ± 0.25
+Water-quality,BR_LogisticRegression,Predict Informedness,,,57.54 ± 0.12,66.61 ± 0.12,60.89 ± 0.12,52.71 ± 0.16,66.02 ± 0.11,59.54 ± 0.13,78.45 ± 0.10,,53.58 ± 0.17,,69.73 ± 0.21,0.26 ± 0.04
+Water-quality,BR_LogisticRegression,Predict Markedness,,,36.45 ± 0.42,66.45 ± 0.15,55.70 ± 0.19,33.67 ± 0.32,69.11 ± 0.24,41.33 ± 0.34,71.40 ± 0.20,,66.82 ± 0.48,,33.89 ± 0.49,1.21 ± 0.08
+Water-quality,BR_LogisticRegression,Predict NPV,,,52.95 ± 0.05,41.92 ± 0.07,52.93 ± 0.09,53.61 ± 0.07,64.01 ± 0.26,54.99 ± 0.06,89.79 ± 0.49,,38.24 ± 0.04,,97.67 ± 0.09,0.00 ± 0.00
+Water-quality,BR_LogisticRegression,Predict Precision,,,24.41 ± 0.03,66.65 ± 0.03,52.91 ± 0.04,14.46 ± 0.15,68.27 ± 0.10,23.12 ± 0.07,66.38 ± 0.01,,70.17 ± 0.18,,15.57 ± 0.03,1.08 ± 0.05
+Water-quality,BR_LogisticRegression,Predict Recall,,,51.25 ± 0.00,36.23 ± 0.00,50.00 ± 0.00,52.09 ± 0.02,18.12 ± 0.00,53.18 ± 0.01,0.00 ± 0.00,,36.23 ± 0.00,,99.43 ± 0.00,0.00 ± 0.00
+Water-quality,BR_LogisticRegression,Predict Subset,,,47.63 ± 0.20,70.56 ± 0.09,60.13 ± 0.11,41.29 ± 0.20,68.02 ± 0.17,51.21 ± 0.16,72.57 ± 0.08,,63.47 ± 0.25,,42.92 ± 0.26,1.38 ± 0.25
+Water-quality,BR_RandomForestClassifier,Marginal Scores,73.11 ± 0.19,35.94 ± 0.31,,,,,,,,75.83 ± 0.70,,78.24 ± 0.11,,
+Water-quality,BR_RandomForestClassifier,Predict Fmeasure,,,61.00 ± 0.14,65.56 ± 0.16,65.79 ± 0.18,59.93 ± 0.20,67.90 ± 0.13,63.14 ± 0.15,83.62 ± 0.23,,52.17 ± 0.07,,81.90 ± 0.21,0.60 ± 0.18
+Water-quality,BR_RandomForestClassifier,Predict Hamming,,,55.73 ± 0.33,73.41 ± 0.23,64.86 ± 0.30,51.25 ± 0.55,70.66 ± 0.26,58.91 ± 0.34,75.47 ± 0.19,,65.86 ± 0.38,,53.00 ± 0.35,2.40 ± 0.17
+Water-quality,BR_RandomForestClassifier,Predict Informedness,,,60.57 ± 0.22,69.99 ± 0.14,65.47 ± 0.17,57.16 ± 0.32,68.55 ± 0.17,62.53 ± 0.19,79.81 ± 0.15,,57.29 ± 0.23,,71.26 ± 0.38,0.58 ± 0.23
+Water-quality,BR_RandomForestClassifier,Predict Markedness,,,43.70 ± 0.05,68.35 ± 0.16,59.64 ± 0.18,42.90 ± 0.34,72.52 ± 0.24,49.15 ± 0.27,74.60 ± 0.17,,70.44 ± 0.58,,42.53 ± 0.26,1.92 ± 0.23
+Water-quality,BR_RandomForestClassifier,Predict NPV,,,53.18 ± 0.06,42.22 ± 0.08,53.49 ± 0.12,53.84 ± 0.06,65.15 ± 0.30,55.22 ± 0.06,91.91 ± 0.56,,38.40 ± 0.04,,98.09 ± 0.09,0.00 ± 0.00
+Water-quality,BR_RandomForestClassifier,Predict Precision,,,26.84 ± 0.28,67.46 ± 0.10,53.99 ± 0.11,17.06 ± 0.21,71.32 ± 0.38,24.99 ± 0.24,66.81 ± 0.05,,75.83 ± 0.70,,17.23 ± 0.23,1.28 ± 0.18
+Water-quality,BR_RandomForestClassifier,Predict Recall,,,51.25 ± 0.00,36.23 ± 0.00,50.00 ± 0.00,52.09 ± 0.02,18.12 ± 0.00,53.18 ± 0.01,0.00 ± 0.00,,36.23 ± 0.00,,99.43 ± 0.00,0.00 ± 0.00
+Water-quality,BR_RandomForestClassifier,Predict Subset,,,55.47 ± 0.33,73.39 ± 0.20,64.73 ± 0.27,50.88 ± 0.48,70.66 ± 0.26,58.65 ± 0.30,75.33 ± 0.17,,65.99 ± 0.39,,52.50 ± 0.35,2.38 ± 0.20
+Water-quality,PCC_AdaBoostClassifier,Marginal Scores,68.78 ± 0.27,32.44 ± 0.34,,,,,,,,71.13 ± 0.38,,74.19 ± 0.36,,
+Water-quality,PCC_AdaBoostClassifier,Predict Fmeasure,,,51.71 ± 0.02,37.61 ± 0.06,50.94 ± 0.06,52.56 ± 0.04,26.72 ± 0.33,53.69 ± 0.03,16.75 ± 0.65,,36.68 ± 0.02,,99.31 ± 0.02,0.00 ± 0.00
+Water-quality,PCC_AdaBoostClassifier,Predict Hamming,,,53.94 ± 0.21,70.17 ± 0.07,62.82 ± 0.12,50.47 ± 0.29,67.17 ± 0.15,56.89 ± 0.15,74.81 ± 0.14,,59.54 ± 0.18,,54.60 ± 0.34,1.04 ± 0.28
+Water-quality,PCC_AdaBoostClassifier,Predict Informedness,,,55.78 ± 0.23,58.19 ± 0.15,58.94 ± 0.18,54.23 ± 0.16,64.85 ± 0.18,57.43 ± 0.14,81.96 ± 0.20,,47.74 ± 0.18,,79.67 ± 0.34,0.11 ± 0.10
+Water-quality,PCC_AdaBoostClassifier,Predict Markedness,,,46.62 ± 0.31,49.94 ± 0.31,53.50 ± 0.11,49.85 ± 0.22,66.29 ± 0.27,51.69 ± 0.22,84.30 ± 0.59,,48.28 ± 0.69,,75.40 ± 0.85,0.26 ± 0.12
+Water-quality,PCC_AdaBoostClassifier,Predict NPV,,,53.05 ± 0.02,42.06 ± 0.03,53.39 ± 0.05,53.77 ± 0.03,64.53 ± 0.11,55.10 ± 0.02,90.75 ± 0.21,,38.31 ± 0.02,,97.86 ± 0.05,0.00 ± 0.00
+Water-quality,PCC_AdaBoostClassifier,Predict Precision,,,24.90 ± 0.24,66.79 ± 0.05,53.39 ± 0.11,16.03 ± 0.32,68.79 ± 0.21,23.44 ± 0.12,66.45 ± 0.03,,71.13 ± 0.38,,15.90 ± 0.20,1.08 ± 0.13
+Water-quality,PCC_AdaBoostClassifier,Predict Recall,,,51.25 ± 0.00,36.23 ± 0.00,50.00 ± 0.00,52.09 ± 0.02,18.12 ± 0.00,53.18 ± 0.01,0.00 ± 0.00,,36.23 ± 0.00,,99.43 ± 0.00,0.00 ± 0.00
+Water-quality,PCC_AdaBoostClassifier,Predict Subset,,,49.03 ± 0.43,69.89 ± 0.23,62.05 ± 0.31,47.35 ± 0.54,66.48 ± 0.26,53.26 ± 0.45,73.33 ± 0.26,,59.63 ± 0.35,,47.58 ± 0.60,1.40 ± 0.33
+Water-quality,PCC_LogisticRegression,Marginal Scores,68.71 ± 0.05,32.50 ± 0.17,,,,,,,,70.09 ± 0.21,,74.49 ± 0.09,,
+Water-quality,PCC_LogisticRegression,Predict Fmeasure,,,58.19 ± 0.08,61.50 ± 0.09,61.03 ± 0.07,56.83 ± 0.12,65.41 ± 0.08,60.54 ± 0.04,82.50 ± 0.10,,48.33 ± 0.09,,81.88 ± 0.08,0.15 ± 0.05
+Water-quality,PCC_LogisticRegression,Predict Hamming,,,47.49 ± 0.25,70.58 ± 0.10,60.09 ± 0.12,41.18 ± 0.29,68.05 ± 0.13,51.14 ± 0.22,72.56 ± 0.10,,63.53 ± 0.20,,42.73 ± 0.35,1.43 ± 0.20
+Water-quality,PCC_LogisticRegression,Predict Informedness,,,57.50 ± 0.16,66.62 ± 0.14,60.78 ± 0.14,52.57 ± 0.20,66.04 ± 0.17,59.48 ± 0.16,78.39 ± 0.13,,53.68 ± 0.22,,69.58 ± 0.19,0.38 ± 0.13
+Water-quality,PCC_LogisticRegression,Predict Markedness,,,36.69 ± 0.41,66.35 ± 0.19,55.67 ± 0.20,33.93 ± 0.42,69.18 ± 0.21,41.70 ± 0.35,71.52 ± 0.10,,66.84 ± 0.37,,34.45 ± 0.42,1.25 ± 0.08
+Water-quality,PCC_LogisticRegression,Predict NPV,,,52.96 ± 0.05,41.93 ± 0.07,52.94 ± 0.10,53.62 ± 0.10,64.04 ± 0.26,55.00 ± 0.06,89.85 ± 0.49,,38.24 ± 0.04,,97.69 ± 0.05,0.00 ± 0.00
+Water-quality,PCC_LogisticRegression,Predict Precision,,,24.38 ± 0.08,66.64 ± 0.03,52.89 ± 0.03,14.41 ± 0.12,68.23 ± 0.11,23.09 ± 0.07,66.37 ± 0.02,,70.09 ± 0.21,,15.55 ± 0.07,1.06 ± 0.04
+Water-quality,PCC_LogisticRegression,Predict Recall,,,51.25 ± 0.00,36.23 ± 0.00,50.00 ± 0.00,52.09 ± 0.02,18.12 ± 0.00,53.18 ± 0.01,0.00 ± 0.00,,36.23 ± 0.00,,99.43 ± 0.00,0.00 ± 0.00
+Water-quality,PCC_LogisticRegression,Predict Subset,,,35.33 ± 0.28,68.79 ± 0.14,58.06 ± 0.15,35.79 ± 0.36,60.11 ± 0.18,42.94 ± 0.36,70.45 ± 0.13,,49.76 ± 0.33,,32.38 ± 0.30,1.43 ± 0.12
+Water-quality,PCC_RandomForestClassifier,Marginal Scores,73.29 ± 0.23,36.17 ± 0.25,,,,,,,,75.87 ± 0.46,,78.36 ± 0.17,,
+Water-quality,PCC_RandomForestClassifier,Predict Fmeasure,,,61.03 ± 0.22,65.05 ± 0.23,65.49 ± 0.25,59.83 ± 0.24,67.81 ± 0.26,63.09 ± 0.20,83.81 ± 0.32,,51.81 ± 0.22,,82.96 ± 0.22,0.53 ± 0.14
+Water-quality,PCC_RandomForestClassifier,Predict Hamming,,,55.20 ± 0.20,73.42 ± 0.14,64.48 ± 0.18,50.17 ± 0.29,70.83 ± 0.15,58.38 ± 0.20,75.19 ± 0.12,,66.47 ± 0.21,,51.86 ± 0.22,2.32 ± 0.22
+Water-quality,PCC_RandomForestClassifier,Predict Informedness,,,60.75 ± 0.11,70.13 ± 0.13,65.35 ± 0.09,57.01 ± 0.13,68.71 ± 0.12,62.63 ± 0.09,79.84 ± 0.05,,57.59 ± 0.20,,71.32 ± 0.07,0.55 ± 0.24
+Water-quality,PCC_RandomForestClassifier,Predict Markedness,,,43.24 ± 0.43,67.99 ± 0.36,59.10 ± 0.33,42.08 ± 0.59,72.62 ± 0.20,48.52 ± 0.51,74.55 ± 0.12,,70.68 ± 0.43,,42.27 ± 0.48,1.75 ± 0.16
+Water-quality,PCC_RandomForestClassifier,Predict NPV,,,53.20 ± 0.03,42.24 ± 0.04,53.46 ± 0.05,53.87 ± 0.05,65.22 ± 0.15,55.24 ± 0.03,92.04 ± 0.29,,38.41 ± 0.02,,98.09 ± 0.08,0.00 ± 0.00
+Water-quality,PCC_RandomForestClassifier,Predict Precision,,,26.99 ± 0.28,67.46 ± 0.07,53.91 ± 0.07,16.66 ± 0.21,71.34 ± 0.25,25.00 ± 0.16,66.82 ± 0.04,,75.87 ± 0.46,,17.38 ± 0.23,1.43 ± 0.14
+Water-quality,PCC_RandomForestClassifier,Predict Recall,,,51.25 ± 0.00,36.23 ± 0.00,50.00 ± 0.00,52.09 ± 0.02,18.12 ± 0.00,53.18 ± 0.01,0.00 ± 0.00,,36.23 ± 0.00,,99.43 ± 0.00,0.00 ± 0.00
+Water-quality,PCC_RandomForestClassifier,Predict Subset,,,53.34 ± 0.25,73.07 ± 0.14,64.16 ± 0.20,49.60 ± 0.42,70.09 ± 0.17,57.08 ± 0.28,74.76 ± 0.17,,65.43 ± 0.32,,49.91 ± 0.31,2.36 ± 0.41

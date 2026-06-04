@@ -5,3 +5,16 @@ __pycache__/
 datasets/NIH
 datasets/nih_*
 datasets/nih_feature_vectors__labels.npy
+slurm/logs/
+# per-job CSVs from slurm/submit_all.sh; aggregated result_*.csv is the source of truth
+result/*/
+!result/figs/
+.claude/
+# local reference copy of the paper; not tracked
+paper/
+
+# Python packaging / editable-install artifacts
+*.egg-info/
+build/
+dist/
+.venv/

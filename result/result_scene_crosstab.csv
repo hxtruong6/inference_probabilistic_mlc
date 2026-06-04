@@ -1,30 +1,55 @@
-Dataset,Base Model,Predict Func,F-beta Score,Hamming Loss,Markedness,Negative Predictive Value,Precision Score,Recall Score,Subset Accuracy,All
-scene,AdaBoostClassifier,Predict Fmeasure,0.37583,0.44005,0.59987,0.9604,0.23933,0.93396,0.0,0.5070628571428571
-scene,AdaBoostClassifier,Predict Hamming Loss,0.22034,0.85051,0.90445,0.85647,0.22457,0.21854,0.21065,0.4979328571428571
-scene,AdaBoostClassifier,Predict Mar,0.0,0.82101,0.9105,0.82101,0.0,0.0,0.0,0.3646457142857143
-scene,AdaBoostClassifier,Predict Neg,0.30154,0.17899,0.5895,1.0,0.17899,1.0,0.0,0.4641457142857143
-scene,AdaBoostClassifier,Predict Pre,0.3979,0.79157,0.63961,0.86755,0.41168,0.39104,0.37055,0.5528428571428571
-scene,AdaBoostClassifier,Predict Recall,0.30154,0.17899,0.5895,1.0,0.17899,1.0,0.0,0.4641457142857143
-scene,AdaBoostClassifier,Predict Subset,0.22914,0.63754,0.5062,0.82333,0.18907,0.3095,0.05853,0.39333
-scene,LogisticRegression,Predict Fmeasure,0.75666,0.89115,0.84473,0.95859,0.73086,0.83313,0.575,0.7985885714285714
-scene,LogisticRegression,Predict Hamming Loss,0.66881,0.90777,0.88162,0.93211,0.67907,0.67089,0.61944,0.7656728571428572
-scene,LogisticRegression,Predict Mar,0.0,0.82101,0.9105,0.82101,0.0,0.0,0.0,0.3646457142857143
-scene,LogisticRegression,Predict Neg,0.30154,0.17899,0.5895,1.0,0.17899,1.0,0.0,0.4641457142857143
-scene,LogisticRegression,Predict Pre,0.72808,0.90458,0.84304,0.93535,0.75072,0.71679,0.683,0.7945085714285715
-scene,LogisticRegression,Predict Recall,0.30154,0.17899,0.5895,1.0,0.17899,1.0,0.0,0.4641457142857143
-scene,LogisticRegression,Predict Subset,0.72815,0.90389,0.84116,0.93805,0.74387,0.72489,0.67843,0.7940628571428572
-scene,RandomForestClassifier,Predict Fmeasure,0.74829,0.89296,0.87087,0.96786,0.70488,0.86158,0.51974,0.7951685714285714
-scene,RandomForestClassifier,Predict Hamming Loss,0.60489,0.9158,0.9329,0.92313,0.61652,0.60171,0.57123,0.7380257142857143
-scene,RandomForestClassifier,Predict Mar,0.0,0.82101,0.9105,0.82101,0.0,0.0,0.0,0.3646457142857143
-scene,RandomForestClassifier,Predict Neg,0.30154,0.17899,0.5895,1.0,0.17899,1.0,0.0,0.4641457142857143
-scene,RandomForestClassifier,Predict Pre,0.79236,0.92592,0.88144,0.94816,0.81473,0.78121,0.74783,0.8416642857142858
-scene,RandomForestClassifier,Predict Recall,0.30154,0.17899,0.5895,1.0,0.17899,1.0,0.0,0.4641457142857143
-scene,RandomForestClassifier,Predict Subset,0.65427,0.92044,0.92503,0.93025,0.66763,0.64908,0.62193,0.7669471428571428
-scene,SGDClassifier,Predict Fmeasure,0.68992,0.87745,0.80955,0.93986,0.67715,0.73903,0.54885,0.7545442857142858
-scene,SGDClassifier,Predict Hamming Loss,0.66475,0.88389,0.81592,0.92971,0.66975,0.67963,0.58499,0.7469485714285714
-scene,SGDClassifier,Predict Mar,0.0,0.82101,0.9105,0.82101,0.0,0.0,0.0,0.3646457142857143
-scene,SGDClassifier,Predict Neg,0.30154,0.17899,0.5895,1.0,0.17899,1.0,0.0,0.4641457142857143
-scene,SGDClassifier,Predict Pre,0.67797,0.88769,0.81264,0.92522,0.70006,0.66696,0.63399,0.75779
-scene,SGDClassifier,Predict Recall,0.30154,0.17899,0.5895,1.0,0.17899,1.0,0.0,0.4641457142857143
-scene,SGDClassifier,Predict Subset,0.67347,0.88229,0.80612,0.93024,0.6795,0.68689,0.59537,0.7505542857142856
-All,,,0.4293982142857143,0.6510521428571429,0.7597553571428571,0.9303685714285714,0.3904039285714286,0.6594582142857143,0.2864117857142857,0.5866926020408163
+Dataset,Base Model,Predict Func,Average Precision,Coverage Score,Fmeasure Score,Hamming Accuracy,Informedness,Macro F1,Markedness,Micro F1,Negative Predictive Value,One-Error Score,Precision Score,Ranking Loss Score,Recall Score,Subset Accuracy
+scene,BR_AdaBoostClassifier,Marginal Scores,86.45 ± 0.21,90.60 ± 0.09,,,,,,,,77.12 ± 0.46,,92.27 ± 0.09,,
+scene,BR_AdaBoostClassifier,Predict Fmeasure,,,30.35 ± 0.06,18.59 ± 0.21,50.43 ± 0.14,30.45 ± 0.07,11.04 ± 0.57,30.54 ± 0.06,4.04 ± 1.10,,18.04 ± 0.05,,99.98 ± 0.04,0.00 ± 0.00
+scene,BR_AdaBoostClassifier,Predict Hamming,,,67.35 ± 0.52,90.62 ± 0.08,82.65 ± 0.19,73.15 ± 0.26,80.34 ± 0.32,72.35 ± 0.22,93.80 ± 0.08,,66.88 ± 0.59,,70.21 ± 0.56,57.90 ± 0.45
+scene,BR_AdaBoostClassifier,Predict Informedness,,,51.50 ± 0.54,65.49 ± 0.60,77.56 ± 0.37,52.73 ± 0.63,67.61 ± 0.29,50.16 ± 0.43,98.87 ± 0.06,,36.35 ± 0.57,,97.11 ± 0.19,2.67 ± 0.41
+scene,BR_AdaBoostClassifier,Predict Markedness,,,51.65 ± 0.78,55.83 ± 0.86,71.63 ± 0.50,44.38 ± 0.52,70.01 ± 0.49,43.90 ± 0.46,98.72 ± 0.13,,41.30 ± 0.95,,96.68 ± 0.31,21.30 ± 1.25
+scene,BR_AdaBoostClassifier,Predict NPV,,,34.89 ± 0.04,34.36 ± 0.04,59.71 ± 0.08,35.34 ± 0.07,60.36 ± 0.07,35.15 ± 0.04,99.37 ± 0.12,,21.35 ± 0.02,,99.43 ± 0.10,0.00 ± 0.00
+scene,BR_AdaBoostClassifier,Predict Precision,,,74.99 ± 0.46,91.14 ± 0.16,84.25 ± 0.28,75.32 ± 0.43,85.54 ± 0.28,74.38 ± 0.44,93.95 ± 0.09,,77.12 ± 0.46,,73.93 ± 0.46,70.75 ± 0.48
+scene,BR_AdaBoostClassifier,Predict Recall,,,30.15 ± 0.00,17.90 ± 0.00,50.00 ± 0.00,30.25 ± 0.02,8.95 ± 0.00,30.36 ± 0.00,0.00 ± 0.00,,17.90 ± 0.00,,100.00 ± 0.00,0.00 ± 0.00
+scene,BR_AdaBoostClassifier,Predict Subset,,,67.35 ± 0.52,90.62 ± 0.08,82.65 ± 0.19,73.15 ± 0.26,80.34 ± 0.32,72.35 ± 0.22,93.80 ± 0.08,,66.88 ± 0.59,,70.21 ± 0.56,57.90 ± 0.45
+scene,BR_LogisticRegression,Marginal Scores,83.16 ± 0.07,88.37 ± 0.05,,,,,,,,72.12 ± 0.21,,90.10 ± 0.04,,
+scene,BR_LogisticRegression,Predict Fmeasure,,,60.25 ± 0.54,86.93 ± 0.15,79.91 ± 0.31,65.88 ± 0.43,75.14 ± 0.32,65.06 ± 0.40,93.54 ± 0.10,,56.73 ± 0.54,,68.93 ± 0.57,41.53 ± 0.62
+scene,BR_LogisticRegression,Predict Hamming,,,61.25 ± 0.32,88.31 ± 0.09,79.46 ± 0.24,66.83 ± 0.31,76.43 ± 0.18,66.31 ± 0.24,92.84 ± 0.06,,60.02 ± 0.31,,65.49 ± 0.35,49.56 ± 0.32
+scene,BR_LogisticRegression,Predict Informedness,,,68.19 ± 0.12,86.76 ± 0.10,83.21 ± 0.08,68.69 ± 0.12,79.47 ± 0.07,67.60 ± 0.15,94.91 ± 0.03,,64.03 ± 0.14,,78.27 ± 0.18,45.81 ± 0.32
+scene,BR_LogisticRegression,Predict Markedness,,,64.60 ± 0.62,88.79 ± 0.19,80.57 ± 0.41,68.41 ± 0.58,78.63 ± 0.37,67.97 ± 0.58,93.16 ± 0.15,,64.09 ± 0.60,,67.88 ± 0.69,54.35 ± 0.60
+scene,BR_LogisticRegression,Predict NPV,,,34.95 ± 0.03,34.42 ± 0.03,59.72 ± 0.03,35.92 ± 0.04,60.49 ± 0.05,35.22 ± 0.03,99.58 ± 0.08,,21.39 ± 0.02,,99.60 ± 0.08,0.00 ± 0.00
+scene,BR_LogisticRegression,Predict Precision,,,70.00 ± 0.21,89.47 ± 0.07,81.33 ± 0.09,70.22 ± 0.23,82.53 ± 0.13,69.55 ± 0.21,92.95 ± 0.04,,72.12 ± 0.21,,68.95 ± 0.21,65.79 ± 0.22
+scene,BR_LogisticRegression,Predict Recall,,,30.15 ± 0.00,17.90 ± 0.00,50.00 ± 0.00,30.25 ± 0.02,8.95 ± 0.00,30.36 ± 0.00,0.00 ± 0.00,,17.90 ± 0.00,,100.00 ± 0.00,0.00 ± 0.00
+scene,BR_LogisticRegression,Predict Subset,,,61.25 ± 0.32,88.31 ± 0.09,79.46 ± 0.24,66.83 ± 0.31,76.43 ± 0.18,66.31 ± 0.24,92.84 ± 0.06,,60.02 ± 0.31,,65.49 ± 0.35,49.56 ± 0.32
+scene,BR_RandomForestClassifier,Marginal Scores,89.09 ± 0.36,92.50 ± 0.19,,,,,,,,81.13 ± 0.55,,94.16 ± 0.19,,
+scene,BR_RandomForestClassifier,Predict Fmeasure,,,62.59 ± 0.48,85.24 ± 0.09,82.89 ± 0.25,67.50 ± 0.27,75.99 ± 0.28,65.58 ± 0.29,95.87 ± 0.10,,56.11 ± 0.45,,79.21 ± 0.60,36.27 ± 0.37
+scene,BR_RandomForestClassifier,Predict Hamming,,,60.89 ± 0.39,91.61 ± 0.09,79.85 ± 0.21,71.29 ± 0.37,77.22 ± 0.25,71.64 ± 0.32,92.39 ± 0.06,,62.05 ± 0.44,,60.64 ± 0.35,57.30 ± 0.39
+scene,BR_RandomForestClassifier,Predict Informedness,,,75.75 ± 0.20,87.85 ± 0.05,88.83 ± 0.15,74.59 ± 0.20,83.38 ± 0.11,72.65 ± 0.14,97.67 ± 0.07,,69.08 ± 0.18,,91.21 ± 0.30,45.82 ± 0.45
+scene,BR_RandomForestClassifier,Predict Markedness,,,76.18 ± 0.28,90.75 ± 0.20,86.97 ± 0.17,76.58 ± 0.32,85.61 ± 0.16,75.55 ± 0.37,95.86 ± 0.09,,75.37 ± 0.28,,81.62 ± 0.50,64.18 ± 0.44
+scene,BR_RandomForestClassifier,Predict NPV,,,35.02 ± 0.02,34.49 ± 0.02,59.90 ± 0.03,35.59 ± 0.03,60.61 ± 0.03,35.29 ± 0.01,99.78 ± 0.05,,21.44 ± 0.01,,99.83 ± 0.05,0.00 ± 0.00
+scene,BR_RandomForestClassifier,Predict Precision,,,78.90 ± 0.56,92.48 ± 0.18,86.53 ± 0.32,78.83 ± 0.57,87.94 ± 0.33,78.24 ± 0.53,94.75 ± 0.11,,81.13 ± 0.55,,77.79 ± 0.56,74.46 ± 0.56
+scene,BR_RandomForestClassifier,Predict Recall,,,30.15 ± 0.00,17.90 ± 0.00,50.00 ± 0.00,30.25 ± 0.02,8.95 ± 0.00,30.36 ± 0.00,0.00 ± 0.00,,17.90 ± 0.00,,100.00 ± 0.00,0.00 ± 0.00
+scene,BR_RandomForestClassifier,Predict Subset,,,60.63 ± 0.40,91.59 ± 0.09,79.73 ± 0.20,71.11 ± 0.38,77.07 ± 0.25,71.48 ± 0.34,92.34 ± 0.06,,61.80 ± 0.44,,60.35 ± 0.36,57.06 ± 0.37
+scene,PCC_AdaBoostClassifier,Marginal Scores,60.84 ± 0.77,69.45 ± 0.93,,,,,,,,41.39 ± 0.72,,71.12 ± 0.90,,
+scene,PCC_AdaBoostClassifier,Predict Fmeasure,,,30.38 ± 0.05,18.72 ± 0.15,50.50 ± 0.10,30.48 ± 0.07,11.50 ± 0.46,30.57 ± 0.04,4.94 ± 0.89,,18.06 ± 0.03,,99.97 ± 0.02,0.00 ± 0.00
+scene,PCC_AdaBoostClassifier,Predict Hamming,,,23.88 ± 0.60,85.36 ± 0.07,61.93 ± 0.37,26.30 ± 0.54,55.12 ± 0.34,35.48 ± 0.72,85.95 ± 0.10,,24.29 ± 0.59,,23.70 ± 0.61,22.98 ± 0.59
+scene,PCC_AdaBoostClassifier,Predict Informedness,,,40.33 ± 0.48,60.15 ± 0.63,65.83 ± 0.38,40.75 ± 0.19,59.84 ± 0.31,40.28 ± 0.50,91.37 ± 0.21,,28.30 ± 0.42,,74.69 ± 0.42,0.41 ± 0.08
+scene,PCC_AdaBoostClassifier,Predict Markedness,,,48.57 ± 0.41,62.53 ± 0.92,69.56 ± 0.27,46.46 ± 0.24,67.99 ± 0.27,43.24 ± 0.38,94.64 ± 0.13,,41.34 ± 0.60,,79.86 ± 0.95,24.50 ± 0.76
+scene,PCC_AdaBoostClassifier,Predict NPV,,,34.40 ± 0.09,33.85 ± 0.10,58.87 ± 0.15,35.91 ± 0.09,59.45 ± 0.17,34.66 ± 0.09,97.86 ± 0.29,,21.05 ± 0.06,,98.08 ± 0.25,0.00 ± 0.00
+scene,PCC_AdaBoostClassifier,Predict Precision,,,40.06 ± 0.69,79.23 ± 0.24,64.70 ± 0.28,32.82 ± 0.99,64.09 ± 0.43,39.92 ± 0.69,86.80 ± 0.14,,41.39 ± 0.72,,39.40 ± 0.68,37.43 ± 0.65
+scene,PCC_AdaBoostClassifier,Predict Recall,,,30.15 ± 0.00,17.90 ± 0.00,50.00 ± 0.00,30.25 ± 0.02,8.95 ± 0.00,30.36 ± 0.00,0.00 ± 0.00,,17.90 ± 0.00,,100.00 ± 0.00,0.00 ± 0.00
+scene,PCC_AdaBoostClassifier,Predict Subset,,,22.49 ± 0.17,62.85 ± 1.01,51.67 ± 0.46,11.22 ± 0.91,50.14 ± 0.26,22.52 ± 0.36,82.14 ± 0.25,,18.14 ± 0.27,,31.20 ± 0.40,4.04 ± 0.91
+scene,PCC_LogisticRegression,Marginal Scores,82.44 ± 0.29,88.02 ± 0.19,,,,,,,,70.93 ± 0.48,,89.75 ± 0.19,,
+scene,PCC_LogisticRegression,Predict Fmeasure,,,68.95 ± 0.22,86.87 ± 0.08,83.26 ± 0.12,69.00 ± 0.20,80.09 ± 0.15,67.78 ± 0.22,94.85 ± 0.08,,65.34 ± 0.23,,78.23 ± 0.33,48.33 ± 0.34
+scene,PCC_LogisticRegression,Predict Hamming,,,65.35 ± 0.54,88.88 ± 0.10,80.43 ± 0.36,68.58 ± 0.38,79.27 ± 0.29,67.99 ± 0.35,92.94 ± 0.11,,65.60 ± 0.46,,67.07 ± 0.66,57.41 ± 0.46
+scene,PCC_LogisticRegression,Predict Informedness,,,69.98 ± 0.17,86.11 ± 0.06,84.08 ± 0.11,69.02 ± 0.15,80.27 ± 0.14,67.49 ± 0.14,95.39 ± 0.08,,65.16 ± 0.28,,81.60 ± 0.28,45.15 ± 0.49
+scene,PCC_LogisticRegression,Predict Markedness,,,69.23 ± 0.23,88.56 ± 0.08,81.94 ± 0.24,69.65 ± 0.28,81.46 ± 0.12,68.83 ± 0.26,93.60 ± 0.09,,69.32 ± 0.15,,71.78 ± 0.40,59.66 ± 0.31
+scene,PCC_LogisticRegression,Predict NPV,,,34.95 ± 0.03,34.42 ± 0.03,59.69 ± 0.05,36.21 ± 0.05,60.47 ± 0.05,35.21 ± 0.03,99.55 ± 0.09,,21.39 ± 0.02,,99.59 ± 0.09,0.00 ± 0.00
+scene,PCC_LogisticRegression,Predict Precision,,,68.79 ± 0.46,89.08 ± 0.16,80.66 ± 0.29,69.10 ± 0.39,81.82 ± 0.29,68.41 ± 0.46,92.71 ± 0.10,,70.93 ± 0.48,,67.72 ± 0.45,64.52 ± 0.43
+scene,PCC_LogisticRegression,Predict Recall,,,30.15 ± 0.00,17.90 ± 0.00,50.00 ± 0.00,30.25 ± 0.02,8.95 ± 0.00,30.36 ± 0.00,0.00 ± 0.00,,17.90 ± 0.00,,100.00 ± 0.00,0.00 ± 0.00
+scene,PCC_LogisticRegression,Predict Subset,,,67.88 ± 0.39,88.69 ± 0.12,81.09 ± 0.29,69.04 ± 0.39,80.79 ± 0.23,68.29 ± 0.39,93.15 ± 0.10,,68.44 ± 0.37,,69.21 ± 0.49,60.23 ± 0.27
+scene,PCC_RandomForestClassifier,Marginal Scores,89.00 ± 0.13,92.45 ± 0.06,,,,,,,,80.97 ± 0.24,,94.10 ± 0.05,,
+scene,PCC_RandomForestClassifier,Predict Fmeasure,,,64.76 ± 0.20,85.24 ± 0.06,83.92 ± 0.16,68.39 ± 0.09,77.14 ± 0.08,66.38 ± 0.06,96.35 ± 0.07,,57.92 ± 0.11,,82.17 ± 0.41,37.21 ± 0.43
+scene,PCC_RandomForestClassifier,Predict Hamming,,,60.72 ± 0.50,91.62 ± 0.08,79.71 ± 0.26,71.11 ± 0.43,77.14 ± 0.30,71.56 ± 0.36,92.33 ± 0.08,,61.94 ± 0.53,,60.33 ± 0.47,57.37 ± 0.53
+scene,PCC_RandomForestClassifier,Predict Informedness,,,75.91 ± 0.13,87.79 ± 0.08,89.08 ± 0.15,74.76 ± 0.14,83.38 ± 0.08,72.72 ± 0.17,97.85 ± 0.07,,68.92 ± 0.12,,91.98 ± 0.29,45.11 ± 0.34
+scene,PCC_RandomForestClassifier,Predict Markedness,,,77.07 ± 0.32,90.80 ± 0.13,87.39 ± 0.17,77.06 ± 0.32,86.09 ± 0.19,75.90 ± 0.31,96.03 ± 0.05,,76.15 ± 0.34,,82.70 ± 0.24,64.74 ± 0.43
+scene,PCC_RandomForestClassifier,Predict NPV,,,35.03 ± 0.01,34.51 ± 0.01,59.92 ± 0.02,35.56 ± 0.03,60.63 ± 0.02,35.30 ± 0.01,99.82 ± 0.04,,21.44 ± 0.01,,99.85 ± 0.03,0.00 ± 0.00
+scene,PCC_RandomForestClassifier,Predict Precision,,,78.74 ± 0.23,92.42 ± 0.08,86.43 ± 0.21,78.70 ± 0.31,87.84 ± 0.14,78.09 ± 0.23,94.72 ± 0.05,,80.97 ± 0.24,,77.63 ± 0.23,74.29 ± 0.22
+scene,PCC_RandomForestClassifier,Predict Recall,,,30.15 ± 0.00,17.90 ± 0.00,50.00 ± 0.00,30.25 ± 0.02,8.95 ± 0.00,30.36 ± 0.00,0.00 ± 0.00,,17.90 ± 0.00,,100.00 ± 0.00,0.00 ± 0.00
+scene,PCC_RandomForestClassifier,Predict Subset,,,65.62 ± 0.52,92.03 ± 0.08,81.63 ± 0.23,74.19 ± 0.36,80.01 ± 0.30,74.03 ± 0.34,93.05 ± 0.08,,66.98 ± 0.53,,65.10 ± 0.51,62.34 ± 0.54
