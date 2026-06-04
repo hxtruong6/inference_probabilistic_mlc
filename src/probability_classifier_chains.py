@@ -243,17 +243,15 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
     def predict_npv(self, X):
         """Bayes-optimal predictor for Negative Predictive Value (NPV).
 
-        Predicts all labels as positive except the one with the lowest marginal
-        probability, maximising the fraction of true negatives among predicted
-        negatives.
+        Paper Corollary 2 (eq. negative): under the convention NPV(y, 1_K) = 1
+        (predicting all-positive leaves no predicted negatives → vacuously
+        perfect), the all-ones vector 1_K attains the maximum expected NPV and
+        is the BOP whenever it is a valid prediction — which it always is in
+        this setting. Hence the NPV BOP is trivial and coincides with the
+        Recall BOP (this is why the F_neg and F_rec rows are identical in the
+        paper's result tables).
         """
-        N, _ = X.shape
-        _, P_margin_yi_1, _ = self.predict(X, marginal=True)
-        # Sort marginals ascending; set only the least-likely label to 0.
-        indices = np.argsort(P_margin_yi_1, axis=1)
-        Y_pred = np.ones((N, self.L))
-        Y_pred[np.arange(N)[:, None], indices[:, :1]] = 0
-        return Y_pred
+        return np.ones((X.shape[0], self.L))
 
     def predict_recall(self, X):
         """Bayes-optimal predictor for Recall.
@@ -272,16 +270,17 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
             - NPV      = 1 if pred=all-ones and true=all-ones (vacuous), 0 if
                          pred=all-ones and true has any 0.
 
-        For candidate top-l (l ∈ {0,..,L}), expected markedness is:
-            l = 0  : 0.5 * (P(y=0|x) + 1 - sum_p/L)
+        Paper Proposition 6 / Algorithm 4 conventions: Fpre(y, 0_K) = 1 and
+        Fneg(y, 1_K) = 1 (vacuous precision / NPV). For candidate top-l
+        (l ∈ {0,..,L}), expected markedness is:
+            l = 0  : 0.5 * (1 + 1 - sum_p/L)        # NPV = 1 - sum_p/L, Precision = 1 (vacuous)
             0<l<L  : 0.5 * (A_l/l + 1 - (sum_p - A_l)/(L-l))
-            l = L  : 0.5 * (sum_p/L + P(y=all-ones|x))
+            l = L  : 0.5 * (sum_p/L + 1)            # Precision = sum_p/L, NPV = 1 (vacuous)
         where sum_p = Σ_j P(y_j=1|x) and A_l = sum of top-l marginals.
+        Only the marginals p_j are needed (cf. Algorithm 4), in O(L log L).
         """
         N, _ = X.shape
-        _, P_margin_yi_1, pw = self.predict(X, marginal=True)
-        P_pair_wise0 = pw["P_pair_wise0"]
-        P_pair_wise1 = pw["P_pair_wise1"]
+        _, P_margin_yi_1, _ = self.predict(X, marginal=True)
         L = self.L
 
         indices = np.argsort(P_margin_yi_1, axis=1)[:, ::-1]
@@ -289,12 +288,11 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
         for i in range(N):
             sum_p = float(np.sum(P_margin_yi_1[i]))
-            P_y0 = float(P_pair_wise0[i, 0])
-            P_yall = float(P_pair_wise1[i, 0])
 
             E = np.zeros(L + 1)
-            E[0] = 0.5 * (P_y0 + 1.0 - sum_p / L)
-            E[L] = 0.5 * (sum_p / L + P_yall)
+            # Boundary cases use the paper's vacuous conventions (Fpre(.,0_K)=1, Fneg(.,1_K)=1).
+            E[0] = 0.5 * (2.0 - sum_p / L)
+            E[L] = 0.5 * (sum_p / L + 1.0)
 
             A_l = 0.0
             for l in range(1, L):
@@ -321,11 +319,14 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
             E0 = P_pair_wise0[i][0]
 
             for k in range(self.L):
+                # k is 0-indexed; the prediction size is l = k + 1.
+                # Paper Algorithm 1: q^beta_{l,k} = (1+β²) Σ_{s=1}^L P_{k,s} / (β²·s + l),
+                # where P_{k,s} = P(y_label=1, |y|=s | x) = P_pair_wise[i][label][s].
                 for label in range(self.L):
-                    for s in range(self.L):
+                    for s in range(1, self.L + 1):
                         q[k][label] += (1 + beta**2) * (
                             P_pair_wise[i][label][s]
-                            / (beta**2 * (s + 1) + k + 1)
+                            / (beta**2 * s + (k + 1))
                         )
                 indices_desc.append(np.argsort(q[k])[::-1].tolist())
                 for i_ in range(k + 1):
@@ -354,17 +355,32 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
         return P_margin_yi_1
 
     def predict_informedness(self, X):
-        """Bayes-optimal predictor for Informedness (Sensitivity + Specificity - 1).
+        """Bayes-optimal predictor for Informedness F_Inf = 1/2 (Specificity + Recall).
 
-        Include label j iff q_sens[j] + q_spec_cost[j] > C, where:
-            q_sens[j]      = Σ_{s=1}^{L}   P(y_j=1, |y|=s | x) / s
-            q_spec_cost[j] = Σ_{s=1}^{L-1} P(y_j=1, |y|=s | x) / (L-s)
-            C              = P(|y|=0 | x)/L + Σ_{s=1}^{L-1} P(|y|=s | x) / (s*(L-s))
+        NOTE ON THE PAPER: the appendix of the conference/extended manuscript
+        derives a size-l rule and claims the expected score is non-decreasing in
+        l, so that only the candidates {0_K, ŷ^{L-1}, 1_K} need be compared. That
+        claim is INCORRECT (it does not match the exact expected Informedness;
+        verified by brute-force enumeration), which is why Informedness was
+        dropped from the published main text. We therefore use the correct
+        derivation below.
+
+        Writing q^Inf_k = Σ_{s=1}^L P(y_k=1, |y|=s | x) / s and
+                β_k     = Σ_{s=0}^{L-1} (P(|y|=s) − P(y_k=1, |y|=s)) / (L − s),
+        the exact expectation decomposes per label:
+            E[F_Inf(y, ŷ)] = const + 1/2 · Σ_{k: ŷ_k=1} (q^Inf_k − β_k),
+        so the BOP includes label k iff q^Inf_k > β_k. Rearranging with
+            q_sens[k]      = q^Inf_k             = Σ_{s=1}^L   P_{k,s} / s,
+            q_spec_cost[k] = Σ_{s=1}^{L-1} P_{k,s} / (L − s),
+            C              = P(|y|=0)/L + Σ_{s=1}^{L-1} P(|y|=s) / (L − s),
+        the rule is: include label k iff q_sens[k] + q_spec_cost[k] > C.
+        This is a per-label threshold (O(L^2)), and it is the exact BOP — see
+        tests/test_inference_optimality.py::test_informedness_optimal.
         """
         N, _ = X.shape
         _, _, pw = self.predict(X, pairwise=True)
         P_pair_wise = pw["P_pair_wise"]    # (N, L, L+1)
-        P_pair_wise0 = pw["P_pair_wise0"]  # (N, 1)
+        P_pair_wise0 = pw["P_pair_wise0"]  # (N, 1) = P(|y|=0 | x)
         L = self.L
         Y_pred = np.zeros((N, L))
 
@@ -379,7 +395,7 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
 
             C = float(P_pair_wise0[i, 0]) / L
             for s in range(1, L):
-                P_s = np.sum(P_pair_wise[i, :, s]) / s
+                P_s = np.sum(P_pair_wise[i, :, s]) / s   # = P(|y|=s | x)
                 C += P_s / (L - s)
 
             Y_pred[i] = np.where(q_sens + q_spec_cost > C, 1.0, 0.0)

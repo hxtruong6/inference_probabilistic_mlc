@@ -143,11 +143,11 @@ class TestNPV:
     def test_worst(self, worst):
         assert EM.negative_predictive_value(*worst) == pytest.approx(0.0)
 
-    def test_all_ones_has_true_neg(self, all_ones):
-        # all-ones pred, but some true labels are 0 → NPV = 0
+    def test_all_ones_is_vacuous_one(self, all_ones):
+        # all-ones pred → no predicted negatives → NPV vacuously 1 (paper Corollary 2),
+        # regardless of y_true. This is the convention the published results use.
         Y_true, Y_pred = all_ones
-        if np.any(Y_true == 0):
-            assert EM.negative_predictive_value(Y_true, Y_pred) == pytest.approx(0.0)
+        assert EM.negative_predictive_value(Y_true, Y_pred) == pytest.approx(1.0)
 
     def test_all_ones_all_true_pos(self):
         # all-ones pred, all-ones true → vacuously perfect NPV = 1
@@ -172,7 +172,7 @@ class TestFBetaScore:
 
 
 # ──────────────────────────────────────────────
-# informedness  (was buggy: used Y_pred instead of Y_true)
+# informedness  — example-based F_Inf = 1/2 (Specificity + Recall) (paper eq.)
 # ──────────────────────────────────────────────
 
 class TestFInformedness:
@@ -183,21 +183,17 @@ class TestFInformedness:
         assert EM.informedness(*worst) == pytest.approx(0.0)
 
     def test_all_ones_informedness(self, all_ones):
-        # Sensitivity = 1 (all true pos captured), Specificity = 0 (no TN).
-        # Informedness = 0.5*(1+0) = 0.5
+        # all-ones pred: Recall = 1 (all true pos captured), Specificity = 0 (no TN
+        # since nothing predicted negative). F_Inf = 0.5*(0+1) = 0.5 per sample.
         assert EM.informedness(*all_ones) == pytest.approx(0.5)
 
-    def test_uses_true_labels_as_denominator(self):
-        # Verify the fixed denominator: uses N_true_pos (from Y_true), not N_pred_pos.
-        # Y_true col sums: [2,1,0], Y_pred col sums: [1,1,0] — they differ.
-        # If the old bug were present (denominator = Y_pred sum), the result would differ.
+    def test_example_based_known_case(self):
+        # Example-based: mean over samples of 0.5*(specificity + recall).
         Y_true = np.array([[1, 1, 0], [1, 0, 0]])
         Y_pred = np.array([[1, 0, 0], [0, 1, 0]])
-        # Manually computed:
-        #   tp=[1,0,0], tn=[0,0,2], n_true_pos=[2,1,0], n_true_neg=[0,1,2]
-        #   sens=[0.5, 0, 1.0(default)], spec=[1.0(default), 0, 1.0]
-        #   informedness = 0.5*mean([1.5, 0, 2.0]) = 0.5833...
-        assert EM.informedness(Y_true, Y_pred) == pytest.approx(0.5833333, rel=1e-5)
+        # sample 0: recall = 1/2, spec = 1   → 0.75
+        # sample 1: recall = 0,   spec = 1/2 → 0.25
+        assert EM.informedness(Y_true, Y_pred) == pytest.approx(0.5)
 
 
 # ──────────────────────────────────────────────
@@ -239,27 +235,26 @@ class TestFMarkedness:
     def test_worst(self, worst):
         assert EM.markedness(*worst) == pytest.approx(0.0)
 
-    def test_all_zeros_precision_is_zero(self, all_zeros):
-        # pred=zeros, some true=1 → precision=0, not 1 (was the bug)
-        # precision=0 for all samples, so markedness ≤ 0.5
-        result = EM.markedness(*all_zeros)
-        # Precision component must be 0; NPV component may be non-zero.
-        # Markedness = 0.5*(NPV + 0). NPV is non-zero since TN > 0.
-        assert result < 1.0
-        # Sanity: precision_score should agree on the 0-case
-        assert EM.precision_score(*all_zeros) == pytest.approx(0.0)
+    def test_all_zeros_vacuous_precision(self, all_zeros):
+        # Paper convention: pred=0_K → internal precision = 1 (vacuous, Fpre(.,0_K)=1).
+        # markedness = 0.5*(NPV + 1); NPV = mean fraction of true negatives.
+        Y_true, Y_pred = all_zeros
+        n = Y_true.shape[1]
+        npv_expected = np.mean(np.sum(1 - Y_true, axis=1) / n)
+        expected = 0.5 * (npv_expected + 1.0)
+        assert EM.markedness(Y_true, Y_pred) == pytest.approx(expected)
 
-    def test_consistent_with_precision_score(self):
-        # markedness's internal precision edge case must match precision_score
+    def test_internal_precision_differs_from_precision_score(self):
+        # markedness's internal precision uses the paper's vacuous convention
+        # (Fpre(.,0_K)=1), which DIFFERS from standalone precision_score (sklearn).
         Y_true = np.array([[1, 0], [1, 1]])
         Y_pred = np.array([[0, 0], [0, 1]])
-        # Sample 0: pred=0,true=[1,0] → precision=0 (both metrics)
-        # Sample 1: pred=[0,1],true=[1,1] → precision=1*1/1=1
-        prec = EM.precision_score(Y_true, Y_pred)
-        # markedness uses same logic; result should be consistent
-        mar = EM.markedness(Y_true, Y_pred)
-        assert prec == pytest.approx(0.5)  # mean of [0, 1]
-        assert mar >= 0.0 and mar <= 1.0
+        # standalone precision: sample0 (empty pred, true>0) → 0; sample1 → 1 → mean 0.5
+        assert EM.precision_score(Y_true, Y_pred) == pytest.approx(0.5)
+        # markedness internal precision: sample0 → 1 (vacuous), sample1 → 1 → mean 1.0
+        # markedness internal NPV:        sample0 → 0.5,        sample1 → 0.0 → mean 0.25
+        # markedness = 0.5 * (0.25 + 1.0) = 0.625
+        assert EM.markedness(Y_true, Y_pred) == pytest.approx(0.625)
 
 
 # ──────────────────────────────────────────────

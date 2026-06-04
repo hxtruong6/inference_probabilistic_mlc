@@ -125,10 +125,10 @@ class EvaluationMetrics:
         Calculate example-based Negative Predictive Value (NPV) for multilabel classification.
 
         Per-sample: TN / (TN + FN). Averaged over all samples.
-        Edge cases:
-        - All labels predicted positive (no negative predictions):
-            - If all true labels are also positive → NPV = 1 (vacuously correct).
-            - Otherwise (some true negatives exist but missed) → NPV = 0.
+        Edge case (paper convention, Corollary 2):
+        - All labels predicted positive (no predicted negatives) → NPV is
+          undefined; the paper assigns Fneg(y, 1_K) = 1 (vacuously perfect),
+          regardless of y_true.
 
         Parameters:
         - y_true: NumPy array, true labels.
@@ -143,9 +143,8 @@ class EvaluationMetrics:
         for i in range(n_samples):
             sum_pred = np.sum(y_pred[i])
             if sum_pred == n_labels:
-                # All positive predictions: no negatives predicted.
-                # TN = 0; FN = number of true negatives (1 - y_true).
-                npv[i] = 1 if np.sum(y_true[i]) == n_labels else 0
+                # No predicted negatives → NPV undefined; paper assigns 1 (vacuous).
+                npv[i] = 1
             else:
                 npv[i] = np.dot(1 - y_true[i], 1 - y_pred[i]) / np.sum(1 - y_pred[i])
         return npv.mean()
@@ -236,11 +235,16 @@ class EvaluationMetrics:
     @staticmethod
     def informedness(Y_true, Y_pred):
         """
-        Calculate label-averaged Informedness (Balanced Accuracy per label) for multilabel classification.
+        Example-based Informedness F_Inf = 1/2 (Specificity + Recall), averaged
+        over samples (paper eq. informedness).
 
-        Per-label: 0.5 * (Specificity + Sensitivity)
-            = 0.5 * (TN/N_true_negative + TP/N_true_positive)
-        Averaged over labels.
+        Per sample:
+            Recall      = TP / (TP + FN) = Σ ŷ·y / Σ y                (= 1 if Σ y = 0)
+            Specificity = TN / (TN + FP) = Σ (1-ŷ)(1-y) / Σ (1-y)     (= 1 if Σ (1-y) = 0)
+            F_Inf       = 1/2 (Specificity + Recall)
+        The vacuous conventions are on the true label vector (a sample with no
+        true positives → Recall = 1; with no true negatives → Specificity = 1),
+        matching the appendix derivation of the Informedness BOP.
 
         Parameters:
         - Y_true: NumPy array, true labels (shape [n_samples, n_labels]).
@@ -250,16 +254,16 @@ class EvaluationMetrics:
         - float: Informedness in [0, 1].
         """
         EvaluationMetrics._check_dimensions(Y_true, Y_pred)
-
-        tn = np.sum((1 - Y_true) * (1 - Y_pred), axis=0)
-        tp = np.sum(Y_true * Y_pred, axis=0)
-        n_true_neg = np.sum(1 - Y_true, axis=0)
-        n_true_pos = np.sum(Y_true, axis=0)  # fixed: was np.sum(Y_pred, axis=0)
-
-        f_spec = np.where(n_true_neg > 0, tn / n_true_neg, 1.0)
-        f_sens = np.where(n_true_pos > 0, tp / n_true_pos, 1.0)
-
-        return (0.5 * (f_spec + f_sens)).mean()
+        n_samples = Y_true.shape[0]
+        vals = np.zeros(n_samples)
+        for i in range(n_samples):
+            yt = Y_true[i]
+            sum_pos = np.sum(yt)
+            sum_neg = np.sum(1 - yt)
+            recall = 1.0 if sum_pos == 0 else np.dot(yt, Y_pred[i]) / sum_pos
+            spec = 1.0 if sum_neg == 0 else np.dot(1 - yt, 1 - Y_pred[i]) / sum_neg
+            vals[i] = 0.5 * (spec + recall)
+        return vals.mean()
 
     @staticmethod
     def markedness(Y_true, Y_pred):
@@ -267,8 +271,12 @@ class EvaluationMetrics:
         Calculate example-based Markedness for multilabel classification.
 
         Per-sample: 0.5 * (NPV + Precision). Averaged over samples.
-        Edge cases for NPV and Precision follow the same conventions as
-        negative_predictive_value() and precision_score() respectively.
+
+        Paper convention (Proposition 6 / Algorithm 4): the vacuous cases are
+        assigned Fpre(y, 0_K) = 1 and Fneg(y, 1_K) = 1, unconditionally. This is
+        what the published markedness results use, and it intentionally DIFFERS
+        from the standalone precision_score() (which follows the scikit-learn
+        convention of 0 when nothing is predicted but true positives exist).
 
         Parameters:
         - Y_true: NumPy array, true labels (shape [n_samples, n_labels]).
@@ -284,19 +292,16 @@ class EvaluationMetrics:
 
         for i in range(n_samples):
             sum_pred = np.sum(Y_pred[i])
-            sum_true = np.sum(Y_true[i])
 
-            # NPV: TN / (TN + FN)
+            # NPV: TN / (TN + FN); no predicted negatives → 1 (vacuous, Fneg(.,1_K)=1).
             if sum_pred == n_labels:
-                npv[i] = 1 if sum_true == n_labels else 0
+                npv[i] = 1
             else:
                 npv[i] = np.dot(1 - Y_true[i], 1 - Y_pred[i]) / np.sum(1 - Y_pred[i])
 
-            # Precision: TP / (TP + FP)
-            if sum_true == 0 and sum_pred == 0:
+            # Precision: TP / (TP + FP); empty prediction → 1 (vacuous, Fpre(.,0_K)=1).
+            if sum_pred == 0:
                 precision[i] = 1
-            elif sum_pred == 0:
-                precision[i] = 0  # fixed: was 1 when pred=0 and true>0
             else:
                 precision[i] = np.dot(Y_true[i], Y_pred[i]) / sum_pred
 
