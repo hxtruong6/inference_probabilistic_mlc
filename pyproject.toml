@@ -57,12 +57,10 @@ include = ["dacaf_mlc*"]
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-# Vendored third-party code and standalone data-prep scripts are kept as-is.
+# Vendored third-party code and the torch-only feature extractor are kept as-is.
 extend-exclude = [
     "dacaf_mlc/skmultiflow",
     "dacaf_mlc/chest_xray_dataset/chest_xray_dataset.py",
-    "dacaf_mlc/chest_xray_dataset/create_test_set.py",
-    "dacaf_mlc/chest_xray_dataset/fix-csv.py",
 ]
 
 [tool.ruff.lint]

@@ -1,8 +1,9 @@
 """Training + k-fold evaluation pipeline.
 
-Each (PCC, BR) × base-estimator model is trained per fold (with per-fold
-StandardScaler to avoid leakage), every inference rule is run, and the
-configured metrics are computed on each rule's output.
+The PCC model with an L2 logistic-regression base learner is trained per fold
+(with per-fold StandardScaler to avoid leakage), every inference rule is run,
+and the configured metrics are computed on each rule's output. This is the
+exact protocol used in the paper.
 """
 import os
 import time
@@ -10,31 +11,24 @@ from uuid import uuid4
 
 from joblib import Parallel, delayed
 from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 
 from dacaf_mlc.config import BASE_DIR, SEED, KFOLD_SPLIT_NUMBER
 from dacaf_mlc.datasets import read_datasets_from_folder
 from dacaf_mlc.metrics_registry import PREDICT_FUNCTIONS
-from dacaf_mlc.probability_classifier_chains import (
-    ProbabilisticClassifierChainCustom,
-    BinaryRelevance,
-)
+from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChainCustom
 from dacaf_mlc.utils import add_key_if_missing, save_crosstab, save_result_df
 
 ESTIMATOR_FACTORIES = {
-    "lr":       lambda seed: LogisticRegression(random_state=seed, max_iter=5_000_000),
-    "rf":       lambda seed: RandomForestClassifier(random_state=seed, n_estimators=100, n_jobs=1),
-    "adaboost": lambda seed: AdaBoostClassifier(random_state=seed, n_estimators=50),
+    "lr": lambda seed: LogisticRegression(random_state=seed, max_iter=5_000_000),
 }
 
 
 def model_display_key(model):
-    """Disambiguate (PCC vs BR) × base estimator. Used as the row key in result CSVs."""
-    short = {
-        "ProbabilisticClassifierChainCustom": "PCC",
-        "BinaryRelevance": "BR",
-    }.get(type(model).__name__, type(model).__name__)
+    """Model row key in result CSVs: PCC + base-estimator name."""
+    short = {"ProbabilisticClassifierChainCustom": "PCC"}.get(
+        type(model).__name__, type(model).__name__
+    )
     return f"{short}_{model.base_estimator.__class__.__name__}"
 
 
@@ -82,7 +76,7 @@ def evaluate_model(model, X_test, Y_test, predict_funcs):
 
 
 def prepare_model_to_evaluate(estimator_names=None, seed=SEED):
-    """Return the list of (PCC, BR) × (base_estimator) models to evaluate.
+    """Return the list of PCC × (base_estimator) models to evaluate.
 
     estimator_names: iterable of keys from ESTIMATOR_FACTORIES, or None for all.
     """
@@ -92,7 +86,6 @@ def prepare_model_to_evaluate(estimator_names=None, seed=SEED):
     for name in estimator_names:
         est = ESTIMATOR_FACTORIES[name](seed)
         models.append(ProbabilisticClassifierChainCustom(est))
-        models.append(BinaryRelevance(est))
     return models
 
 

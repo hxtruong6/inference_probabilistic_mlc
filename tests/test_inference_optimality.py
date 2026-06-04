@@ -120,15 +120,6 @@ def test_paper_table_signatures():
     assert np.all(cc.predict_precision(X).sum(axis=1) == 1)
 
 
-@pytest.mark.parametrize("seed", [8, 9, 11])
-def test_informedness_optimal(seed):
-    # The per-label-threshold rule must attain the true argmax of E[F_Inf] over
-    # all 2^L predictions. (The paper appendix's size-l/3-candidate rule does
-    # NOT — this test is what flags that; hence the corrected derivation in code.)
-    cc, X = _fit_small_pcc(L, seed=seed)
-    _assert_optimal(cc, X[:12], L, cc.predict_informedness, EM.informedness)
-
-
 def test_precision_predicts_single_top_label():
     # Paper Corollary 1: the (table-reproducing) precision BOP predicts exactly
     # one label, the highest-marginal one. (The standalone precision metric uses

@@ -12,27 +12,22 @@ from dacaf_mlc.chest_xray_dataset.chest_xray_utils import load_df_features_from_
 
 # ARFF datasets shipped as a single whole file (no separate train/test split).
 DATASET_WHOLE_FILES = [
-    "VirusGO_sparse",
     "Water-quality",
     "CHD_49",
     "emotions",
     "scene",
     "yeast",
-    "flags",
-    "PlantPseAAC",
 ]
 # Datasets whose ARFF stores the labels in the FIRST columns rather than the last.
-DATASET_WHOLE_FILES_TARGET_AT_FIRST = ["Water-quality", "CHD_49", "yeast", "PlantPseAAC"]
+DATASET_WHOLE_FILES_TARGET_AT_FIRST = ["Water-quality", "CHD_49", "yeast"]
 
-# Full sweep set. The chest_xray_nih__* entries require pre-extracted features at
-# datasets/nih_feature_vectors_{densenet,resnet,resnetae}.npy.
+# Paper datasets. The chest_xray_nih__* entries require pre-extracted features at
+# datasets/nih_feature_vectors_{densenet,resnet,resnetae}.npy (see
+# dacaf_mlc/chest_xray_dataset/Readme.md).
 DEFAULT_DATASET_NAMES = [
-    "flags",                       # L=7
     "emotions",                    # L=6
     "scene",                       # L=6
     "CHD_49",                      # L=6
-    "VirusGO_sparse",              # L=6  (sparse ARFF)
-    "PlantPseAAC",                 # L=12 (sparse ARFF)
     "Water-quality",               # L=14
     "yeast",                       # L=14
     "chest_xray_nih__densenet",    # L=14, N≈112k

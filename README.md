@@ -85,11 +85,11 @@ For a probabilistic prediction `P(y | x)` over `L` labels, each rule returns the
 python -m venv .venv && source .venv/bin/activate    # or conda create -n dacaf python=3.10
 pip install -e .            # core (tabular) deps; add ".[image]" for the ChestX-ray experiments
 
-# one (dataset, seed, model) run:
-dacaf-mlc --dataset emotions --seed 1 --estimator lr --output-dir result
+# one (dataset, seed) run:
+dacaf-mlc --dataset emotions --seed 1 --output-dir result
 ```
 
-This writes `result/emotions/seed1_lr.csv` and a cross-tab of **target metric × evaluation metric** — the table at the heart of the paper.
+This writes `result/emotions/seed1_all.csv` and a cross-tab of **target metric × evaluation metric** — the table at the heart of the paper.
 
 ---
 
@@ -114,8 +114,8 @@ For the chest-X-ray data we extract features with a pretrained backbone via [Tor
 
 ```bash
 dacaf-mlc                                  # local, small datasets (or: python -m dacaf_mlc.evaluate)
-# or: see slurm/README.md                  # one job per (dataset × seed × estimator)
-python slurm/aggregate.py                  # aggregate when jobs finish
+# or: see scripts/SLURM.md                 # one job per (dataset × seed)
+python scripts/aggregate.py                # aggregate when jobs finish
 ```
 
 Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
@@ -126,7 +126,7 @@ Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_s
 make reproduce          # = bash scripts/reproduce_tabular.sh
 ```
 
-The exact published protocol is recorded in [`configs/paper.yaml`](configs/paper.yaml).
+The exact published protocol is recorded in [`docs/paper.yaml`](docs/paper.yaml).
 
 ---
 
@@ -156,8 +156,8 @@ target metric (see [`CONVENTIONS.md`](CONVENTIONS.md) for the exact rules and co
 
 ```
 dacaf_mlc/                           # installable package
-  probability_classifier_chains.py   # PCC + BR + per-metric Bayes-optimal predict_* rules
-  evaluation_metrics.py              # all metrics (higher-is-better form)
+  probability_classifier_chains.py   # PCC + the 7 per-metric Bayes-optimal predict_* rules
+  evaluation_metrics.py              # the 7 paper metrics (higher-is-better form)
   arff_dataset.py                    # MULAN ARFF loader + 10-fold CV
   datasets.py                        # dataset registry + loaders
   metrics_registry.py                # which metrics run on which inference rule
@@ -165,16 +165,15 @@ dacaf_mlc/                           # installable package
   evaluate.py                        # CLI entry point (dacaf-mlc): parse_args + main
   config.py                          # paths + protocol constants
   utils.py                           # result aggregation
-  chest_xray_dataset/                # NIH feature loader ([image] extra)
+  chest_xray_dataset/                # NIH feature extractor + loader ([image] extra)
   skmultiflow/                       # vendored ClassifierChain base
-inference_evaluate_models.py         # thin backward-compat shim → dacaf_mlc.evaluate
 pyproject.toml                       # packaging + deps (core / [image] / [dev])
-configs/paper.yaml                   # published protocol manifest
-scripts/reproduce_tabular.sh         # one-command tabular reproduction
-slurm/                               # cluster submission + aggregation
+scripts/                             # reproduce_tabular.sh + Slurm cluster scripts
 tests/                               # unit tests + brute-force optimality + e2e
+docs/                                # reproduction notes, result tables (.tex), paper.yaml manifest
+datasets/                            # the paper's MULAN ARFFs (+ chest-xray label CSV)
+result/                              # aggregated result CSVs
 CONVENTIONS.md  CONTRIBUTING.md  CITATION.cff
-result/                              # output CSVs
 paper/                               # local copy of the paper source (not tracked)
 ```
 
@@ -187,16 +186,6 @@ python -m pytest tests/ -v
 ```
 
 Every inference rule is checked against **brute-force enumeration** of the expected metric, so the closed-form rules are provably correct on small cases. A batched predictor (one `predict_proba` call per chain level instead of `N·L·2^L`) is verified numerically equivalent to the reference enumeration.
-
----
-
-## Beyond the paper (also in this code)
-
-The repository ships a few extras not used in the published experiments, handy for further study:
-
-- a **Binary Relevance** baseline (label-independence) sharing the same inference interface, to isolate the effect of chain-aware inference;
-- additional MULAN benchmarks (`flags`, `VirusGO`, `PlantPseAAC`, …) and base learners (Random Forest, AdaBoost);
-- an **Informedness** rule with a corrected derivation (the paper's appendix discusses it; it is not part of the main experiments).
 
 ---
 

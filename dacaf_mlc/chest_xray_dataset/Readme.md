@@ -1,7 +1,7 @@
 # NIH ChestX-ray14 feature extraction
 
 This subpackage produces the `nih_feature_vectors_{densenet,resnet,resnetae}.npy`
-files consumed by `inference_evaluate_models.py` for the
+files consumed by `dacaf_mlc.evaluate` for the
 `chest_xray_nih__{densenet,resnet,resnetae}` rows of the paper.
 
 The pipeline turns raw NIH ChestX-ray14 PNGs into pooled feature vectors
@@ -35,33 +35,19 @@ is impractical).
        test_list.txt                  # NIH-provided official test split
    ```
 
-3. **Clean the metadata** (strips trailing "Y" in `Patient Age`):
-
-   ```bash
-   python src/chest_xray_dataset/fix-csv.py \
-       datasets/NIH/Data_Entry_2017.csv \
-       datasets/NIH/Data_Entry_2017_fixed.csv
-   ```
-
-4. **Subset to the official test split**:
-
-   ```bash
-   python src/chest_xray_dataset/create_test_set.py \
-       datasets/NIH/test_list.txt \
-       datasets/NIH/Data_Entry_2017_fixed.csv \
-       datasets/NIH_Data_Entry_2017__testset.csv
-   ```
-
-   The eval loader reads `datasets/NIH_Data_Entry_2017__testset_image_labels.csv`
-   (the one-hot label CSV used by `NIHChestXRayDataset`); produce it from the
-   metadata above following the column convention `Image Index, label_1, …, label_8`.
+3. **Build the one-hot label CSV** that the extractor reads,
+   `datasets/NIH_Data_Entry_2017__testset_image_labels.csv` (shipped in this
+   repo). To regenerate it from the raw NIH metadata: strip the trailing "Y" in
+   `Patient Age`, subset to the official `test_list.txt` split, and one-hot the
+   `Finding Labels` to the 8 kept pathologies, writing the column convention
+   `Image Index, label_1, …, label_8`.
 
 ## Extract features (run once per backbone)
 
 ```bash
-python src/chest_xray_dataset/chest_xray_dataset.py --model densenet
-python src/chest_xray_dataset/chest_xray_dataset.py --model resnet
-python src/chest_xray_dataset/chest_xray_dataset.py --model resnetae
+python dacaf_mlc/chest_xray_dataset/chest_xray_dataset.py --model densenet
+python dacaf_mlc/chest_xray_dataset/chest_xray_dataset.py --model resnet
+python dacaf_mlc/chest_xray_dataset/chest_xray_dataset.py --model resnetae
 ```
 
 Each invocation writes two files into `datasets/`:
@@ -78,5 +64,3 @@ These are the inputs the paper's eval pipeline picks up via
 |---|---|
 | `chest_xray_dataset.py` | Main extraction script. CLI: `--model {densenet,resnet,resnetae}`. |
 | `chest_xray_utils.py` | `load_df_features_from_npy`, `save_features_to_npy`, etc. Imported by the eval pipeline. |
-| `fix-csv.py` | One-shot helper to normalise NIH's `Patient Age` column. |
-| `create_test_set.py` | One-shot helper to filter metadata to NIH's official test split. |

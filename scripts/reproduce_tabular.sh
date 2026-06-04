@@ -21,5 +21,5 @@ for dataset in "${DATASETS[@]}"; do
 done
 
 echo "==> Aggregating"
-python slurm/aggregate.py --result-dir "${OUTPUT_DIR}"
+python scripts/aggregate.py --result-dir "${OUTPUT_DIR}"
 echo "Done. See ${OUTPUT_DIR}/result_<dataset>_crosstab.csv for the target × evaluation tables."
