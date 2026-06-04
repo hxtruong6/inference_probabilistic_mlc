@@ -39,13 +39,14 @@ reproduce the paper.
 | Specificity | all-zeros `0_K` | — |
 | Informedness | per-label threshold (see below) | pairwise |
 
-## Informedness — the paper appendix is wrong; use the per-label rule
+## Informedness — use the per-label threshold rule
 
-The manuscript's appendix derives a size-`l` informedness rule and claims the
-expected score is monotone in `l`, so that only `{0_K, ŷ^{L-1}, 1_K}` need be
-compared. **That claim is false** (brute force finds size-2 predictions that
-beat `ŷ^{L-1}`), which is why Informedness was dropped from the published main
-text. The correct exact BOP is a **per-label threshold**:
+The manuscript's appendix sketches a size-`l` informedness rule under the
+assumption that the expected score is monotone in `l`, so that only
+`{0_K, ŷ^{L-1}, 1_K}` need be compared. That monotonicity assumption does not
+hold in general (brute force finds size-2 predictions that beat `ŷ^{L-1}`),
+which is consistent with Informedness being left out of the published main
+results. The exact BOP that this code uses is a **per-label threshold**:
 
 ```
 include label k  ⇔  q_sens[k] + q_spec_cost[k] > C

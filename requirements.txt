@@ -1,3 +1,7 @@
+# Frozen lockfile for exact reproduction (includes the heavy [image] stack:
+# torch / torchvision / torchxrayvision). For the canonical, lighter install use
+# `pip install -e .` (core, tabular-only) or `pip install -e ".[image]"`; the
+# authoritative dependency declarations live in pyproject.toml.
 joblib==1.3.2
 numpy==1.26.4
 pandas==2.0.3
