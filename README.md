@@ -62,13 +62,26 @@ In all **7 of 7** columns the diagonal (target = evaluation) is the maximum: to 
 
 ## Quickstart (one run)
 
+Using [**uv**](https://docs.astral.sh/uv/) (recommended, fast; a checked-in `uv.lock` pins exact versions):
+
 ```bash
-python -m venv .venv && source .venv/bin/activate    # or conda create -n dacaf python=3.10
-pip install -e .            # core (tabular) deps; add ".[image]" for the ChestX-ray experiments
+uv venv .venv --python 3.11 && source .venv/bin/activate
+uv pip install -e .          # core (tabular) deps; add ".[image]" for the ChestX-ray experiments
+# reproducible install from the lockfile instead: uv sync            (add --extra image for ChestX-ray)
 
 # one (dataset, seed) run:
 dacaf-mlc --dataset emotions --seed 1 --output-dir result
+# or without activating a venv: uv run dacaf-mlc --dataset emotions --seed 1 --output-dir result
 ```
+
+<details><summary>Alternative: plain pip / conda</summary>
+
+```bash
+python -m venv .venv && source .venv/bin/activate    # or conda create -n dacaf python=3.10
+pip install -e .            # core (tabular) deps; add ".[image]" for the ChestX-ray experiments
+dacaf-mlc --dataset emotions --seed 1 --output-dir result
+```
+</details>
 
 This writes `result/emotions/seed1_all.csv` and a cross-tab of **target metric × evaluation metric**, the table at the heart of the paper.
 

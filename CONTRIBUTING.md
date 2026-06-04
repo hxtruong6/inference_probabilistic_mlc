@@ -2,6 +2,15 @@
 
 ## Setup
 
+Using [uv](https://docs.astral.sh/uv/) (recommended; `uv.lock` pins exact versions):
+
+```bash
+uv sync --extra dev              # core + pytest + ruff   (add --extra image for ChestX-ray)
+# then run tools via `uv run ...`, or `source .venv/bin/activate`
+```
+
+Or with plain pip / conda:
+
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"          # core + pytest + ruff   (add ,image for ChestX-ray)
