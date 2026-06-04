@@ -1,7 +1,7 @@
 # Slurm sweep driver
 
-This directory turns `inference_evaluate_models.py` into a per-job entry point
-and submits one Slurm job per **(dataset × seed × estimator)** combination.
+This directory turns `python -m dacaf_mlc.evaluate` into a per-job entry point
+and submits one Slurm job per **(dataset × seed)** combination.
 
 ## Files
 
@@ -32,11 +32,11 @@ python slurm/aggregate.py --result-dir result
 The same entry point runs locally — useful for debugging one combo:
 
 ```bash
-python inference_evaluate_models.py \
+python -m dacaf_mlc.evaluate \
     --dataset emotions --seed 1 --estimator lr --output-dir result
 ```
 
-Output lands at `result/emotions/seed1_lr.csv` (+ `_crosstab.csv`).
+Output lands at `result/emotions/seed1_all.csv` (+ `_crosstab.csv`).
 
 ## Customising the sweep
 
@@ -58,7 +58,7 @@ DATASETS="emotions" SEEDS="$(seq 1 10)" ./slurm/submit_all.sh
 | `yeast`, `Water-quality` (L=14)   | 24h | 32G | 10 |
 | Everything else                   |  4h | 24G | 10 |
 
-`inference_evaluate_models.py` honours `SLURM_CPUS_PER_TASK` for joblib's fold
+`dacaf_mlc.evaluate` honours `SLURM_CPUS_PER_TASK` for joblib's fold
 parallelism — set `--cpus-per-task` to the number of folds you want in
 parallel (max 10 with `KFOLD_SPLIT_NUMBER=10`).
 

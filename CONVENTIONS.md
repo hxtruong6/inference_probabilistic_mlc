@@ -14,8 +14,7 @@ Some metrics are undefined for boundary predictions. The paper assigns:
 |---|---|---|
 | Precision with an **empty** prediction `Fpre(y, 0_K)` | **1** | Markedness (internal) |
 | NPV with an **all-ones** prediction `Fneg(y, 1_K)` | **1** | NPV metric, Markedness (internal) |
-| Recall when the **true** set is empty | 1 | Recall, Informedness |
-| Specificity when the **true** set is full | 1 | Informedness |
+| Recall when the **true** set is empty | 1 | Recall |
 
 Note the asymmetry: the **standalone** `precision_score` keeps the scikit-learn
 convention (precision = 0 when nothing is predicted but true positives exist),
@@ -37,24 +36,8 @@ reproduce the paper.
 | NPV | all-ones `1_K` (Corollary 2) | — |
 | Recall | all-ones `1_K` | — |
 | Specificity | all-zeros `0_K` | — |
-| Informedness | per-label threshold (see below) | pairwise |
 
-## Informedness — use the per-label threshold rule
-
-The manuscript's appendix sketches a size-`l` informedness rule under the
-assumption that the expected score is monotone in `l`, so that only
-`{0_K, ŷ^{L-1}, 1_K}` need be compared. That monotonicity assumption does not
-hold in general (brute force finds size-2 predictions that beat `ŷ^{L-1}`),
-which is consistent with Informedness being left out of the published main
-results. The exact BOP that this code uses is a **per-label threshold**:
-
-```
-include label k  ⇔  q_sens[k] + q_spec_cost[k] > C
-  q_sens[k]      = Σ_{s=1}^L     P(y_k=1, |y|=s) / s
-  q_spec_cost[k] = Σ_{s=1}^{L-1} P(y_k=1, |y|=s) / (L-s)
-  C              = P(|y|=0)/L + Σ_{s=1}^{L-1} P(|y|=s) / (L-s)
-```
-
-This is derived from `E[F_Inf(y,ŷ)] = const + ½ Σ_{k∈ŷ}(q^Inf_k − β_k)` and is
-verified optimal in `tests/test_inference_optimality.py::test_informedness_optimal`.
-The corresponding metric is the example-based `½(Specificity + Recall)`.
+These are the seven metrics that make up the paper's target × evaluation table
+(Hamming, Subset 0/1, Precision, NPV, Recall, Markedness, F-β). Each `predict_*`
+rule is verified against brute-force enumeration in
+`tests/test_inference_optimality.py`.

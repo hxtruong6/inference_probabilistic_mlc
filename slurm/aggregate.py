@@ -1,6 +1,6 @@
 """Aggregate per-job CSVs (one per seed × estimator) into per-dataset summaries.
 
-Per-job CSVs are written by inference_evaluate_models.py::run_single to
+Per-job CSVs are written by dacaf_mlc.pipeline.run_single to
     <result-dir>/<dataset>/seed<S>_<est-tag>.csv
 
 This script walks that layout and produces, per dataset:
