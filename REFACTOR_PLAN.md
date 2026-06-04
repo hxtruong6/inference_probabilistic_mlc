@@ -15,8 +15,8 @@ BOP optimality proofs) must stay green after every phase. Paper reproduction on 
       (setuptools, package=`dacaf_mlc`); `pip install -e .` works.
 - [x] 1b. Moved driver → `dacaf_mlc/evaluate.py`; console entry point `dacaf-mlc`; thin
       root shim kept for backward compatibility.
-- [ ] 1c. Split the driver internals into `inference/`, `metrics/`, `data/`, `pipeline/`.
-      (Behavior-preserving moves only; verify against golden test.)  ← REMAINING
+- [x] 1c. Split the driver into config/datasets/metrics_registry/pipeline + thin CLI;
+      verified by tests/test_pipeline_e2e.py and a real `dacaf-mlc` run.
 - [x] 1d. Vendored `skmultiflow/` made a proper package (added `__init__.py`); excluded
       from lint. (Optional: move under `_vendor/` later.)
 
@@ -31,16 +31,18 @@ BOP optimality proofs) must stay green after every phase. Paper reproduction on 
       note (per-label rule is the correct BOP).
 - [x] README scope reconciled: paper-first headline + "Beyond the paper" section.
 
-## Phase 4 — Reproducibility  ← REMAINING
-- [ ] `configs/paper.yaml` (PCC+LR, seeds, 10-fold, scaling). `make reproduce`.
-- [ ] Document/script NIH ChestX-ray feature regeneration; ship checksums not the .npy.
+## Phase 4 — Reproducibility  ✅ DONE
+- [x] `configs/paper.yaml` (protocol manifest) + `scripts/reproduce_tabular.sh` + `make reproduce`.
+- [ ] NIH ChestX-ray checksums — cannot generate without the (untracked) .npy files;
+      regeneration steps live in `dacaf_mlc/chest_xray_dataset/Readme.md`. (manual)
 
 ## Phase 5 — CI & quality  ✅ DONE
 - [x] GitHub Actions (`.github/workflows/ci.yml`): ruff lint + pytest on py3.10/3.12.
 - [x] ruff configured (excludes vendored + data-prep scripts; ignores E741 for `l`); clean.
 
-## Phase 6 — Docs & release
-- [x] `CITATION.cff` (DOI 10.1016/j.inffus.2026.104517).
-- [ ] CONTRIBUTING, API reference; version tag, Zenodo code DOI.  ← REMAINING
+## Phase 6 — Docs & release  ✅ (code DOI is manual)
+- [x] `CITATION.cff` (DOI 10.1016/j.inffus.2026.104517), `CONTRIBUTING.md`, README
+      "Library usage" API section.
+- [ ] Tag `v1.0.0` and mint a Zenodo code DOI. (manual, on release)
 
-Order: 0 → 1 → 2 → (3,5 parallel) → 4 → 6.
+Order: 0 → 1 → 2 → (3,5 parallel) → 4 → 6.  ALL PHASES COMPLETE (bar the two manual items).

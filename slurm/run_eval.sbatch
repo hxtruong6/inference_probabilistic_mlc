@@ -39,7 +39,7 @@ echo "[$(date -Is)] host=$(hostname) job=${SLURM_JOB_ID:-local}"
 echo "[$(date -Is)] DATASET=${DATASET} SEED=${SEED} ESTIMATOR=${ESTIMATOR}"
 echo "[$(date -Is)] CPUS=${SLURM_CPUS_PER_TASK:-?} MEM=${SLURM_MEM_PER_NODE:-?}"
 
-python inference_evaluate_models.py \
+python -m dacaf_mlc.evaluate \
     --dataset   "${DATASET}" \
     --seed      "${SEED}" \
     --estimator "${ESTIMATOR}" \

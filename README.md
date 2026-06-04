@@ -120,23 +120,60 @@ python slurm/aggregate.py                  # aggregate when jobs finish
 
 Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
 
+**One command** for the tractable (tabular) subset — runs the 5 tabular datasets × 5 seeds and aggregates:
+
+```bash
+make reproduce          # = bash scripts/reproduce_tabular.sh
+```
+
+The exact published protocol is recorded in [`configs/paper.yaml`](configs/paper.yaml).
+
+---
+
+## Library usage
+
+```python
+from sklearn.linear_model import LogisticRegression
+from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChainCustom
+from dacaf_mlc.evaluation_metrics import EvaluationMetrics as EM
+
+pcc = ProbabilisticClassifierChainCustom(LogisticRegression(max_iter=10_000))
+pcc.fit(X_train, Y_train)                 # Y: (n, L) binary
+
+y_f1   = pcc.predict_fmeasure(X_test, beta=1)   # Bayes-optimal for F1
+y_ham  = pcc.predict_hamming(X_test)            # ... for Hamming
+y_mar  = pcc.predict_markedness(X_test)         # ... for Markedness
+
+print(EM.f_beta(Y_test, y_f1), EM.markedness(Y_test, y_mar))
+```
+
+Every `predict_*` rule returns the prediction that maximises the expected value of its
+target metric (see [`CONVENTIONS.md`](CONVENTIONS.md) for the exact rules and conventions).
+
 ---
 
 ## Repository layout
 
 ```
 dacaf_mlc/                           # installable package
-  probability_classifier_chains.py   # PCC + per-metric Bayes-optimal predict_* rules
+  probability_classifier_chains.py   # PCC + BR + per-metric Bayes-optimal predict_* rules
   evaluation_metrics.py              # all metrics (higher-is-better form)
   arff_dataset.py                    # MULAN ARFF loader + 10-fold CV
-  chest_xray_dataset/                # NIH feature loader
-  evaluate.py                        # pipeline: train × predict × evaluate (CLI: dacaf-mlc)
+  datasets.py                        # dataset registry + loaders
+  metrics_registry.py                # which metrics run on which inference rule
+  pipeline.py                        # training / k-fold eval / run_single
+  evaluate.py                        # CLI entry point (dacaf-mlc): parse_args + main
+  config.py                          # paths + protocol constants
   utils.py                           # result aggregation
+  chest_xray_dataset/                # NIH feature loader ([image] extra)
   skmultiflow/                       # vendored ClassifierChain base
 inference_evaluate_models.py         # thin backward-compat shim → dacaf_mlc.evaluate
 pyproject.toml                       # packaging + deps (core / [image] / [dev])
+configs/paper.yaml                   # published protocol manifest
+scripts/reproduce_tabular.sh         # one-command tabular reproduction
 slurm/                               # cluster submission + aggregation
-tests/                               # unit tests + brute-force optimality checks
+tests/                               # unit tests + brute-force optimality + e2e
+CONVENTIONS.md  CONTRIBUTING.md  CITATION.cff
 result/                              # output CSVs
 paper/                               # local copy of the paper source (not tracked)
 ```
