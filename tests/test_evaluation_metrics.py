@@ -4,7 +4,7 @@ Run with: python -m pytest tests/test_evaluation_metrics.py -v
 """
 import numpy as np
 import pytest
-from src.evaluation_metrics import EvaluationMetrics as EM
+from dacaf_mlc.evaluation_metrics import EvaluationMetrics as EM
 
 
 # ──────────────────────────────────────────────

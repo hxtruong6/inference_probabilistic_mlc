@@ -2,7 +2,7 @@ import copy
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
-from src.skmultiflow.core.base import (
+from dacaf_mlc.skmultiflow.core.base import (
     BaseSKMObject,
     ClassifierMixin,
     MetaEstimatorMixin,
@@ -10,7 +10,7 @@ from src.skmultiflow.core.base import (
 )
 
 
-from src.skmultiflow.utils.validation import check_random_state
+from dacaf_mlc.skmultiflow.utils.validation import check_random_state
 
 
 class ClassifierChain(

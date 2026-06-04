@@ -12,11 +12,11 @@ import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
 
-from src.probability_classifier_chains import (
+from dacaf_mlc.probability_classifier_chains import (
     ProbabilisticClassifierChainCustom,
     joint_probability,
 )
-from src.evaluation_metrics import EvaluationMetrics as EM
+from dacaf_mlc.evaluation_metrics import EvaluationMetrics as EM
 
 
 def _fit_small_pcc(L, N=30, D=5, seed=0):
@@ -98,6 +98,26 @@ def test_fmeasure_optimal():
         cc, X[:NTEST], L, lambda x: cc.predict_fmeasure(x, beta=1),
         lambda yt, yp: EM.f_beta(yt, yp, beta=1),
     )
+
+
+def test_paper_table_signatures():
+    # Signatures that must hold for the code to reproduce the published tables:
+    #  - NPV BOP and Recall BOP are both the all-ones vector → the F_neg and
+    #    F_rec rows of every result table are identical.
+    #  - On the all-ones prediction, NPV and Recall both evaluate to 1.0
+    #    (vacuous conventions) → the NPV/Recall diagonals are 100.
+    #  - Precision BOP predicts exactly one label.
+    cc, X = _fit_small_pcc(L, seed=10)
+    yp_npv = cc.predict_npv(X)
+    yp_rec = cc.predict_recall(X)
+    assert np.array_equal(yp_npv, yp_rec) and np.all(yp_npv == 1)
+    truth = (X[:, :L] > 0).astype(int)
+    truth[:, 0] = 1  # ensure every sample has >=1 positive (as in the paper datasets)
+    # NPV is vacuously 1 on the all-ones prediction for ANY truth; recall is 1
+    # when every sample has a positive → together these give the 100 diagonals.
+    assert EM.negative_predictive_value(truth, yp_npv) == pytest.approx(1.0)
+    assert EM.recall_score(truth, yp_rec) == pytest.approx(1.0)
+    assert np.all(cc.predict_precision(X).sum(axis=1) == 1)
 
 
 @pytest.mark.parametrize("seed", [8, 9, 11])

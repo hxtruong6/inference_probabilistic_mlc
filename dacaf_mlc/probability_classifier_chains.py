@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.base import clone
 from sklearn.linear_model import LogisticRegression
 
-from src.skmultiflow.meta.classifier_chains import ClassifierChain
+from dacaf_mlc.skmultiflow.meta.classifier_chains import ClassifierChain
 
 
 def joint_probability(y, x, cc, payoff=np.prod):

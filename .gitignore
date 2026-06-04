@@ -12,3 +12,9 @@ result/*/
 .claude/
 # local reference copy of the paper; not tracked
 paper/
+
+# Python packaging / editable-install artifacts
+*.egg-info/
+build/
+dist/
+.venv/

@@ -82,12 +82,11 @@ For a probabilistic prediction `P(y | x)` over `L` labels, each rule returns the
 ## Quickstart
 
 ```bash
-conda create -n inference_prob_mlc python=3.10
-conda activate inference_prob_mlc
-pip install -r requirements.txt
+python -m venv .venv && source .venv/bin/activate    # or conda create -n dacaf python=3.10
+pip install -e .            # core (tabular) deps; add ".[image]" for the ChestX-ray experiments
 
 # one (dataset, seed, model) run:
-python inference_evaluate_models.py --dataset emotions --seed 1 --estimator lr --output-dir result
+dacaf-mlc --dataset emotions --seed 1 --estimator lr --output-dir result
 ```
 
 This writes `result/emotions/seed1_lr.csv` and a cross-tab of **target metric × evaluation metric** — the table at the heart of the paper.
@@ -109,12 +108,12 @@ The paper uses **Probabilistic Classifier Chains (PCC)** with an **L2-regularise
 | Yeast | 14 | 2417 | tabular |
 | ChestX-ray8 | 8 | 25596 | image (ResNet / resnetAE / DenseNet features) |
 
-For the chest-X-ray data we extract features with a pretrained backbone via [TorchXRayVision](https://github.com/mlmed/torchxrayvision); the raw NIH features are **not redistributed** (see [`src/chest_xray_dataset/Readme.md`](src/chest_xray_dataset/Readme.md)).
+For the chest-X-ray data we extract features with a pretrained backbone via [TorchXRayVision](https://github.com/mlmed/torchxrayvision); the raw NIH features are **not redistributed** (see [`dacaf_mlc/chest_xray_dataset/Readme.md`](dacaf_mlc/chest_xray_dataset/Readme.md)).
 
 **Full sweep** (heavy — use a cluster):
 
 ```bash
-python inference_evaluate_models.py        # local, small datasets
+dacaf-mlc                                  # local, small datasets (or: python -m dacaf_mlc.evaluate)
 # or: see slurm/README.md                  # one job per (dataset × seed × estimator)
 python slurm/aggregate.py                  # aggregate when jobs finish
 ```
@@ -126,15 +125,18 @@ Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_s
 ## Repository layout
 
 ```
-src/
+dacaf_mlc/                           # installable package
   probability_classifier_chains.py   # PCC + per-metric Bayes-optimal predict_* rules
   evaluation_metrics.py              # all metrics (higher-is-better form)
   arff_dataset.py                    # MULAN ARFF loader + 10-fold CV
   chest_xray_dataset/                # NIH feature loader
+  evaluate.py                        # pipeline: train × predict × evaluate (CLI: dacaf-mlc)
   utils.py                           # result aggregation
-inference_evaluate_models.py         # pipeline: train × predict × evaluate
+  skmultiflow/                       # vendored ClassifierChain base
+inference_evaluate_models.py         # thin backward-compat shim → dacaf_mlc.evaluate
+pyproject.toml                       # packaging + deps (core / [image] / [dev])
 slurm/                               # cluster submission + aggregation
-tests/                               # unit tests + brute-force equivalence checks
+tests/                               # unit tests + brute-force optimality checks
 result/                              # output CSVs
 paper/                               # local copy of the paper source (not tracked)
 ```
