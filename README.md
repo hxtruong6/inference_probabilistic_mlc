@@ -16,7 +16,7 @@ Official code for the paper **published in _Information Fusion_ (2026)**:
 
 In multi-label classification, each instance can carry *any subset* of the labels, and **different evaluation metrics want different predictions**. A model that is great for one metric (e.g. F₁) can be poor for another (e.g. subset accuracy).
 
-**DaCaF** is a generic recipe that, given a probabilistic model `P(y | x)`, finds the **Bayes-optimal prediction (BOP)** for a chosen metric — the prediction `ŷ` that maximises the *expected* score of that metric.
+**DaCaF** is a generic recipe that, given a probabilistic model `P(y | x)`, finds the **Bayes-optimal prediction (BOP)** for a chosen metric: the prediction `ŷ` that maximises the *expected* score of that metric.
 
 ```mermaid
 flowchart TD
@@ -31,55 +31,36 @@ flowchart TD
 
 **Two building blocks:**
 
-1. **Divide & Conquer** — partition the `2^L` possible predictions into `L+1` groups (by how many labels are predicted relevant). Within each group the best prediction is found just by **sorting labels by a score**; the global best is the best across groups.
-2. **Fusion** — the scores need certain marginal/pairwise probabilities. These are estimated by **fusing the predictions of the dependent binary classifiers** that make up the chain (via ancestral sampling).
+1. **Divide & Conquer**: partition the `2^L` possible predictions into `L+1` groups (by how many labels are predicted relevant). Within each group the best prediction is found just by **sorting labels by a score**; the global best is the best across groups.
+2. **Fusion**: the scores need certain marginal/pairwise probabilities. These are estimated by **fusing the predictions of the dependent binary classifiers** that make up the chain (via ancestral sampling).
 
-The paper proves this works for **two whole families of metrics** (so it covers many metrics at once, not one at a time) and shows when a metric's optimal prediction is *trivial* — a useful warning sign when choosing a metric.
-
----
-
-## Headline empirical finding
-
-**Mismatch hurts.** When you evaluate with metric *E* but optimise for a different metric *T* during prediction, performance usually drops. Optimising the metric you actually care about is (almost always) best — verified on 5 tabular datasets + a chest-X-ray image dataset, using the *exact* computation paradigm (no approximation blurring the picture).
+The paper proves this works for **two whole families of metrics** (so it covers many metrics at once, not one at a time) and shows when a metric's optimal prediction is *trivial*, a useful warning sign when choosing a metric.
 
 ---
 
-## The metrics and their optimal predictions
+## Results at a glance
 
-For a probabilistic prediction `P(y | x)` over `L` labels, each rule returns the prediction that maximises the expected metric. `pⱼ = P(yⱼ = 1 | x)` is the marginal.
+**The headline finding: mismatch hurts.** When you evaluate with metric *E* but optimise for a different metric *T* during prediction, performance usually drops. Optimising the metric you actually care about is (almost always) best. This is verified on 5 tabular datasets plus a chest-X-ray image dataset, using the *exact* computation paradigm (no approximation blurring the picture).
 
-| Metric | Optimal prediction (BOP) | Needs | Cost |
-|---|---|---|---|
-| **Hamming** | `ŷⱼ = 1 ⇔ pⱼ > ½` | marginals | `O(L)` |
-| **Subset 0/1** | the single most probable label vector | full joint | intractable |
-| **F-β / F₁** | sort by an F-score, pick best prefix size | pairwise `P(yⱼ=1, |y|=s)` | `O(L³)` |
-| **Markedness** | rank by marginals, compare prefix sizes | marginals | `O(L log L)` |
-| **Precision** | predict only the top-marginal label | marginals | `O(L)` *(near-trivial)* |
-| **NPV** | all ones except the lowest-marginal label | marginals | `O(L)` *(near-trivial)* |
-| **Recall** | always predict `1…1` | — | trivial |
-| **Specificity** | always predict `0…0` | — | trivial |
+You read the table **column by column**: each column is one evaluation metric, each row is the metric you optimised for. The **bold diagonal** (optimise the metric you evaluate) should be the largest value in its column.
 
-> **Why "trivial" matters:** Recall/Specificity (and near-trivial Precision/NPV) have optimal predictions you can write down *without looking at any data*. The paper argues such metrics are weak *standalone* evaluation metrics — a practical takeaway when designing a metric for a new domain.
+**Example: CHD-49 (PCC + logistic regression, mean over 5 seeds × 10-fold, the fastest dataset).** Values are percentages, higher is better. Bold = the maximum of its column = the rule that targets that metric.
 
----
+| Target ↓ \ Eval → | F₁ | Hamming | Markedness | Precision | NPV | Recall | Subset |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| **F₁** | **67.1** | 69.3 | 71.9 | 62.7 | 81.1 | 79.2 | 15.1 |
+| **Hamming** | 63.9 | **70.8** | 71.3 | 66.6 | 75.7 | 66.9 | 18.1 |
+| **Markedness** | 34.2 | 63.7 | **77.0** | 33.4 | 71.1 | 40.5 | 8.4 |
+| **Precision** | 40.5 | 64.8 | 68.3 | **73.5** | 63.1 | 29.1 | 3.1 |
+| **NPV** | 58.4 | 43.0 | 71.5 | 43.0 | **100.0** | 99.5 | 0.0 |
+| **Recall** | 58.4 | 43.0 | 71.5 | 43.0 | 100.0 | **99.5** | 0.0 |
+| **Subset** | 64.0 | 69.4 | 70.4 | 64.2 | 76.5 | 69.8 | **18.9** |
 
-## How to cite
-
-```bibtex
-@article{nguyen2026probabilistic,
-  title   = {Probabilistic multi-label classification via a divide-and-conquer and fusion approach},
-  author  = {Nguyen, Vu-Linh and Hoang, Xuan-Truong and Hoang, Anh and Huynh, Van-Nam},
-  journal = {Information Fusion},
-  year    = {2026},
-  pages   = {104517},
-  issn    = {1566-2535},
-  doi     = {10.1016/j.inffus.2026.104517}
-}
-```
+In all **7 of 7** columns the diagonal (target = evaluation) is the maximum: to score best on a metric, optimise that metric. The NPV and Recall rows are identical because both BOPs are the all-ones vector `1…1` (see the metrics table below).
 
 ---
 
-## Quickstart
+## Quickstart (one run)
 
 ```bash
 python -m venv .venv && source .venv/bin/activate    # or conda create -n dacaf python=3.10
@@ -89,13 +70,34 @@ pip install -e .            # core (tabular) deps; add ".[image]" for the ChestX
 dacaf-mlc --dataset emotions --seed 1 --output-dir result
 ```
 
-This writes `result/emotions/seed1_all.csv` and a cross-tab of **target metric × evaluation metric** — the table at the heart of the paper.
+This writes `result/emotions/seed1_all.csv` and a cross-tab of **target metric × evaluation metric**, the table at the heart of the paper.
+
+---
+
+## The metrics and their optimal predictions
+
+For a probabilistic prediction `P(y | x)` over `L` labels, each rule returns the prediction that maximises the expected metric. `pⱼ = P(yⱼ = 1 | x)` is the marginal.
+
+**How to read the columns:** *Needs* is the probabilistic information the rule consumes (cheap **marginals** `pⱼ`, the harder **pairwise** terms, or the full joint). *Cost* is the per-instance time once that information is available. Rules marked *trivial* / *near-trivial* have a BOP you can write down without looking at any data.
+
+| Metric | Optimal prediction (BOP) | Needs | Cost |
+|---|---|---|---|
+| **Hamming** | `ŷⱼ = 1 ⇔ pⱼ > ½` | marginals | `O(L)` |
+| **Subset 0/1** | the single most probable label vector | full joint | intractable |
+| **F-β / F₁** | sort by an F-score, pick best prefix size | pairwise `P(yⱼ=1, |y|=s)` | `O(L³)` |
+| **Markedness** | rank by marginals, compare prefix sizes | marginals | `O(L log L)` |
+| **Precision** | predict only the top-marginal label | marginals | `O(L)` *(near-trivial)* |
+| **NPV** | predict all ones `1…1` (same BOP as Recall here); falls back to `ŷ^{K-1}` (all ones but the lowest-marginal label) only if `1…1` is disallowed | marginals | `O(L)` *(near-trivial)* |
+| **Recall** | always predict `1…1` | none | trivial |
+| **Specificity** | always predict `0…0` | none | trivial |
+
+> **Why "trivial" matters:** Recall/Specificity (and near-trivial Precision/NPV) have optimal predictions you can write down *without looking at any data*. The paper argues such metrics are weak *standalone* evaluation metrics, a practical takeaway when designing a metric for a new domain.
 
 ---
 
 ## Reproducing the paper's results
 
-The paper uses **Probabilistic Classifier Chains (PCC)** with an **L2-regularised logistic-regression** base learner, **10-fold cross-validation**, and the **exact computation paradigm** (enumerate all `2^L` labelings, so it is limited to a small/moderate number of labels).
+The paper uses **Probabilistic Classifier Chains (PCC)** with an **L2-regularised logistic-regression** base learner, **10-fold cross-validation**, and the **exact computation paradigm** (enumerate all `2^L` labelings, so it is limited to a small or moderate number of labels). The exact published protocol is recorded in [`docs/paper.yaml`](docs/paper.yaml).
 
 **Datasets in the paper (6):**
 
@@ -110,7 +112,13 @@ The paper uses **Probabilistic Classifier Chains (PCC)** with an **L2-regularise
 
 For the chest-X-ray data we extract features with a pretrained backbone via [TorchXRayVision](https://github.com/mlmed/torchxrayvision); the raw NIH features are **not redistributed** (see [`dacaf_mlc/chest_xray_dataset/Readme.md`](dacaf_mlc/chest_xray_dataset/Readme.md)).
 
-**Full sweep** (heavy — use a cluster):
+**One command** for the tractable (tabular) subset, runs the 5 tabular datasets × 5 seeds and aggregates:
+
+```bash
+make reproduce          # = bash scripts/reproduce_tabular.sh
+```
+
+**Full sweep** (heavy, use a cluster):
 
 ```bash
 dacaf-mlc                                  # local, small datasets (or: python -m dacaf_mlc.evaluate)
@@ -120,13 +128,7 @@ python scripts/aggregate.py                # aggregate when jobs finish
 
 Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
 
-**One command** for the tractable (tabular) subset — runs the 5 tabular datasets × 5 seeds and aggregates:
-
-```bash
-make reproduce          # = bash scripts/reproduce_tabular.sh
-```
-
-The exact published protocol is recorded in [`docs/paper.yaml`](docs/paper.yaml).
+> **Note on exact numbers.** The inference rules here are the corrected, paper-aligned versions (each is checked against brute-force enumeration in the tests). Every **diagonal** entry (each metric optimised for itself, which is the paper's actual claim) reproduces the published tables within about 1.8 percentage points and stays the maximum of its column. Some **off-diagonal** cells of the Markedness and F-measure target rows differ from the printed paper tables, which were produced by an earlier predictor variant; this is a flat-optimum sensitivity in those rules, not a change to any conclusion. The `result/*.csv` and `docs/paper_tables.tex` files shipped in the repo are from an earlier multi-model run and will be regenerated.
 
 ---
 
@@ -189,6 +191,22 @@ Every inference rule is checked against **brute-force enumeration** of the expec
 
 ---
 
+## How to cite
+
+```bibtex
+@article{nguyen2026probabilistic,
+  title   = {Probabilistic multi-label classification via a divide-and-conquer and fusion approach},
+  author  = {Nguyen, Vu-Linh and Hoang, Xuan-Truong and Hoang, Anh and Huynh, Van-Nam},
+  journal = {Information Fusion},
+  year    = {2026},
+  pages   = {104517},
+  issn    = {1566-2535},
+  doi     = {10.1016/j.inffus.2026.104517}
+}
+```
+
+---
+
 ## References
 
 - K. Dembczyński, W. Cheng, E. Hüllermeier. *Bayes Optimal Multilabel Classification via Probabilistic Classifier Chains.* ICML 2010.
@@ -199,4 +217,4 @@ Every inference rule is checked against **brute-force enumeration** of the expec
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT, see [LICENSE](LICENSE).
