@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper below."
+title: "Probabilistic multi-label classification via a divide-and-conquer and fusion approach"
+authors:
+  - family-names: Nguyen
+    given-names: Vu-Linh
+  - family-names: Hoang
+    given-names: Xuan-Truong
+  - family-names: Hoang
+    given-names: Anh
+  - family-names: Huynh
+    given-names: Van-Nam
+preferred-citation:
+  type: article
+  title: "Probabilistic multi-label classification via a divide-and-conquer and fusion approach"
+  authors:
+    - family-names: Nguyen
+      given-names: Vu-Linh
+    - family-names: Hoang
+      given-names: Xuan-Truong
+    - family-names: Hoang
+      given-names: Anh
+    - family-names: Huynh
+      given-names: Van-Nam
+  journal: "Information Fusion"
+  year: 2026
+  doi: "10.1016/j.inffus.2026.104517"
+  issn: "1566-2535"
+  start: 104517

@@ -5,7 +5,7 @@ from uuid import uuid4
 from joblib import Parallel, delayed
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
-from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.linear_model import LogisticRegression
 import numpy as np
 
 from dacaf_mlc.arff_dataset import MultiLabelArffDataset
