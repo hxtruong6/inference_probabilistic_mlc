@@ -27,6 +27,8 @@ software_impacts/*.pdf
 software_impacts/*.spl
 software_impacts/*.bbl
 software_impacts/*.blg
+software_impacts/*.fls
+software_impacts/*.fdb_latexmk
 software_impacts/*.abs
 software_impacts/*.fff
 software_impacts/*.ttt
