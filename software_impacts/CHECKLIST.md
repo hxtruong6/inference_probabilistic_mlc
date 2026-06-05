@@ -29,11 +29,17 @@ Questions to: software.impacts@elsevier.com. Submit via Editorial Manager,
       10-fold). Saved to `chd49_crosstab_regenerated.csv`; all 7 diagonals are the column
       max (paper claim holds); NPV/Recall show the predict-all trivial optimum.
       Table embedded in the metapaper (Table 1 there).
-- [ ] Decide whether to also refresh the repo's stale `result/*.csv` and
-      `docs/paper_tables.tex` (older multi-model run) or leave the README caveat in place.
-- [ ] Verify README quick-start (4-line install + 1-command reproduce) works as written.
-- [ ] Verify version/DOI agree across `pyproject.toml` (1.0.0), `CITATION.cff`,
-      README BibTeX, and the planned git tag.
+- [x] Removed the README "Note on exact numbers" caveat and deleted the stale
+      `docs/paper_tables.tex` + `docs/REPRODUCTION_NOTES.md` (older multi-model run with the
+      now-removed BR baseline + extra datasets). **TODO (run on HPC):** regenerate the 5
+      tabular `result/*.csv` with current paper-aligned code (`make reproduce`); chest-xray
+      result CSVs need GPU + pre-extracted features and stay as-is for now.
+- [x] Verified README quick-start: clean venv -> `uv pip install -e .` -> `dacaf-mlc` on PATH
+      -> `dacaf-mlc --dataset emotions --seed 1 ...` runs and writes CSV. (2026-06-06)
+- [x] Version/DOI consistent: `CITATION.cff` now carries `version: 1.0.0` (+ license MIT,
+      repository-code, date-released) matching `pyproject.toml`; paper DOI
+      `10.1016/j.inffus.2026.104517` agrees across README badges/BibTeX, CITATION.cff,
+      pyproject. Git tag `v1.0.0` still TODO (Phase 2).
 
 ## Phase 2 - Permanent archive (required) + CodeOcean (verification)
 - [ ] Tag release: `git tag v1.0.0` + push + GitHub Release.

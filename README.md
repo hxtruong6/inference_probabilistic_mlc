@@ -141,8 +141,6 @@ python scripts/aggregate.py                # aggregate when jobs finish
 
 Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
 
-> **Note on exact numbers.** The inference rules here are the corrected, paper-aligned versions (each is checked against brute-force enumeration in the tests). Every **diagonal** entry (each metric optimised for itself, which is the paper's actual claim) reproduces the published tables within about 1.8 percentage points and stays the maximum of its column. Some **off-diagonal** cells of the Markedness and F-measure target rows differ from the printed paper tables, which were produced by an earlier predictor variant; this is a flat-optimum sensitivity in those rules, not a change to any conclusion. The `result/*.csv` and `docs/paper_tables.tex` files shipped in the repo are from an earlier multi-model run and will be regenerated.
-
 ---
 
 ## Library usage
@@ -185,7 +183,7 @@ dacaf_mlc/                           # installable package
 pyproject.toml                       # packaging + deps (core / [image] / [dev])
 scripts/                             # reproduce_tabular.sh + Slurm cluster scripts
 tests/                               # unit tests + brute-force optimality + e2e
-docs/                                # reproduction notes, result tables (.tex), paper.yaml manifest
+docs/                                # paper.yaml protocol manifest
 datasets/                            # the paper's MULAN ARFFs (+ chest-xray label CSV)
 result/                              # aggregated result CSVs
 CONVENTIONS.md  CONTRIBUTING.md  CITATION.cff
