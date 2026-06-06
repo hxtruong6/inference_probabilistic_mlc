@@ -1,8 +1,9 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the paper below."
 title: "Probabilistic multi-label classification via a divide-and-conquer and fusion approach"
-version: 1.0.0
+version: 1.1.0
 date-released: "2026-06-06"
+doi: "10.5281/zenodo.20572638"
 license: MIT
 repository-code: "https://github.com/hxtruong6/inference_probabilistic_mlc"
 url: "https://github.com/hxtruong6/inference_probabilistic_mlc"
@@ -11,6 +12,7 @@ authors:
     given-names: Vu-Linh
   - family-names: Hoang
     given-names: Xuan-Truong
+    orcid: "https://orcid.org/0009-0003-4350-5148"
   - family-names: Hoang
     given-names: Anh
   - family-names: Huynh
@@ -23,6 +25,7 @@ preferred-citation:
       given-names: Vu-Linh
     - family-names: Hoang
       given-names: Xuan-Truong
+      orcid: "https://orcid.org/0009-0003-4350-5148"
     - family-names: Hoang
       given-names: Anh
     - family-names: Huynh

@@ -2,6 +2,8 @@
 
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.inffus.2026.104517-blue)](https://doi.org/10.1016/j.inffus.2026.104517)
 [![Journal](https://img.shields.io/badge/Information%20Fusion-2026-green)](https://doi.org/10.1016/j.inffus.2026.104517)
+[![Software DOI](https://img.shields.io/badge/Software%20DOI-10.5281%2Fzenodo.20572638-blue)](https://doi.org/10.5281/zenodo.20572638)
+[![Code Ocean](https://img.shields.io/badge/Code%20Ocean-Reproduce-blue?logo=codeocean)](https://codeocean.com/capsule/1580907/tree)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
 
 Official code for the paper **published in _Information Fusion_ (2026)**:
@@ -24,15 +26,14 @@ flowchart TD
     B -->|inference, per instance x| C[Probabilistic prediction<br/>P of y given x]
     C --> D{DaCaF}
     D --> E[Divide and Conquer<br/>split predictions by number of relevant labels,<br/>solve each group by sorting]
-    D --> F[Fusion<br/>estimate the needed probabilities<br/>by fusing the chain binary classifiers]
-    E --> G[Bayes-optimal prediction y-hat<br/>for the chosen metric]
-    F --> G
+    E --> F[Fusion<br/>produce the prediction by fusing the chain binary classifiers<br/>to supply the needed marginal/pairwise probabilities]
+    F --> G[Bayes-optimal prediction y-hat<br/>for the chosen metric]
 ```
 
 **Two building blocks:**
 
 1. **Divide & Conquer**: partition the `2^L` possible predictions into `L+1` groups (by how many labels are predicted relevant). Within each group the best prediction is found just by **sorting labels by a score**; the global best is the best across groups.
-2. **Fusion**: the scores need certain marginal/pairwise probabilities. These are estimated by **fusing the predictions of the dependent binary classifiers** that make up the chain (via ancestral sampling).
+2. **Fusion**: the final step that produces the prediction. The sorting scores need certain marginal/pairwise probabilities, which are supplied by **fusing the predictions of the dependent binary classifiers** that make up the chain (via ancestral sampling).
 
 The paper proves this works for **two whole families of metrics** (so it covers many metrics at once, not one at a time) and shows when a metric's optimal prediction is *trivial*, a useful warning sign when choosing a metric.
 
@@ -140,6 +141,10 @@ python scripts/aggregate.py                # aggregate when jobs finish
 ```
 
 Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
+
+### Run it online (Code Ocean)
+
+A one-click reproducible capsule is available: **<https://codeocean.com/capsule/1580907/tree>**. Click **Reproducible Run** to rebuild the environment and reproduce the CHD-49 target × evaluation table (`result_CHD_49_crosstab.csv`) on CPU in seconds — every diagonal entry is the maximum of its column, the paper's central claim. The capsule entry point is [`run`](run); dependencies are pinned in [`requirements-core.txt`](requirements-core.txt).
 
 ---
 
