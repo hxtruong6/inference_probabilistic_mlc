@@ -1,5 +1,17 @@
+# Python
 *.pyc
 __pycache__/
 *.so
+*.egg-info/
 .DS_Store
 *.swp
+
+# Not needed inside the reproducibility capsule (keeps the image small).
+# NOTE: datasets/ and tests/ are intentionally KEPT (data to reproduce + tests to verify).
+.git/
+.github/
+.venv/
+docs/
+software_impacts/
+result/
+*.pdf

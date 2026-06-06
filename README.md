@@ -62,13 +62,26 @@ In all **7 of 7** columns the diagonal (target = evaluation) is the maximum: to 
 
 ## Quickstart (one run)
 
+Using [**uv**](https://docs.astral.sh/uv/) (recommended, fast; a checked-in `uv.lock` pins exact versions):
+
 ```bash
-python -m venv .venv && source .venv/bin/activate    # or conda create -n dacaf python=3.10
-pip install -e .            # core (tabular) deps; add ".[image]" for the ChestX-ray experiments
+uv venv .venv --python 3.11 && source .venv/bin/activate
+uv pip install -e .          # core (tabular) deps; add ".[image]" for the ChestX-ray experiments
+# reproducible install from the lockfile instead: uv sync            (add --extra image for ChestX-ray)
 
 # one (dataset, seed) run:
 dacaf-mlc --dataset emotions --seed 1 --output-dir result
+# or without activating a venv: uv run dacaf-mlc --dataset emotions --seed 1 --output-dir result
 ```
+
+<details><summary>Alternative: plain pip / conda</summary>
+
+```bash
+python -m venv .venv && source .venv/bin/activate    # or conda create -n dacaf python=3.10
+pip install -e .            # core (tabular) deps; add ".[image]" for the ChestX-ray experiments
+dacaf-mlc --dataset emotions --seed 1 --output-dir result
+```
+</details>
 
 This writes `result/emotions/seed1_all.csv` and a cross-tab of **target metric × evaluation metric**, the table at the heart of the paper.
 
@@ -128,8 +141,6 @@ python scripts/aggregate.py                # aggregate when jobs finish
 
 Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
 
-> **Note on exact numbers.** The inference rules here are the corrected, paper-aligned versions (each is checked against brute-force enumeration in the tests). Every **diagonal** entry (each metric optimised for itself, which is the paper's actual claim) reproduces the published tables within about 1.8 percentage points and stays the maximum of its column. Some **off-diagonal** cells of the Markedness and F-measure target rows differ from the printed paper tables, which were produced by an earlier predictor variant; this is a flat-optimum sensitivity in those rules, not a change to any conclusion. The `result/*.csv` and `docs/paper_tables.tex` files shipped in the repo are from an earlier multi-model run and will be regenerated.
-
 ---
 
 ## Library usage
@@ -172,7 +183,7 @@ dacaf_mlc/                           # installable package
 pyproject.toml                       # packaging + deps (core / [image] / [dev])
 scripts/                             # reproduce_tabular.sh + Slurm cluster scripts
 tests/                               # unit tests + brute-force optimality + e2e
-docs/                                # reproduction notes, result tables (.tex), paper.yaml manifest
+docs/                                # paper.yaml protocol manifest
 datasets/                            # the paper's MULAN ARFFs (+ chest-xray label CSV)
 result/                              # aggregated result CSVs
 CONVENTIONS.md  CONTRIBUTING.md  CITATION.cff
