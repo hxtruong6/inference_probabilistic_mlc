@@ -2,16 +2,19 @@
 # Code Ocean reproducible-run entry point.
 #
 # Code Ocean executes /code/run on a clean build, with the repo mounted at
-# /code and an output folder at /results. This rebuilds the exact environment
-# from uv.lock and reproduces the paper's CHD-49 result table.
+# /code and an output folder at /results. Third-party libraries are installed
+# at BUILD time via the Environment editor (pinned in requirements-core.txt),
+# NOT here — per Code Ocean's verification guidelines. This script only
+# registers the local source package and runs the analysis.
 set -euo pipefail
 
 cd "$(dirname "$0")"
 export DACAF_BASE_DIR="$(pwd)"        # /code at runtime, so datasets/ is found
 
-pip install -q uv                      # bootstrap uv (not preinstalled on CO)
-uv sync --frozen                       # exact deps from uv.lock; fail if stale
+# Register the local source package only (no dependency downloads). This is the
+# "compile source at runtime" step the guidelines explicitly allow.
+pip install --no-deps -e .
 
 # CHD-49 table -> /results/result_CHD_49_crosstab.csv (fast, CPU-only).
 # For all 5 tabular datasets, swap in: scripts/reproduce_tabular.sh
-uv run bash scripts/reproduce_capsule.sh /results
+bash scripts/reproduce_capsule.sh /results
