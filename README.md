@@ -24,15 +24,14 @@ flowchart TD
     B -->|inference, per instance x| C[Probabilistic prediction<br/>P of y given x]
     C --> D{DaCaF}
     D --> E[Divide and Conquer<br/>split predictions by number of relevant labels,<br/>solve each group by sorting]
-    D --> F[Fusion<br/>estimate the needed probabilities<br/>by fusing the chain binary classifiers]
-    E --> G[Bayes-optimal prediction y-hat<br/>for the chosen metric]
-    F --> G
+    E --> F[Fusion<br/>produce the prediction by fusing the chain binary classifiers<br/>to supply the needed marginal/pairwise probabilities]
+    F --> G[Bayes-optimal prediction y-hat<br/>for the chosen metric]
 ```
 
 **Two building blocks:**
 
 1. **Divide & Conquer**: partition the `2^L` possible predictions into `L+1` groups (by how many labels are predicted relevant). Within each group the best prediction is found just by **sorting labels by a score**; the global best is the best across groups.
-2. **Fusion**: the scores need certain marginal/pairwise probabilities. These are estimated by **fusing the predictions of the dependent binary classifiers** that make up the chain (via ancestral sampling).
+2. **Fusion**: the final step that produces the prediction. The sorting scores need certain marginal/pairwise probabilities, which are supplied by **fusing the predictions of the dependent binary classifiers** that make up the chain (via ancestral sampling).
 
 The paper proves this works for **two whole families of metrics** (so it covers many metrics at once, not one at a time) and shows when a metric's optimal prediction is *trivial*, a useful warning sign when choosing a metric.
 
