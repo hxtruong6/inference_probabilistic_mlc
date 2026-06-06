@@ -2,6 +2,7 @@
 
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.inffus.2026.104517-blue)](https://doi.org/10.1016/j.inffus.2026.104517)
 [![Journal](https://img.shields.io/badge/Information%20Fusion-2026-green)](https://doi.org/10.1016/j.inffus.2026.104517)
+[![Code Ocean](https://img.shields.io/badge/Code%20Ocean-Reproduce-blue?logo=codeocean)](https://codeocean.com/capsule/1580907/tree)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
 
 Official code for the paper **published in _Information Fusion_ (2026)**:
@@ -139,6 +140,10 @@ python scripts/aggregate.py                # aggregate when jobs finish
 ```
 
 Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
+
+### Run it online (Code Ocean)
+
+A one-click reproducible capsule is available: **<https://codeocean.com/capsule/1580907/tree>**. Click **Reproducible Run** to rebuild the environment and reproduce the CHD-49 target × evaluation table (`result_CHD_49_crosstab.csv`) on CPU in seconds — every diagonal entry is the maximum of its column, the paper's central claim. The capsule entry point is [`run`](run); dependencies are pinned in [`requirements-core.txt`](requirements-core.txt).
 
 ---
 
