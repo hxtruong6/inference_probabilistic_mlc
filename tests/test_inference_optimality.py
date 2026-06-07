@@ -13,7 +13,7 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 from dacaf_mlc.probability_classifier_chains import (
-    ProbabilisticClassifierChainCustom,
+    ProbabilisticClassifierChain,
     joint_probability,
 )
 from dacaf_mlc.evaluation_metrics import EvaluationMetrics as EM
@@ -26,7 +26,7 @@ def _fit_small_pcc(L, N=30, D=5, seed=0):
     X = rng.randn(N, D)
     logits = X[:, :L] if D >= L else rng.randn(N, L)
     Y = (rng.rand(N, L) < 1.0 / (1.0 + np.exp(-logits))).astype(int)
-    cc = ProbabilisticClassifierChainCustom(
+    cc = ProbabilisticClassifierChain(
         base_estimator=LogisticRegression(max_iter=2000)
     )
     cc.fit(X, Y)

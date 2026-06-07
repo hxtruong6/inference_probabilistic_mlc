@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dacaf-mlc"
-version = "1.1.0"
+version = "1.2.0"
 description = "Bayes-optimal inference for probabilistic multi-label classification (DaCaF)"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [
     { name = "Vu-Linh Nguyen" },
-    { name = "Xuan-Truong Hoang", email = "hxtruong6@gmail.com" },
+    { name = "Xuan-Truong Hoang", email = "hxtruong@jaist.ac.jp" },
     { name = "Anh Hoang" },
     { name = "Van-Nam Huynh" },
 ]
@@ -53,6 +53,9 @@ dacaf-mlc = "dacaf_mlc.evaluate:main"
 
 [tool.setuptools.packages.find]
 include = ["dacaf_mlc*"]
+
+[tool.setuptools.package-data]
+"dacaf_mlc.skmultiflow" = ["LICENSE"]
 
 [tool.ruff]
 line-length = 100

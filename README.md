@@ -4,6 +4,8 @@
 [![Journal](https://img.shields.io/badge/Information%20Fusion-2026-green)](https://doi.org/10.1016/j.inffus.2026.104517)
 [![Software DOI](https://img.shields.io/badge/Software%20DOI-10.5281%2Fzenodo.20572638-blue)](https://doi.org/10.5281/zenodo.20572638)
 [![Code Ocean](https://img.shields.io/badge/Code%20Ocean-Reproduce-blue?logo=codeocean)](https://codeocean.com/capsule/1580907/tree)
+[![PyPI](https://img.shields.io/pypi/v/dacaf-mlc?logo=pypi&logoColor=white)](https://pypi.org/project/dacaf-mlc/)
+[![Python](https://img.shields.io/pypi/pyversions/dacaf-mlc)](https://pypi.org/project/dacaf-mlc/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
 
 Official code for the paper **published in _Information Fusion_ (2026)**:
@@ -60,6 +62,16 @@ You read the table **column by column**: each column is one evaluation metric, e
 In all **7 of 7** columns the diagonal (target = evaluation) is the maximum: to score best on a metric, optimise that metric. The NPV and Recall rows are identical because both BOPs are the all-ones vector `1…1` (see the metrics table below).
 
 ---
+
+## Install
+
+To **use DaCaF as a library**, install the released package from PyPI:
+
+```bash
+pip install dacaf-mlc          # core (tabular); add "dacaf-mlc[image]" for the ChestX-ray experiments
+```
+
+To **reproduce the paper** (datasets, sweeps, lockfile), use the editable install from a clone below.
 
 ## Quickstart (one run)
 
@@ -135,8 +147,7 @@ make reproduce          # = bash scripts/reproduce_tabular.sh
 **Full sweep** (heavy, use a cluster):
 
 ```bash
-dacaf-mlc                                  # local, small datasets (or: python -m dacaf_mlc.evaluate)
-# or: see scripts/SLURM.md                 # one job per (dataset × seed)
+dacaf-mlc --dataset CHD_49 --seed 1        # one job per (dataset, seed); repeat as needed
 python scripts/aggregate.py                # aggregate when jobs finish
 ```
 
@@ -152,10 +163,10 @@ A one-click reproducible capsule is available: **<https://codeocean.com/capsule/
 
 ```python
 from sklearn.linear_model import LogisticRegression
-from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChainCustom
+from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChain
 from dacaf_mlc.evaluation_metrics import EvaluationMetrics as EM
 
-pcc = ProbabilisticClassifierChainCustom(LogisticRegression(max_iter=10_000))
+pcc = ProbabilisticClassifierChain(LogisticRegression(max_iter=10_000))
 pcc.fit(X_train, Y_train)                 # Y: (n, L) binary
 
 y_f1   = pcc.predict_fmeasure(X_test, beta=1)   # Bayes-optimal for F1
@@ -231,6 +242,15 @@ Every inference rule is checked against **brute-force enumeration** of the expec
 - D. M. W. Powers. *Evaluation: From Precision, Recall and F-Measure to ROC, Informedness, Markedness & Correlation.* 2011.
 - G. Tsoumakas, I. Katakis, I. Vlahavas. *Mining Multi-label Data.* 2010 (MULAN).
 
+## Acknowledgements
+
+The `dacaf_mlc/skmultiflow/` directory contains a trimmed, vendored subset of
+[scikit-multiflow](https://github.com/scikit-multiflow/scikit-multiflow)
+(the `ClassifierChain` base and its supporting utilities), redistributed under
+its original 3-clause BSD license. See
+[`dacaf_mlc/skmultiflow/LICENSE`](dacaf_mlc/skmultiflow/LICENSE) for the full text.
+
 ## License
 
-MIT, see [LICENSE](LICENSE).
+MIT for the original DaCaF code, see [LICENSE](LICENSE). Vendored third-party
+code retains its own license as noted in Acknowledgements above.

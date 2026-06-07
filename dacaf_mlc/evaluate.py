@@ -39,8 +39,8 @@ def main():
         run_single(args.dataset, args.seed, estimator_names, args.output_dir)
         return
 
-    # Full sweep — kept for local interactive use; on the cluster prefer
-    # scripts/submit_all.sh which launches one --dataset job at a time.
+    # Full sweep — kept for local interactive use; for large runs prefer
+    # one --dataset job at a time and aggregate with scripts/aggregate.py.
     for dataset_name in DEFAULT_DATASET_NAMES:
         for seed in DEFAULT_SEEDS:
             run_single(dataset_name, seed, estimator_names, args.output_dir)
