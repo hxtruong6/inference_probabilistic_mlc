@@ -231,6 +231,15 @@ Every inference rule is checked against **brute-force enumeration** of the expec
 - D. M. W. Powers. *Evaluation: From Precision, Recall and F-Measure to ROC, Informedness, Markedness & Correlation.* 2011.
 - G. Tsoumakas, I. Katakis, I. Vlahavas. *Mining Multi-label Data.* 2010 (MULAN).
 
+## Acknowledgements
+
+The `dacaf_mlc/skmultiflow/` directory contains a trimmed, vendored subset of
+[scikit-multiflow](https://github.com/scikit-multiflow/scikit-multiflow)
+(the `ClassifierChain` base and its supporting utilities), redistributed under
+its original 3-clause BSD license. See
+[`dacaf_mlc/skmultiflow/LICENSE`](dacaf_mlc/skmultiflow/LICENSE) for the full text.
+
 ## License
 
-MIT, see [LICENSE](LICENSE).
+MIT for the original DaCaF code, see [LICENSE](LICENSE). Vendored third-party
+code retains its own license as noted in Acknowledgements above.

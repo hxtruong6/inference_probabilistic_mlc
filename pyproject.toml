@@ -54,6 +54,9 @@ dacaf-mlc = "dacaf_mlc.evaluate:main"
 [tool.setuptools.packages.find]
 include = ["dacaf_mlc*"]
 
+[tool.setuptools.package-data]
+"dacaf_mlc.skmultiflow" = ["LICENSE"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py310"
