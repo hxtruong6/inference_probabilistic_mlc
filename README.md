@@ -147,8 +147,7 @@ make reproduce          # = bash scripts/reproduce_tabular.sh
 **Full sweep** (heavy, use a cluster):
 
 ```bash
-dacaf-mlc                                  # local, small datasets (or: python -m dacaf_mlc.evaluate)
-# or: see scripts/SLURM.md                 # one job per (dataset × seed)
+dacaf-mlc --dataset CHD_49 --seed 1        # one job per (dataset, seed); repeat as needed
 python scripts/aggregate.py                # aggregate when jobs finish
 ```
 

@@ -7,7 +7,7 @@ __pycache__/
 datasets/NIH
 datasets/nih_*
 scripts/logs/
-# per-job CSVs from scripts/submit_all.sh; aggregated result_*.csv is the source of truth
+# per-job CSVs from sweeps; aggregated result_*.csv is the source of truth
 result/*/
 .claude/
 .vscode/
