@@ -23,6 +23,22 @@
 \usepackage{lmodern}
 \usepackage{booktabs}
 \usepackage{listings}
+%% Python syntax highlighting for code listings (listings + xcolor, no shell-escape needed)
+\definecolor{codekw}{RGB}{0,0,180}
+\definecolor{codecomment}{RGB}{0,128,0}
+\definecolor{codestring}{RGB}{163,21,21}
+\lstdefinestyle{pythonstyle}{%
+  language=Python,
+  basicstyle=\scriptsize\ttfamily,
+  keywordstyle=\color{codekw}\bfseries,
+  commentstyle=\color{codecomment}\itshape,
+  stringstyle=\color{codestring},
+  showstringspaces=false,
+  breaklines=true,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{black!30},
+}
 \usepackage[authoryear,longnamesfirst]{natbib}
 
 \usepackage{hyperref}
@@ -214,7 +230,7 @@ and 3.12.
 \section{Illustrative examples}\label{sec:examples}
 A few lines are enough to fit a model once and then query the Bayes-optimal prediction
 for any metric of interest:
-\begin{lstlisting}[language=Python,basicstyle=\scriptsize\ttfamily]
+\begin{lstlisting}[style=pythonstyle]
 from sklearn.linear_model import LogisticRegression
 from dacaf_mlc.probability_classifier_chains \
     import ProbabilisticClassifierChainCustom

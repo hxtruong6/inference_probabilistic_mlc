@@ -11,7 +11,7 @@ requires-python = ">=3.10"
 license = { file = "LICENSE" }
 authors = [
     { name = "Vu-Linh Nguyen" },
-    { name = "Xuan-Truong Hoang", email = "hxtruong6@gmail.com" },
+    { name = "Xuan-Truong Hoang", email = "hxtruong@jaist.ac.jp" },
     { name = "Anh Hoang" },
     { name = "Van-Nam Huynh" },
 ]
