@@ -170,42 +170,50 @@ structure---useful for assessing the practical value of emerging MLC metrics.
 \section{Software description}\label{sec:description}
 
 \subsection{Software architecture}
-DaCaF is an installable Python package (\texttt{dacaf\_mlc}; pip / Docker, with a console
-script \texttt{dacaf-mlc}). Its core class \texttt{ProbabilisticClassifierChainCustom}
-(PCC) wraps any scikit-learn base estimator and estimates $P(y\mid x)$ via a classifier
-chain. Every inference rule rests on two algorithmic building blocks:
-\begin{itemize}
-  \item \textit{Divide-and-conquer}: partition the $2^L$ predictions into $L{+}1$ groups
-        by number of relevant labels; the best in each group is found by sorting labels by
-        a per-metric score, and the global best is the best across groups.
-  \item \textit{Fusion}: the scores require marginal/pairwise probabilities, estimated by
-        fusing the chain's dependent binary classifiers via ancestral sampling.
-\end{itemize}
-Supporting modules include \texttt{evaluation\_metrics.py}, \texttt{metrics\_registry.py},
-\texttt{pipeline.py} (train / k-fold / run\_single), \texttt{evaluate.py} (CLI),
-\texttt{arff\_dataset.py} (MULAN ARFF + 10-fold CV), \texttt{datasets.py}, and
-\texttt{chest\_xray\_dataset/} (NIH feature extractor, [image] extra). A vendored
-\texttt{skmultiflow} ClassifierChain base keeps the install self-contained.
+DaCaF is distributed as the Python package \texttt{dacaf\_mlc}, which can be installed
+from PyPI or run through the provided Docker image, and which also exposes a command-line
+tool \texttt{dacaf-mlc}. At its core is the class \texttt{ProbabilisticClassifierChainCustom}
+(PCC), which turns any scikit-learn base estimator into a probabilistic multi-label
+classifier: it arranges the labels as a classifier chain and, from that chain, estimates
+the conditional probability $P(y\mid x)$ of each labeling.
+
+Every prediction rule in the package is built from the same two steps of the DaCaF approach.
+The \textbf{divide-and-conquer} step uses a property of Bayes-optimal predictions to
+partition the $2^L$ possible predictions into $L{+}1$ groups according to the number of
+relevant labels; within each group a local optimum can be found efficiently by sorting the
+labels by an appropriate score, and the global BOP is then obtained by comparing the local
+optima across groups. The \textbf{fusion} step supplies the probabilistic information that
+these scores require---marginal and pairwise label probabilities---by fusing the predictions
+of the dependent binary classifiers that make up the chain, rather than by enumerating all
+labelings.
+
+Around this core, the package provides supporting modules for evaluation metrics and their
+registry, a pipeline for training and $k$-fold evaluation, the \texttt{evaluate} command-line
+interface, and loaders for MULAN ARFF datasets and the NIH ChestX-ray data. A trimmed copy of
+the \texttt{skmultiflow} classifier-chain base is vendored so that the package installs and
+runs on its own.
 
 \subsection{Software functionalities}
-\begin{itemize}
-  \item Seven per-metric Bayes-optimal rules: \texttt{predict\_fmeasure},
-        \texttt{predict\_hamming}, \texttt{predict\_markedness}, \texttt{predict\_precision},
-        \texttt{predict\_npv}, \texttt{predict\_recall}, \texttt{predict\_subset}. Each
-        returns the prediction maximising the expected value of its target metric
-        (conventions in CONVENTIONS.md).
-  \item Covers two whole metric families at once and flags when a metric's optimum is
-        \emph{trivial} (a metric-choice diagnostic).
-  \item Batched predictor: one \texttt{predict\_proba} per chain level instead of
-        $N\cdot L\cdot 2^L$; verified numerically equal to brute-force enumeration.
-  \item Reproducible evaluation: a CLI and scripts (\texttt{reproduce\_tabular.sh}, Slurm)
-        over MULAN tabular datasets and an NIH ChestX-ray14 image dataset.
-  \item Correctness harness: every rule checked against brute-force expected-metric
-        enumeration on small cases; CI on Python 3.10/3.12.
-\end{itemize}
+The central functionality is a set of seven per-metric prediction rules---\texttt{predict\_fmeasure},
+\texttt{predict\_hamming}, \texttt{predict\_markedness}, \texttt{predict\_precision},
+\texttt{predict\_npv}, \texttt{predict\_recall}, and \texttt{predict\_subset}---each of which
+returns the prediction that maximizes the expected value of its target metric. Between them
+these rules cover two families of MLC metrics, so a single fitted model can be queried for the
+Bayes-optimal prediction of many different metrics. The same machinery also yields a diagnostic
+that flags metrics whose optimal prediction is trivial or very restricted, which can help
+practitioners judge the practical value of a newly proposed metric.
+
+For efficiency, the rules share a batched predictor that issues one \texttt{predict\_proba} call
+per chain level instead of evaluating all $N\cdot L\cdot 2^L$ labelings, and its output has been
+verified to match brute-force enumeration numerically on small problems. Finally, the package
+ships a reproducible evaluation layer---the command-line interface together with scripts over
+MULAN tabular datasets and the NIH ChestX-ray data---and a correctness harness that checks every
+rule against exact expected-metric enumeration, run under continuous integration on Python 3.10
+and 3.12.
 
 \subsection{Illustrative example}
-A minimal library usage fits the model once and then queries the BOP for any metric:
+A few lines are enough to fit a model once and then query the Bayes-optimal prediction
+for any metric of interest:
 \begin{lstlisting}[language=Python,basicstyle=\scriptsize\ttfamily]
 from sklearn.linear_model import LogisticRegression
 from dacaf_mlc.probability_classifier_chains \
@@ -219,11 +227,20 @@ y_f1  = pcc.predict_fmeasure(X_test, beta=1)  # BOP for F1
 y_ham = pcc.predict_hamming(X_test)           # BOP for Hamming
 print(EM.f_beta(Y_test, y_f1), EM.hamming(Y_test, y_ham))
 \end{lstlisting}
-The headline experiment (Table~\ref{tab:chd49}) shows that the mismatch between the target
-and evaluation metrics hurts: rows are the metric optimised for, columns the metric
-evaluated, and the bold diagonal entry is the maximum of its column. A single command
-reproduces it: \texttt{make reproduce} (CHD-49, the fastest dataset). The chest-xray path
-scales the same API to real DenseNet/ResNet features.
+Table~\ref{tab:chd49} reports the headline experiment on the CHD-49 dataset, with PCC and
+logistic regression averaged over five seeds and ten-fold cross-validation. Each row is the
+metric that DaCaF optimises during prediction, and each column the metric used to evaluate
+the resulting predictions; the bold entry on the diagonal marks the largest value in its
+column. The pattern is consistent with the divide-and-conquer guarantee: for almost every
+evaluation metric, the best score in a column is obtained by optimising that same metric, so
+a mismatch between the target and the evaluation metric measurably lowers performance. The
+two exceptions are informative rather than accidental. The NPV and Recall columns are both
+maximised by predictions that collapse to the predict-all labeling---the trivial optimum that
+the diagnostic flags---which reaches a perfect or near-perfect score without learning anything
+metric-specific from the data, while driving the Subset score to zero. The whole table is
+regenerated from the shipped code with a single command, \texttt{make reproduce} (CHD-49, the
+fastest dataset), and the same API carries over unchanged to the NIH ChestX-ray features
+extracted with a pretrained DenseNet or ResNet backbone.
 
 \begin{table}[t]
 \centering
