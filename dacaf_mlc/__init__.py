@@ -8,7 +8,7 @@ https://doi.org/10.1016/j.inffus.2026.104517
 from dacaf_mlc.evaluation_metrics import EvaluationMetrics
 from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChainCustom
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 
 __all__ = [
     "ProbabilisticClassifierChainCustom",
