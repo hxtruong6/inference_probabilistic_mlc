@@ -207,8 +207,8 @@ DaCaF is distributed as the Python package \texttt{dacaf\_mlc}, which can be ins
 from PyPI or run through the provided Docker image, and which also exposes a command-line
 tool \texttt{dacaf-mlc}. At its core is the class \texttt{ProbabilisticClassifierChain}
 (PCC), which turns any scikit-learn base estimator into a probabilistic multi-label
-classifier: it arranges the labels as a classifier chain and, from that chain, estimates
-the conditional probability $P(y\mid x)$ of each labeling.
+classifier: it arranges the labels as a classifier chain \citep{cc2011} and, from that chain,
+estimates the conditional probability $P(y\mid x)$ of each labeling.
 
 Every prediction rule in the package is built from the same two steps of the DaCaF approach.
 The \textbf{divide-and-conquer} step uses a property of Bayes-optimal predictions to
@@ -222,7 +222,8 @@ labelings.
 
 Around this core, the package provides supporting modules for evaluation metrics and their
 registry, a pipeline for training and $k$-fold evaluation, the \texttt{evaluate} command-line
-interface, and loaders for MULAN ARFF datasets and the NIH ChestX-ray data. A trimmed copy of
+interface, and loaders for MULAN ARFF datasets \citep{mulan2011} and the NIH ChestX-ray data
+\citep{chestxray2017}. A trimmed copy of
 the \texttt{skmultiflow} classifier-chain base is vendored so that the package installs and
 runs on its own.
 
@@ -273,7 +274,7 @@ the diagnostic flags), which reaches a perfect or near-perfect score without lea
 metric-specific from the data, while driving the Subset score to zero. The whole table is
 regenerated from the shipped code with a single command, \texttt{make reproduce} (CHD-49, the
 fastest dataset), and the same API carries over unchanged to the NIH ChestX-ray features
-extracted with a pretrained DenseNet or ResNet backbone.
+extracted with a pretrained DenseNet or ResNet backbone via TorchXRayVision \citep{txrv2022}.
 
 \begin{table}[t]
 \centering
@@ -385,6 +386,21 @@ of the U.S. Government.
 \bibitem[Pillai et~al.(2017)]{pillai2017} I. Pillai, G. Fumera, F. Roli,
   Designing multi-label classifiers that maximize F measures: state of the art,
   Pattern Recognition 61 (2017) 394--404.
+\bibitem[Read et~al.(2011)]{cc2011} J. Read, B. Pfahringer, G. Holmes, E. Frank,
+  Classifier chains for multi-label classification, Machine Learning 85 (2011) 333--359.
+  \url{https://doi.org/10.1007/s10994-011-5256-5}.
+\bibitem[Tsoumakas et~al.(2011)]{mulan2011} G. Tsoumakas, E. Spyromitros-Xioufis, J. Vilcek,
+  I. Vlahavas, MULAN: a Java library for multi-label learning, Journal of Machine Learning
+  Research 12 (2011) 2411--2414.
+\bibitem[Wang et~al.(2017)]{chestxray2017} X. Wang, Y. Peng, L. Lu, Z. Lu, M. Bagheri,
+  R. M. Summers, ChestX-ray8: hospital-scale chest X-ray database and benchmarks on
+  weakly-supervised classification and localization of common thorax diseases, in:
+  IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 3462--3471.
+  \url{https://doi.org/10.1109/CVPR.2017.369}.
+\bibitem[Cohen et~al.(2022)]{txrv2022} J. P. Cohen, J. D. Viviano, P. Bertin, et~al.,
+  TorchXRayVision: a library of chest X-ray datasets and models, in: Proceedings of
+  Machine Learning Research (MIDL), Vol. 172, 2022, pp. 231--249.
+  \url{https://doi.org/10.48550/arXiv.2111.00595}.
 \end{thebibliography}
 
 \end{document}
