@@ -60,7 +60,21 @@
 %%   the chain's binary classifiers); exact, covers two whole metric families.
 %% - Ships 7 verified predict_* rules, CLI + library, reproducible eval, tests vs brute force.
 \begin{abstract}
-TODO abstract (<= 250 words).
+In multi-label classification (MLC), different evaluation metrics call for different
+Bayes-Optimal Predictions (BOPs), and no single model is optimal for all of them.
+Probabilistic MLC allows the target metric to be optimized during the prediction phase,
+but computing the exact BOP is intractable in general, and existing tools are
+limited---covering only a few metrics, relying on strong assumptions such as label
+independence, or lacking a reusable, well-tested implementation. We present DaCaF, a
+Python package implementing the Divide-and-Conquer and Fusion approach that, given any
+probabilistic model $P(y\mid x)$, returns the exact BOP for a chosen metric, covering two
+families of MLC metrics. The method combines a divide-and-conquer step, which partitions
+the prediction search space into groups to find a local optimum in each, with a fusion
+step, which estimates the required probabilities from the chain's dependent binary
+classifiers. The package provides seven per-metric prediction rules, each verified against
+brute-force enumeration, together with a command-line interface, a library API, and
+reproducible evaluation scripts, enabling an exact study of the mismatch between target
+and evaluation metrics.
 \end{abstract}
 
 %% ----- Highlights (3-5 bullets, <= 85 chars each). TODO tighten to <=85 chars.
@@ -132,9 +146,9 @@ negatively impact predictive performance.
 However, computing the BOP in a naive way---by searching over the $2^L$ candidate
 predictions for $L$ labels---quickly becomes intractable as the number of labels grows.
 Existing studies are arguably limited in two respects: some focus on only a small number
-of metrics, such as subset 0/1 accuracy, Hamming accuracy, and $F_\beta$ \citep{CITE},
+of metrics, such as subset 0/1 accuracy, Hamming accuracy, and $F_\beta$ \citep{pcc2010,fmax2011,waegeman2014},
 yet require a different, metric-specific algorithm for each metric; others rely on strong
-assumptions, such as label independence \citep{CITE}. As a consequence, no reusable,
+assumptions, such as label independence \citep{pillai2017}. As a consequence, no reusable,
 exact, and broadly applicable tool exists for finding BOPs across the metrics commonly
 used in probabilistic MLC.
 
@@ -302,7 +316,12 @@ TODO statement (or remove if not applicable).
   Bayes optimal multilabel classification via probabilistic classifier chains, ICML 2010.
 \bibitem[Dembczy\'nski et~al.(2011)]{fmax2011} K. Dembczy\'nski, W. Waegeman, W. Cheng, E. H\"ullermeier,
   An exact algorithm for F-measure maximization, NeurIPS 2011.
-%% TODO add Waegeman 2014 (JMLR), Powers 2011, Tsoumakas 2010 (MULAN) as needed.
+\bibitem[Waegeman et~al.(2014)]{waegeman2014} W. Waegeman, K. Dembczy\'nski, A. Jachnik, W. Cheng, E. H\"ullermeier,
+  On the Bayes-optimality of F-measure maximizers, J. Mach. Learn. Res. 15 (2014) 3513--3568.
+\bibitem[Pillai et~al.(2017)]{pillai2017} I. Pillai, G. Fumera, F. Roli,
+  Designing multi-label classifiers that maximize F measures: state of the art,
+  Pattern Recognition 61 (2017) 394--404.
+%% TODO add Powers 2011, Tsoumakas 2010 (MULAN) as needed.
 \end{thebibliography}
 
 \end{document}
