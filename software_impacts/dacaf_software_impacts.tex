@@ -91,11 +91,12 @@ Bayes-optimal inference \sep evaluation metrics
 \toprule
 \textbf{Nr.} & \textbf{Code metadata description} \\
 \midrule
-C1 & Current code version: v1.0.0 \\
+C1 & Current code version: v1.1.0 \\
 C2 & Permanent link to code/repository: \newline
      \url{https://github.com/hxtruong6/inference_probabilistic_mlc} \newline
-     Zenodo: TODO software DOI \\
-C3 & Permanent link to Reproducible Capsule: TODO Code Ocean capsule \\
+     Zenodo: \url{https://doi.org/10.5281/zenodo.20572638} \\
+C3 & Permanent link to Reproducible Capsule: \newline
+     \url{https://codeocean.com/capsule/1580907/tree} \\
 C4 & Legal Code License: MIT \\
 C5 & Code versioning system used: git \\
 C6 & Software code languages, tools, services used: Python ($\geq$3.10);
@@ -112,23 +113,41 @@ C9 & Support email for questions: hxtruong@jaist.ac.jp \\
 
 %% ======================================================================
 \section{Motivation and significance}\label{sec:motivation}
-%% TODO prose (~250 words). Talking points:
-\begin{itemize}
-  \item Multi-label classification: each instance carries any subset of $L$ labels.
-  \item Key fact: different evaluation metrics are optimised by different predictions;
-        a model great for $F_1$ can be poor for subset accuracy.
-  \item Right per-instance choice is the Bayes-optimal prediction (BOP): the $\hat{y}$
-        maximising the \emph{expected} score of the target metric.
-  \item Computing BOP naively is intractable ($2^L$ candidate predictions).
-  \item Gap: no reusable, exact, multi-metric BOP tool for probabilistic MLC; prior
-        work treats one metric at a time and/or approximates.
-  \item DaCaF closes this: a generic recipe + reference implementation that, given any
-        probabilistic model $P(y\mid x)$, returns the exact BOP for a chosen metric.
-  \item Significance: optimise the metric you actually care about; study metric-mismatch
-        effects without approximation noise.
-  \item Tie to the published paper (Information Fusion 2026, \citealp{dacaf2026}): proves
-        correctness for two metric families; this software is the artifact behind it.
-\end{itemize}
+
+%% --- Paragraph 1: the problem (DONE) ---
+Multi-label classification (MLC) is a setting in which each instance can belong to
+any subset of the labels, with applications ranging from text and image annotation to
+high-stakes domains such as clinical decision-making. To compare ground-truth label sets
+and predictions, a variety of evaluation metrics with different characteristics have been
+proposed. Probabilistic MLC offers unique advantages by allowing the optimization of
+different metrics during the prediction phase: once a probabilistic classifier estimates
+the conditional probability of each labeling, the Bayes-Optimal Prediction (BOP) of a
+target metric---the prediction $\hat{y}$ that maximizes the expected score of that
+metric---can be sought. As different metrics may call for significantly different BOPs, a
+mismatch between the target metric, i.e., the metric optimized during the prediction
+phase, and the evaluation metric, i.e., the metric used to assess the classifier, can
+negatively impact predictive performance.
+
+%% --- Paragraph 2: intractability + gap (DONE) ---
+However, computing the BOP in a naive way---by searching over the $2^L$ candidate
+predictions for $L$ labels---quickly becomes intractable as the number of labels grows.
+Existing studies are arguably limited in two respects: some focus on only a small number
+of metrics, such as subset 0/1 accuracy, Hamming accuracy, and $F_\beta$ \citep{CITE},
+yet require a different, metric-specific algorithm for each metric; others rely on strong
+assumptions, such as label independence \citep{CITE}. As a consequence, no reusable,
+exact, and broadly applicable tool exists for finding BOPs across the metrics commonly
+used in probabilistic MLC.
+
+%% --- Paragraph 3: we present DaCaF + significance (DONE) ---
+We present DaCaF, a software package that implements the Divide-and-Conquer and Fusion
+(DaCaF) approach \citep{dacaf2026}: given any probabilistic model $P(y\mid x)$, it returns
+the exact BOP for a chosen metric, covering two families of commonly used MLC metrics. It
+proceeds in two steps---a divide-and-conquer strategy followed by a fusion strategy---to
+find the prediction that is optimal for the selected metric. DaCaF thereby (a) optimizes
+the metric one actually cares about, (b) enables studying the mismatch between the target
+and evaluation metrics in an exact way, undisturbed by approximation, and (c) provides a
+diagnostic that flags metrics whose BOP has a trivial or very restricted
+structure---useful for assessing the practical value of emerging MLC metrics.
 
 \section{Software description}\label{sec:description}
 
@@ -277,8 +296,8 @@ TODO statement (or remove if not applicable).
   approach, Information Fusion (2026), Article 104517.
   \url{https://doi.org/10.1016/j.inffus.2026.104517}.
 \bibitem[Hoang et~al.(2026)]{software} X.-T. Hoang, V.-L. Nguyen, A. Hoang, V.-N. Huynh,
-  DaCaF: probabilistic multi-label classification (v1.0.0) [Computer software],
-  Zenodo, TODO DOI. \url{https://github.com/hxtruong6/inference_probabilistic_mlc}.
+  DaCaF: probabilistic multi-label classification (v1.1.0) [Computer software],
+  Zenodo (2026). \url{https://doi.org/10.5281/zenodo.20572638}.
 \bibitem[Dembczy\'nski et~al.(2010)]{pcc2010} K. Dembczy\'nski, W. Cheng, E. H\"ullermeier,
   Bayes optimal multilabel classification via probabilistic classifier chains, ICML 2010.
 \bibitem[Dembczy\'nski et~al.(2011)]{fmax2011} K. Dembczy\'nski, W. Waegeman, W. Cheng, E. H\"ullermeier,
