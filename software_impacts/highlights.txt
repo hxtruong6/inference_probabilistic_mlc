@@ -1,9 +1,0 @@
-Highlights
-
-DaCaF: Bayes-optimal per-metric inference for probabilistic multi-label classification
-
-- DaCaF returns the exact Bayes-optimal prediction for a chosen MLC metric
-- Model-agnostic drop-in layer on top of any probabilistic model P(y|x)
-- Seven per-metric rules verified equal to brute-force enumeration
-- Covers two whole families of MLC metrics in a single tool
-- Diagnostic flags metrics whose Bayes-optimal prediction is trivial
