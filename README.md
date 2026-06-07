@@ -4,6 +4,8 @@
 [![Journal](https://img.shields.io/badge/Information%20Fusion-2026-green)](https://doi.org/10.1016/j.inffus.2026.104517)
 [![Software DOI](https://img.shields.io/badge/Software%20DOI-10.5281%2Fzenodo.20572638-blue)](https://doi.org/10.5281/zenodo.20572638)
 [![Code Ocean](https://img.shields.io/badge/Code%20Ocean-Reproduce-blue?logo=codeocean)](https://codeocean.com/capsule/1580907/tree)
+[![PyPI](https://img.shields.io/pypi/v/dacaf-mlc?logo=pypi&logoColor=white)](https://pypi.org/project/dacaf-mlc/)
+[![Python](https://img.shields.io/pypi/pyversions/dacaf-mlc)](https://pypi.org/project/dacaf-mlc/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
 
 Official code for the paper **published in _Information Fusion_ (2026)**:
@@ -60,6 +62,16 @@ You read the table **column by column**: each column is one evaluation metric, e
 In all **7 of 7** columns the diagonal (target = evaluation) is the maximum: to score best on a metric, optimise that metric. The NPV and Recall rows are identical because both BOPs are the all-ones vector `1…1` (see the metrics table below).
 
 ---
+
+## Install
+
+To **use DaCaF as a library**, install the released package from PyPI:
+
+```bash
+pip install dacaf-mlc          # core (tabular); add "dacaf-mlc[image]" for the ChestX-ray experiments
+```
+
+To **reproduce the paper** (datasets, sweeps, lockfile), use the editable install from a clone below.
 
 ## Quickstart (one run)
 
