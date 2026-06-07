@@ -164,10 +164,10 @@ A one-click reproducible capsule is available: **<https://codeocean.com/capsule/
 
 ```python
 from sklearn.linear_model import LogisticRegression
-from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChainCustom
+from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChain
 from dacaf_mlc.evaluation_metrics import EvaluationMetrics as EM
 
-pcc = ProbabilisticClassifierChainCustom(LogisticRegression(max_iter=10_000))
+pcc = ProbabilisticClassifierChain(LogisticRegression(max_iter=10_000))
 pcc.fit(X_train, Y_train)                 # Y: (n, L) binary
 
 y_f1   = pcc.predict_fmeasure(X_test, beta=1)   # Bayes-optimal for F1

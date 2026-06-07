@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 
@@ -37,7 +39,7 @@ def joint_probability(y, x, cc, payoff=np.prod):
     return payoff(p)
 
 
-class ProbabilisticClassifierChainCustom(ClassifierChain):
+class ProbabilisticClassifierChain(ClassifierChain):
     """Probabilistic Classifier Chains (PCC) for multi-label learning.
 
     Extends ClassifierChain with Bayes-optimal inference rules for
@@ -338,3 +340,20 @@ class ProbabilisticClassifierChainCustom(ClassifierChain):
                     Y_pred[i][int(indices_desc[k_opt][_l])] = 1
 
         return Y_pred
+
+
+class ProbabilisticClassifierChainCustom(ProbabilisticClassifierChain):
+    """Deprecated alias for :class:`ProbabilisticClassifierChain`.
+
+    Retained for backward compatibility with v1.1.x. It will be removed in
+    v2.0; use :class:`ProbabilisticClassifierChain` instead.
+    """
+
+    def __init__(self, *args, **kwargs):
+        warnings.warn(
+            "ProbabilisticClassifierChainCustom is deprecated and will be removed "
+            "in v2.0; use ProbabilisticClassifierChain instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(*args, **kwargs)

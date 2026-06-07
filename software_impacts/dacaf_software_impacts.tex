@@ -24,20 +24,37 @@
 \usepackage{booktabs}
 \usepackage{listings}
 %% Python syntax highlighting for code listings (listings + xcolor, no shell-escape needed)
+\definecolor{codebg}{RGB}{248,248,248}
+\definecolor{codeframe}{RGB}{210,210,210}
 \definecolor{codekw}{RGB}{0,0,180}
 \definecolor{codecomment}{RGB}{0,128,0}
 \definecolor{codestring}{RGB}{163,21,21}
+\definecolor{codenum}{RGB}{150,150,150}
 \lstdefinestyle{pythonstyle}{%
   language=Python,
-  basicstyle=\scriptsize\ttfamily,
+  backgroundcolor=\color{codebg},
+  basicstyle=\small\ttfamily,
   keywordstyle=\color{codekw}\bfseries,
   commentstyle=\color{codecomment}\itshape,
   stringstyle=\color{codestring},
+  numbers=left,
+  numberstyle=\tiny\color{codenum},
+  numbersep=10pt,
   showstringspaces=false,
   breaklines=true,
+  breakatwhitespace=true,
   columns=fullflexible,
+  keepspaces=true,
+  tabsize=4,
   frame=single,
-  rulecolor=\color{black!30},
+  framesep=8pt,
+  framerule=0.4pt,
+  rulecolor=\color{codeframe},
+  xleftmargin=20pt,
+  aboveskip=12pt,
+  belowskip=8pt,
+  captionpos=b,
+  abovecaptionskip=6pt,
 }
 \usepackage[authoryear,longnamesfirst]{natbib}
 
@@ -188,7 +205,7 @@ structure, which is useful for assessing the practical value of emerging MLC met
 \subsection{Software architecture}
 DaCaF is distributed as the Python package \texttt{dacaf\_mlc}, which can be installed
 from PyPI or run through the provided Docker image, and which also exposes a command-line
-tool \texttt{dacaf-mlc}. At its core is the class \texttt{ProbabilisticClassifierChainCustom}
+tool \texttt{dacaf-mlc}. At its core is the class \texttt{ProbabilisticClassifierChain}
 (PCC), which turns any scikit-learn base estimator into a probabilistic multi-label
 classifier: it arranges the labels as a classifier chain and, from that chain, estimates
 the conditional probability $P(y\mid x)$ of each labeling.
@@ -229,18 +246,18 @@ and 3.12.
 
 \section{Illustrative examples}\label{sec:examples}
 A few lines are enough to fit a model once and then query the Bayes-optimal prediction
-for any metric of interest:
-\begin{lstlisting}[style=pythonstyle]
+for any metric of interest (Listing~\ref{lst:usage}):
+\begin{lstlisting}[style=pythonstyle,caption={Fit one probabilistic model, then read off the Bayes-optimal prediction (BOP) for any metric.},label={lst:usage}]
 from sklearn.linear_model import LogisticRegression
-from dacaf_mlc.probability_classifier_chains \
-    import ProbabilisticClassifierChainCustom
-from dacaf_mlc.evaluation_metrics import EvaluationMetrics as EM
+from dacaf_mlc import ProbabilisticClassifierChain, EvaluationMetrics as EM
 
-pcc = ProbabilisticClassifierChainCustom(
-    LogisticRegression(max_iter=10_000))
-pcc.fit(X_train, Y_train)            # Y: (n, L) binary
-y_f1  = pcc.predict_fmeasure(X_test, beta=1)  # BOP for F1
-y_ham = pcc.predict_hamming(X_test)           # BOP for Hamming
+# Fit one probabilistic model; then query the BOP of any metric.
+pcc = ProbabilisticClassifierChain(LogisticRegression(max_iter=10_000))
+pcc.fit(X_train, Y_train)                  # Y_train: (n, L) binary labels
+
+y_f1  = pcc.predict_fmeasure(X_test, beta=1)   # BOP for the F1 metric
+y_ham = pcc.predict_hamming(X_test)            # BOP for Hamming accuracy
+
 print(EM.f_beta(Y_test, y_f1), EM.hamming(Y_test, y_ham))
 \end{lstlisting}
 Table~\ref{tab:chd49} reports the headline experiment on the CHD-49 dataset, with PCC and

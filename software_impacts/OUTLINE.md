@@ -59,7 +59,7 @@ Narrative arc:
 BOOMER analogue: Technical overview. Source: method l.485–1026.
 
 **2.1 Software architecture** — lettered components like BOOMER's (a)(b)(c):
-- (a) Installable `dacaf_mlc` package; `ProbabilisticClassifierChainCustom` (PCC) wraps any scikit-learn estimator, estimates P(y|x) via a classifier chain.
+- (a) Installable `dacaf_mlc` package; `ProbabilisticClassifierChain` (PCC) wraps any scikit-learn estimator, estimates P(y|x) via a classifier chain.
 - (b) The two algorithmic blocks behind every rule:
   - **Divide-and-conquer**: partition 2^L predictions into L+1 groups by label count; best-in-group by sorting; global best = best across groups.
   - **Fusion**: estimate marginal/pairwise probabilities by fusing the chain's dependent binary classifiers.

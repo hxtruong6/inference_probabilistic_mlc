@@ -16,7 +16,7 @@ from sklearn.linear_model import LogisticRegression
 from dacaf_mlc.config import BASE_DIR, SEED, KFOLD_SPLIT_NUMBER
 from dacaf_mlc.datasets import read_datasets_from_folder
 from dacaf_mlc.metrics_registry import PREDICT_FUNCTIONS
-from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChainCustom
+from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChain
 from dacaf_mlc.utils import add_key_if_missing, save_crosstab, save_result_df
 
 ESTIMATOR_FACTORIES = {
@@ -26,9 +26,10 @@ ESTIMATOR_FACTORIES = {
 
 def model_display_key(model):
     """Model row key in result CSVs: PCC + base-estimator name."""
-    short = {"ProbabilisticClassifierChainCustom": "PCC"}.get(
-        type(model).__name__, type(model).__name__
-    )
+    short = {
+        "ProbabilisticClassifierChain": "PCC",
+        "ProbabilisticClassifierChainCustom": "PCC",  # deprecated alias
+    }.get(type(model).__name__, type(model).__name__)
     return f"{short}_{model.base_estimator.__class__.__name__}"
 
 
@@ -85,7 +86,7 @@ def prepare_model_to_evaluate(estimator_names=None, seed=SEED):
     models = []
     for name in estimator_names:
         est = ESTIMATOR_FACTORIES[name](seed)
-        models.append(ProbabilisticClassifierChainCustom(est))
+        models.append(ProbabilisticClassifierChain(est))
     return models
 
 

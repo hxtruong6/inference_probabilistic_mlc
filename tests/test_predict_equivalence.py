@@ -6,14 +6,14 @@ The optimized prefix-tree batched predict() must produce IDENTICAL outputs
 import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
-from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChainCustom
+from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChain
 
 
 def _fit_pcc(L, D=4, n_samples=50, seed=0):
     rng = np.random.default_rng(seed)
     X = rng.standard_normal((n_samples, D))
     Y = (rng.random((n_samples, L)) > 0.5).astype(int)
-    pcc = ProbabilisticClassifierChainCustom(LogisticRegression(max_iter=2000, random_state=seed))
+    pcc = ProbabilisticClassifierChain(LogisticRegression(max_iter=2000, random_state=seed))
     pcc.fit(X, Y)
     return pcc, X
 

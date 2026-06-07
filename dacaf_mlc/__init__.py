@@ -6,12 +6,16 @@ https://doi.org/10.1016/j.inffus.2026.104517
 """
 
 from dacaf_mlc.evaluation_metrics import EvaluationMetrics
-from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChainCustom
+from dacaf_mlc.probability_classifier_chains import (
+    ProbabilisticClassifierChain,
+    ProbabilisticClassifierChainCustom,  # deprecated alias, removed in v2.0
+)
 
-__version__ = "1.1.1"
+__version__ = "1.2.0"
 
 __all__ = [
-    "ProbabilisticClassifierChainCustom",
+    "ProbabilisticClassifierChain",
+    "ProbabilisticClassifierChainCustom",  # deprecated alias
     "EvaluationMetrics",
     "__version__",
 ]
