@@ -13,6 +13,7 @@ result/*/
 .vscode/
 # local reference copy of the paper; not tracked
 paper/
+papers/
 
 # Python packaging / editable-install artifacts
 *.egg-info/
