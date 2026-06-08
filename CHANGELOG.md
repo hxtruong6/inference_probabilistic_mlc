@@ -28,6 +28,8 @@ scene, and Water-quality over multiple seeds). The documented public API
   `DATASET_WHOLE_FILES`, and `DATASET_WHOLE_FILES_TARGET_AT_FIRST` lists.
 - Built-in CSV loader (`_load_csv`) with positional or by-name label columns
   (`label_columns`) and a configurable separator (`csv_sep`).
+- `register_dataset(spec, override=False)`: register a `DatasetSpec` at runtime
+  so pip-installed users can load custom datasets without editing the source.
 - `docs/EXTENDING.md`: how to add a new evaluation metric, inference target, or
   dataset (ARFF / CSV / custom source), each as a small registry-based change,
   plus the duck-typed dataloader contract.

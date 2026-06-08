@@ -152,6 +152,55 @@ DatasetSpec("mydata", 2, _load_csv,
 `label_columns` must have length `n_labels` (validated at construction). Label
 columns are cast to `int`; everything else becomes the float feature matrix.
 
+### Runtime registration (no source edit) + end-to-end example
+
+If you installed via `pip` you can't edit the `DATASET_SPECS` tuple, so register
+your spec at runtime with `register_dataset`. The following script is
+**self-contained and runnable** — it writes a small CSV, registers it, runs the
+full 10-fold target × evaluation sweep, and writes the crosstab CSV:
+
+```python
+import os, tempfile
+import numpy as np, pandas as pd
+
+# 1. Point the package at a scratch base dir BEFORE importing dacaf_mlc.
+#    run_single reads datasets from <DACAF_BASE_DIR>/datasets/.
+base = tempfile.mkdtemp()
+os.makedirs(os.path.join(base, "datasets"))
+os.environ["DACAF_BASE_DIR"] = base
+
+# 2. Write a tiny multi-label CSV: 4 features + 3 trailing label columns.
+rng = np.random.default_rng(0)
+n, d, L = 80, 4, 3
+X = rng.normal(size=(n, d))
+Y = (rng.random((n, L)) > 0.5).astype(int)
+pd.concat(
+    [pd.DataFrame(X, columns=[f"f{i}" for i in range(d)]),
+     pd.DataFrame(Y, columns=[f"l{j}" for j in range(L)])], axis=1
+).to_csv(os.path.join(base, "datasets", "mydata.csv"), index=False)
+
+# 3. Register the CSV at runtime, then run the sweep.
+from dacaf_mlc.datasets import DatasetSpec, _load_csv, register_dataset
+from dacaf_mlc.pipeline import run_single
+
+register_dataset(DatasetSpec("mydata", n_labels=L, loader=_load_csv, note="L=3 demo"))
+out = run_single("mydata", seed=1, estimator_names=["lr"], output_dir=os.path.join(base, "result"))
+print("crosstab:", out.replace(".csv", "_crosstab.csv"))
+```
+
+`register_dataset(spec, override=False)` inserts the spec into the registry (and
+appends to `DEFAULT_DATASET_NAMES` if `in_default_sweep=True`); it raises if the
+name already exists unless `override=True`.
+
+For a quick prediction without the sweep, use the model directly — load the
+dataset, fit, and call a `predict_*` rule:
+
+```python
+from dacaf_mlc.datasets import read_datasets_from_folder
+(ds,) = list(read_datasets_from_folder(os.path.join(base, "datasets"), ["mydata"]))
+# ds.X, ds.Y are numpy arrays; see the README "Library usage" block for fit/predict.
+```
+
 ### A non-ARFF / non-CSV custom source
 
 If your data isn't a whole-file ARFF (e.g. pre-extracted feature `.npy`, like

@@ -119,8 +119,30 @@ DATASET_SPECS = (
 DATASET_REGISTRY = {spec.name: spec for spec in DATASET_SPECS}
 
 # Names included in the default sweep, in order (used as argparse --dataset
-# choices and by the no-arg full sweep).
+# choices and by the no-arg full sweep). Mutated in place by register_dataset so
+# importers that hold this list reference see runtime additions.
 DEFAULT_DATASET_NAMES = [spec.name for spec in DATASET_SPECS if spec.in_default_sweep]
+
+
+def register_dataset(spec, override=False):
+    """Register a ``DatasetSpec`` at runtime (no source edit needed).
+
+    Lets a pip-installed user add their own dataset so that
+    ``read_datasets_from_folder`` and ``pipeline.run_single`` can load it by
+    name. If ``spec.in_default_sweep`` is true the name is also appended to
+    ``DEFAULT_DATASET_NAMES``.
+
+    Raises ``ValueError`` if the name is already registered unless
+    ``override=True``. Returns the spec for convenience.
+    """
+    if spec.name in DATASET_REGISTRY and not override:
+        raise ValueError(
+            f"Dataset '{spec.name}' is already registered; pass override=True to replace it."
+        )
+    DATASET_REGISTRY[spec.name] = spec
+    if spec.in_default_sweep and spec.name not in DEFAULT_DATASET_NAMES:
+        DEFAULT_DATASET_NAMES.append(spec.name)
+    return spec
 
 
 def read_datasets_from_folder(folder_path, dataset_names):
