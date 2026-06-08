@@ -1,6 +1,10 @@
+import logging
+
 import pandas as pd
 import scipy.io.arff as arff
 from sklearn.model_selection import KFold
+
+logger = logging.getLogger(__name__)
 
 # Number of labels per (dense) MULAN ARFF used in the paper.
 _LABEL_COUNTS = {
@@ -53,8 +57,7 @@ class MultiLabelArffDataset:
         """Convert DataFrames to numpy arrays (no scaling applied here)."""
         X_np = X.to_numpy().astype(float)
         Y_np = Y.to_numpy()
-        print(f"Features shape: {X_np.shape}")
-        print(f"Labels shape:   {Y_np.shape}")
+        logger.info("Features shape: %s | Labels shape: %s", X_np.shape, Y_np.shape)
         return X_np, Y_np
 
     def _get_label_count(self):

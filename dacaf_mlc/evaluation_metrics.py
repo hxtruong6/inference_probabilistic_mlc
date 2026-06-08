@@ -12,7 +12,9 @@ class EvaluationMetrics:
     def _check_dimensions(Y_true, Y_pred):
         """Check if the dimensions of Y_true and Y_pred are the same."""
         if Y_true.shape != Y_pred.shape:
-            raise Exception("Y_true and Y_pred have different shapes")
+            raise ValueError(
+                f"Y_true and Y_pred have different shapes: {Y_true.shape} vs {Y_pred.shape}"
+            )
 
     @staticmethod
     def get_loss(Y_true, Y_pred, loss_func):
@@ -60,17 +62,15 @@ class EvaluationMetrics:
         - float: Precision score.
         """
         EvaluationMetrics._check_dimensions(y_true, y_pred)
-        n_samples, _ = y_true.shape
-        precision = np.zeros(n_samples)
-        for i in range(n_samples):
-            sum_true = np.sum(y_true[i])
-            sum_pred = np.sum(y_pred[i])
-            if sum_true == 0 and sum_pred == 0:
-                precision[i] = 1
-            elif sum_pred == 0:
-                precision[i] = 0
-            else:
-                precision[i] = np.dot(y_true[i], y_pred[i]) / sum_pred
+        # Per-sample Precision = TP / (TP + FP) = TP / sum_pred, averaged over samples.
+        # Binary inputs ⇒ every reduction is an exact integer sum (vectorized = loop).
+        sum_true = y_true.sum(axis=1)
+        sum_pred = y_pred.sum(axis=1)
+        tp = (y_true * y_pred).sum(axis=1)
+        # Safe denominator avoids 0/0; the sum_pred == 0 rows are overwritten next.
+        precision = tp / np.where(sum_pred == 0, 1, sum_pred)
+        # Vacuous cases: pred empty & true empty → 1; pred empty & true non-empty → 0.
+        precision = np.where(sum_pred == 0, np.where(sum_true == 0, 1.0, 0.0), precision)
         return precision.mean()
 
     @staticmethod
@@ -91,14 +91,13 @@ class EvaluationMetrics:
         - float: Recall score.
         """
         EvaluationMetrics._check_dimensions(y_true, y_pred)
-        n_samples, _ = y_true.shape
-        recall = np.zeros(n_samples)
-        for i in range(n_samples):
-            sum_true = np.sum(y_true[i])
-            if sum_true == 0:
-                recall[i] = 1 if np.sum(y_pred[i]) == 0 else 0
-            else:
-                recall[i] = np.dot(y_true[i], y_pred[i]) / sum_true
+        # Per-sample Recall = TP / (TP + FN) = TP / sum_true, averaged over samples.
+        sum_true = y_true.sum(axis=1)
+        sum_pred = y_pred.sum(axis=1)
+        tp = (y_true * y_pred).sum(axis=1)
+        recall = tp / np.where(sum_true == 0, 1, sum_true)
+        # Vacuous: true empty → 1 if pred also empty, else 0.
+        recall = np.where(sum_true == 0, np.where(sum_pred == 0, 1.0, 0.0), recall)
         return recall.mean()
 
     @staticmethod
@@ -138,15 +137,14 @@ class EvaluationMetrics:
         - float: NPV in [0, 1].
         """
         EvaluationMetrics._check_dimensions(y_true, y_pred)
-        n_samples, n_labels = y_true.shape
-        npv = np.zeros(n_samples)
-        for i in range(n_samples):
-            sum_pred = np.sum(y_pred[i])
-            if sum_pred == n_labels:
-                # No predicted negatives → NPV undefined; paper assigns 1 (vacuous).
-                npv[i] = 1
-            else:
-                npv[i] = np.dot(1 - y_true[i], 1 - y_pred[i]) / np.sum(1 - y_pred[i])
+        # Per-sample NPV = TN / (TN + FN) = TN / (#predicted negatives), averaged.
+        n_labels = y_true.shape[1]
+        sum_pred = y_pred.sum(axis=1)
+        pred_neg = n_labels - sum_pred                      # = sum(1 - y_pred)
+        tn = ((1 - y_true) * (1 - y_pred)).sum(axis=1)
+        npv = tn / np.where(pred_neg == 0, 1, pred_neg)
+        # Vacuous (paper Corollary 2): no predicted negatives (pred all-ones) → 1.
+        npv = np.where(sum_pred == n_labels, 1.0, npv)
         return npv.mean()
 
     @staticmethod
@@ -166,14 +164,14 @@ class EvaluationMetrics:
         - float: F-beta score in [0, 1].
         """
         EvaluationMetrics._check_dimensions(y_true, y_pred)
-        n_samples, _ = y_true.shape
-        f_beta = np.zeros(n_samples)
-        for i in range(n_samples):
-            denom = (beta**2) * np.sum(y_true[i]) + np.sum(y_pred[i])
-            if denom == 0:
-                f_beta[i] = 1
-            else:
-                f_beta[i] = (1 + beta**2) * np.dot(y_true[i], y_pred[i]) / denom
+        # Per-sample F_β = (1+β²)·TP / (β²·sum_true + sum_pred), averaged over samples.
+        sum_true = y_true.sum(axis=1)
+        sum_pred = y_pred.sum(axis=1)
+        tp = (y_true * y_pred).sum(axis=1)
+        denom = (beta**2) * sum_true + sum_pred
+        f_beta = (1 + beta**2) * tp / np.where(denom == 0, 1, denom)
+        # Vacuous: denom == 0 ⇔ true and pred both empty → 1.
+        f_beta = np.where(denom == 0, 1.0, f_beta)
         return f_beta.mean()
 
     @staticmethod
@@ -197,23 +195,17 @@ class EvaluationMetrics:
         - float: Markedness in [0, 1].
         """
         EvaluationMetrics._check_dimensions(Y_true, Y_pred)
-        n_samples, n_labels = Y_true.shape
-        npv = np.zeros(n_samples)
-        precision = np.zeros(n_samples)
+        # Per-sample Markedness = 0.5·(NPV + Precision), averaged over samples.
+        # NB: these vacuous conventions (Fpre(.,0_K)=Fneg(.,1_K)=1) follow the paper's
+        # markedness definition and intentionally differ from precision_score()'s.
+        n_labels = Y_true.shape[1]
+        sum_pred = Y_pred.sum(axis=1)
+        tp = (Y_true * Y_pred).sum(axis=1)
+        tn = ((1 - Y_true) * (1 - Y_pred)).sum(axis=1)
+        pred_neg = n_labels - sum_pred
 
-        for i in range(n_samples):
-            sum_pred = np.sum(Y_pred[i])
-
-            # NPV: TN / (TN + FN); no predicted negatives → 1 (vacuous, Fneg(.,1_K)=1).
-            if sum_pred == n_labels:
-                npv[i] = 1
-            else:
-                npv[i] = np.dot(1 - Y_true[i], 1 - Y_pred[i]) / np.sum(1 - Y_pred[i])
-
-            # Precision: TP / (TP + FP); empty prediction → 1 (vacuous, Fpre(.,0_K)=1).
-            if sum_pred == 0:
-                precision[i] = 1
-            else:
-                precision[i] = np.dot(Y_true[i], Y_pred[i]) / sum_pred
-
+        # NPV: TN / (#predicted negatives); pred all-ones → 1 (vacuous, Fneg(.,1_K)=1).
+        npv = np.where(sum_pred == n_labels, 1.0, tn / np.where(pred_neg == 0, 1, pred_neg))
+        # Precision: TP / sum_pred; empty prediction → 1 (vacuous, Fpre(.,0_K)=1).
+        precision = np.where(sum_pred == 0, 1.0, tp / np.where(sum_pred == 0, 1, sum_pred))
         return (0.5 * (npv + precision)).mean()

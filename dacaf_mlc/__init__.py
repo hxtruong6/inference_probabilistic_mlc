@@ -11,7 +11,7 @@ from dacaf_mlc.probability_classifier_chains import (
     ProbabilisticClassifierChainCustom,  # deprecated alias, removed in v2.0
 )
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 __all__ = [
     "ProbabilisticClassifierChain",

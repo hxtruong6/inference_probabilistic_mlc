@@ -31,7 +31,7 @@ CI runs the same checks on Python 3.10 and 3.12.
   expected value of its target metric. New or changed rules must be covered by a
   brute-force optimality check in `tests/test_inference_optimality.py`
   (`argmax_ŷ E[metric]` over all `2^L` predictions).
-- Respect the documented metric conventions in `CONVENTIONS.md` (notably the
+- Respect the documented metric conventions in `docs/CONVENTIONS.md` (notably the
   intentional vacuous-convention asymmetry).
 - Keep vendored code (`dacaf_mlc/skmultiflow/`) unmodified.
 - Match the surrounding style; `l` is allowed as a variable (paper notation for
