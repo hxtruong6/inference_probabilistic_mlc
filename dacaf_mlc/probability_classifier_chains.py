@@ -101,10 +101,8 @@ class ProbabilisticClassifierChain(ClassifierChain):
             self.cache_key is not None
             and self.prediction_cache.get(self.cache_key) is not None
         ):
-            print(f"Cached [{self.cache_key}]")
             return self.prediction_cache[self.cache_key]
 
-        print(f"Predicting... [{self.cache_key}]")
         N, D = X.shape
         L = self.L
         K = 1 << L  # 2^L

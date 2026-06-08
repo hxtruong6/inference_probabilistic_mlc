@@ -22,14 +22,35 @@ In multi-label classification, each instance can carry *any subset* of the label
 
 **DaCaF** is a generic recipe that, given a probabilistic model `P(y | x)`, finds the **Bayes-optimal prediction (BOP)** for a chosen metric: the prediction `ŷ` that maximises the *expected* score of that metric.
 
-```mermaid
-flowchart TD
-    A[Training data] -->|learn| B[Probabilistic classifier PCC<br/>estimates P of y given x]
-    B -->|inference, per instance x| C[Probabilistic prediction<br/>P of y given x]
-    C --> D{DaCaF}
-    D --> E[Divide and Conquer<br/>split predictions by number of relevant labels,<br/>solve each group by sorting]
-    E --> F[Fusion<br/>produce the prediction by fusing the chain binary classifiers<br/>to supply the needed marginal/pairwise probabilities]
-    F --> G[Bayes-optimal prediction y-hat<br/>for the chosen metric]
+```text
+              Training data
+                   │ learn
+                   ▼
+        ┌──────────────────────────┐
+        │  Probabilistic classifier │   PCC estimates P(y | x)
+        │  chain (PCC)              │
+        └──────────────────────────┘
+                   │ inference, per instance x
+                   ▼
+          P(y | x)   (probabilistic prediction)
+                   │
+                   ▼
+        ╔═════════════ DaCaF ══════════════╗
+        ║  1. DIVIDE & CONQUER             ║
+        ║     split the 2^L predictions    ║
+        ║     into L+1 groups by #labels;  ║
+        ║     solve each group by sorting  ║
+        ║                                  ║
+        ║  2. FUSION                       ║
+        ║     fuse the chain's binary      ║
+        ║     classifiers (ancestral       ║
+        ║     sampling) to supply the      ║
+        ║     marginal / pairwise probs    ║
+        ╚══════════════════════════════════╝
+                   │
+                   ▼
+          ŷ = Bayes-optimal prediction
+              for the chosen metric
 ```
 
 **Two building blocks:**
@@ -43,23 +64,11 @@ The paper proves this works for **two whole families of metrics** (so it covers 
 
 ## Results at a glance
 
-**The headline finding: mismatch hurts.** When you evaluate with metric *E* but optimise for a different metric *T* during prediction, performance usually drops. Optimising the metric you actually care about is (almost always) best. This is verified on 5 tabular datasets plus a chest-X-ray image dataset, using the *exact* computation paradigm (no approximation blurring the picture).
+**The headline finding: mismatch hurts.** When you evaluate with metric *E* but optimise for a different metric *T* during prediction, performance usually drops. Optimising the metric you actually care about is (almost always) best — verified on 5 tabular datasets plus a chest-X-ray image dataset, using the *exact* computation paradigm (no approximation blurring the picture).
 
-You read the table **column by column**: each column is one evaluation metric, each row is the metric you optimised for. The **bold diagonal** (optimise the metric you evaluate) should be the largest value in its column.
+Read the per-dataset table **column by column**: each column is an evaluation metric, each row the metric you optimised for, and the **diagonal** (optimise the metric you evaluate) is the largest value in its column. On CHD-49, all **7 of 7** columns confirm this.
 
-**Example: CHD-49 (PCC + logistic regression, mean over 5 seeds × 10-fold, the fastest dataset).** Values are percentages, higher is better. Bold = the maximum of its column = the rule that targets that metric.
-
-| Target ↓ \ Eval → | F₁ | Hamming | Markedness | Precision | NPV | Recall | Subset |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| **F₁** | **67.1** | 69.3 | 71.9 | 62.7 | 81.1 | 79.2 | 15.1 |
-| **Hamming** | 63.9 | **70.8** | 71.3 | 66.6 | 75.7 | 66.9 | 18.1 |
-| **Markedness** | 34.2 | 63.7 | **77.0** | 33.4 | 71.1 | 40.5 | 8.4 |
-| **Precision** | 40.5 | 64.8 | 68.3 | **73.5** | 63.1 | 29.1 | 3.1 |
-| **NPV** | 58.4 | 43.0 | 71.5 | 43.0 | **100.0** | 99.5 | 0.0 |
-| **Recall** | 58.4 | 43.0 | 71.5 | 43.0 | 100.0 | **99.5** | 0.0 |
-| **Subset** | 64.0 | 69.4 | 70.4 | 64.2 | 76.5 | 69.8 | **18.9** |
-
-In all **7 of 7** columns the diagonal (target = evaluation) is the maximum: to score best on a metric, optimise that metric. The NPV and Recall rows are identical because both BOPs are the all-ones vector `1…1` (see the metrics table below).
+📊 **Full results, datasets, and the target × evaluation table** → see the [reproduction guide](https://github.com/hxtruong6/inference_probabilistic_mlc/blob/main/docs/REPRODUCING.md).
 
 ---
 
@@ -121,100 +130,46 @@ For a probabilistic prediction `P(y | x)` over `L` labels, each rule returns the
 
 ---
 
-## Reproducing the paper's results
-
-The paper uses **Probabilistic Classifier Chains (PCC)** with an **L2-regularised logistic-regression** base learner, **10-fold cross-validation**, and the **exact computation paradigm** (enumerate all `2^L` labelings, so it is limited to a small or moderate number of labels). The exact published protocol is recorded in [`docs/paper.yaml`](docs/paper.yaml).
-
-**Datasets in the paper (6):**
-
-| Dataset | #labels (L) | #instances | Type |
-|---|---:|---:|---|
-| Emotions | 6 | 593 | tabular |
-| CHD-49 | 6 | 555 | tabular |
-| Scene | 6 | 2407 | tabular |
-| Water-quality | 14 | 1060 | tabular |
-| Yeast | 14 | 2417 | tabular |
-| ChestX-ray8 | 8 | 25596 | image (ResNet / resnetAE / DenseNet features) |
-
-For the chest-X-ray data we extract features with a pretrained backbone via [TorchXRayVision](https://github.com/mlmed/torchxrayvision); the raw NIH features are **not redistributed** (see [`dacaf_mlc/chest_xray_dataset/Readme.md`](dacaf_mlc/chest_xray_dataset/Readme.md)).
-
-**One command** for the tractable (tabular) subset, runs the 5 tabular datasets × 5 seeds and aggregates:
-
-```bash
-make reproduce          # = bash scripts/reproduce_tabular.sh
-```
-
-**Full sweep** (heavy, use a cluster):
-
-```bash
-dacaf-mlc --dataset CHD_49 --seed 1        # one job per (dataset, seed); repeat as needed
-python scripts/aggregate.py                # aggregate when jobs finish
-```
-
-Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format), `_summary.csv` (mean ± std), and `_crosstab.csv` (target × evaluation pivot).
-
-### Run it online (Code Ocean)
-
-A one-click reproducible capsule is available: **<https://codeocean.com/capsule/1580907/tree>**. Click **Reproducible Run** to rebuild the environment and reproduce the CHD-49 target × evaluation table (`result_CHD_49_crosstab.csv`) on CPU in seconds — every diagonal entry is the maximum of its column, the paper's central claim. The capsule entry point is [`run`](run); dependencies are pinned in [`requirements-core.txt`](requirements-core.txt).
-
----
-
 ## Library usage
 
 ```python
+import numpy as np
 from sklearn.linear_model import LogisticRegression
 from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChain
 from dacaf_mlc.evaluation_metrics import EvaluationMetrics as EM
 
+# toy multi-label data: 200 instances, 8 features, 4 labels (Y is (n, L) binary)
+rng = np.random.default_rng(0)
+X = rng.normal(size=(200, 8))
+Y = (rng.random((200, 4)) > 0.5).astype(int)
+X_train, Y_train, X_test, Y_test = X[:150], Y[:150], X[150:], Y[150:]
+
 pcc = ProbabilisticClassifierChain(LogisticRegression(max_iter=10_000))
-pcc.fit(X_train, Y_train)                 # Y: (n, L) binary
+pcc.fit(X_train, Y_train)
 
-y_f1   = pcc.predict_fmeasure(X_test, beta=1)   # Bayes-optimal for F1
-y_ham  = pcc.predict_hamming(X_test)            # ... for Hamming
-y_mar  = pcc.predict_markedness(X_test)         # ... for Markedness
+y_f1  = pcc.predict_fmeasure(X_test, beta=1)   # Bayes-optimal for F1
+y_ham = pcc.predict_hamming(X_test)            # ... for Hamming
+y_mar = pcc.predict_markedness(X_test)         # ... for Markedness
 
-print(EM.f_beta(Y_test, y_f1), EM.markedness(Y_test, y_mar))
+print("F1:        ", EM.f_beta(Y_test, y_f1))
+print("Hamming:   ", EM.hamming_accuracy(Y_test, y_ham))
+print("Markedness:", EM.markedness(Y_test, y_mar))
 ```
 
 Every `predict_*` rule returns the prediction that maximises the expected value of its
-target metric (see [`CONVENTIONS.md`](CONVENTIONS.md) for the exact rules and conventions).
+target metric (see [`docs/CONVENTIONS.md`](https://github.com/hxtruong6/inference_probabilistic_mlc/blob/main/docs/CONVENTIONS.md) for the exact rules and conventions).
 
 ---
 
-## Repository layout
+## Reproducing the paper
 
-```
-dacaf_mlc/                           # installable package
-  probability_classifier_chains.py   # PCC + the 7 per-metric Bayes-optimal predict_* rules
-  evaluation_metrics.py              # the 7 paper metrics (higher-is-better form)
-  arff_dataset.py                    # MULAN ARFF loader + 10-fold CV
-  datasets.py                        # dataset registry + loaders
-  metrics_registry.py                # which metrics run on which inference rule
-  pipeline.py                        # training / k-fold eval / run_single
-  evaluate.py                        # CLI entry point (dacaf-mlc): parse_args + main
-  config.py                          # paths + protocol constants
-  utils.py                           # result aggregation
-  chest_xray_dataset/                # NIH feature extractor + loader ([image] extra)
-  skmultiflow/                       # vendored ClassifierChain base
-pyproject.toml                       # packaging + deps (core / [image] / [dev])
-scripts/                             # reproduce_tabular.sh + Slurm cluster scripts
-tests/                               # unit tests + brute-force optimality + e2e
-docs/                                # paper.yaml protocol manifest
-datasets/                            # the paper's MULAN ARFFs (+ chest-xray label CSV)
-result/                              # aggregated result CSVs
-CONVENTIONS.md  CONTRIBUTING.md  CITATION.cff
-paper/                               # local copy of the paper source (not tracked)
-```
+The full experimental protocol — the 6 datasets, the `make reproduce` command, the
+cluster sweep, the online Code Ocean capsule, the complete target × evaluation results
+table, the repository layout, and the test suite — lives in the **[reproduction guide](https://github.com/hxtruong6/inference_probabilistic_mlc/blob/main/docs/REPRODUCING.md)**.
 
----
-
-## Testing
-
-```bash
-python -m pytest tests/ -v
-```
-
-Every inference rule is checked against **brute-force enumeration** of the expected metric, so the closed-form rules are provably correct on small cases. A batched predictor (one `predict_proba` call per chain level instead of `N·L·2^L`) is verified numerically equivalent to the reference enumeration.
+In short: `make reproduce` runs the tabular datasets and aggregates the crosstabs, and
+every inference rule is checked against brute-force enumeration of the expected metric
+(`python -m pytest tests/ -v`).
 
 ---
 
