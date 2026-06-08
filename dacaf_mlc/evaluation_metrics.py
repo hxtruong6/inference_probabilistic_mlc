@@ -12,7 +12,9 @@ class EvaluationMetrics:
     def _check_dimensions(Y_true, Y_pred):
         """Check if the dimensions of Y_true and Y_pred are the same."""
         if Y_true.shape != Y_pred.shape:
-            raise Exception("Y_true and Y_pred have different shapes")
+            raise ValueError(
+                f"Y_true and Y_pred have different shapes: {Y_true.shape} vs {Y_pred.shape}"
+            )
 
     @staticmethod
     def get_loss(Y_true, Y_pred, loss_func):

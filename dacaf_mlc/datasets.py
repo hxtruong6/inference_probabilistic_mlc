@@ -39,7 +39,7 @@ DEFAULT_DATASET_NAMES = [
 def read_datasets_from_folder(folder_path, dataset_names):
     """Yield a MultiLabelArffDataset for each requested dataset name."""
     if not os.path.isdir(folder_path):
-        raise Exception(f"Folder path is not valid: {folder_path}")
+        raise ValueError(f"Folder path is not valid: {folder_path}")
 
     for filename in dataset_names:
         if "chest_xray_nih" in filename:
@@ -57,4 +57,4 @@ def read_datasets_from_folder(folder_path, dataset_names):
                 target_at_first=(filename in DATASET_WHOLE_FILES_TARGET_AT_FIRST),
             )
         else:
-            raise Exception(f"Dataset '{filename}' is not supported.")
+            raise ValueError(f"Dataset '{filename}' is not supported.")
