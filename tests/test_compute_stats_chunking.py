@@ -1,4 +1,9 @@
-"""Chunked compute_stats must be bit-identical to whole-batch (samples are independent)."""
+"""Chunked compute_stats must be numerically equivalent to whole-batch.
+
+Samples are independent, but predict_proba (a matmul) can differ at float-epsilon
+between a 1-row and N-row input depending on the BLAS build, so the probability
+fields match up to tolerance; the MAP argmax and downstream predictions are exact.
+"""
 import numpy as np
 import pytest
 from sklearn.linear_model import LogisticRegression
@@ -20,11 +25,13 @@ def test_chunked_matches_whole(batch_size):
     pcc, X = _fit()
     whole = pcc.compute_stats(X, needs={"map", "marginal", "pairwise"})
     chunked = pcc.compute_stats(X, needs={"map", "marginal", "pairwise"}, batch_size=batch_size)
-    # joint-derived-by-slicing/argmax fields are bit-identical (samples independent).
+    # The MAP argmax is robust to float-epsilon, so it stays bit-identical.
     np.testing.assert_array_equal(chunked.map_prediction, whole.map_prediction)
-    np.testing.assert_array_equal(chunked.p_empty, whole.p_empty)
-    np.testing.assert_array_equal(chunked.p_full, whole.p_full)
-    # matmul-derived fields match up to float associativity (BLAS gemm vs gemv path).
+    # The probability fields match only up to float associativity: predict_proba
+    # (a matmul) gives ~1e-16-different logits for a 1-row vs N-row input depending
+    # on the BLAS build, which propagates into the joint and its slices/products.
+    np.testing.assert_allclose(chunked.p_empty, whole.p_empty, rtol=1e-12, atol=1e-12)
+    np.testing.assert_allclose(chunked.p_full, whole.p_full, rtol=1e-12, atol=1e-12)
     np.testing.assert_allclose(chunked.marginals, whole.marginals, rtol=1e-12, atol=1e-12)
     np.testing.assert_allclose(chunked.pairwise, whole.pairwise, rtol=1e-12, atol=1e-12)
     assert chunked.n_samples == whole.n_samples == len(X)
