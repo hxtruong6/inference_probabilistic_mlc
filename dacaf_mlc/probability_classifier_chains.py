@@ -304,8 +304,8 @@ class ProbabilisticClassifierChain(ClassifierChain):
                 Y_pred[i, indices[i, k]] = 1
         return Y_pred
 
-    def predict_fmeasure(self, X, beta=1):
-        """Bayes-optimal predictor for F-beta measure."""
+    def _predict_fmeasure_loop(self, X, beta=1):
+        """Reference (pre-vectorization) F-beta BOP. Kept for regression tests."""
         N, _ = X.shape
         _, _, pw = self.predict(X, pairwise=True)
         P_pair_wise = pw["P_pair_wise"]
@@ -339,6 +339,50 @@ class ProbabilisticClassifierChain(ClassifierChain):
                 for _l in range(k_opt + 1):
                     Y_pred[i][int(indices_desc[k_opt][_l])] = 1
 
+        return Y_pred
+
+    def predict_fmeasure(self, X, beta=1):
+        """Bayes-optimal predictor for the F-beta measure (vectorized).
+
+        Numerically equivalent to ``_predict_fmeasure_loop`` but replaces the
+        O(N·L³) Python triple loop with tensor contractions. Paper Algorithm 1:
+        for prediction size l (= k+1) the per-label score is
+            q_{l,label} = (1+β²) Σ_{s=1}^L P(y_label=1, |y|=s) / (β²·s + l),
+        the best size-l prediction is the top-l labels by q_{l,·}, and the
+        expected F-beta of that prediction is the sum of its top-l q values.
+        The all-zero prediction (expected F-beta = P(|y|=0)) wins iff it beats
+        every nonempty size.
+        """
+        N, _ = X.shape
+        L = self.L
+        _, _, pw = self.predict(X, pairwise=True)
+        P_pair_wise = pw["P_pair_wise"]          # (N, L, L+1): P(y_label=1, |y|=s)
+        E0 = pw["P_pair_wise0"][:, 0]            # (N,): P(|y|=0)
+
+        # Weight matrix W[l-1, s-1] = (1+β²) / (β²·s + l), for l, s ∈ {1..L}.
+        s = np.arange(1, L + 1)
+        l = np.arange(1, L + 1)
+        W = (1 + beta**2) / (beta**2 * s[None, :] + l[:, None])  # (L, L)
+
+        # q[n, label, l-1] = Σ_s P(y_label=1,|y|=s) · W[l-1, s-1]   (s from 1..L)
+        Pe = P_pair_wise[:, :, 1:]               # (N, L, L) over s = 1..L
+        q = np.einsum("nls,ks->nlk", Pe, W)      # (N, L_label, L_size)
+
+        # E[n, k] = sum of the top-(k+1) label scores for size l=k+1.
+        q_sorted_desc = np.sort(q, axis=1)[:, ::-1, :]     # sort labels descending
+        cum = np.cumsum(q_sorted_desc, axis=1)             # (N, L, L_size)
+        rank = np.arange(L)
+        E_main = cum[:, rank, rank]                        # (N, L): E_main[:,k]=top-(k+1) sum
+        E = np.concatenate([E_main, np.zeros((N, 1))], axis=1)  # (N, L+1), pad to match loop
+
+        Y_pred = np.zeros((N, L))
+        choose_empty = E0 > E.max(axis=1)
+        k_opt = E.argmax(axis=1)                           # (N,)
+        for i in range(N):
+            if choose_empty[i]:
+                continue
+            order = np.argsort(q[i, :, k_opt[i]])[::-1]     # same tie order as the loop
+            Y_pred[i, order[: k_opt[i] + 1]] = 1
         return Y_pred
 
 
