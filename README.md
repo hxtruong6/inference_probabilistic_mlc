@@ -191,11 +191,11 @@ every inference rule is checked against brute-force enumeration of the expected 
 
 ## References
 
-- K. Dembczyński, W. Cheng, E. Hüllermeier. *Bayes Optimal Multilabel Classification via Probabilistic Classifier Chains.* ICML 2010.
-- K. Dembczyński, W. Waegeman, W. Cheng, E. Hüllermeier. *An Exact Algorithm for F-Measure Maximization.* NeurIPS 2011.
-- W. Waegeman et al. *On the Bayes-optimality of F-measure maximizers.* JMLR 2014.
-- D. M. W. Powers. *Evaluation: From Precision, Recall and F-Measure to ROC, Informedness, Markedness & Correlation.* 2011.
-- G. Tsoumakas, I. Katakis, I. Vlahavas. *Mining Multi-label Data.* 2010 (MULAN).
+- K. Dembczyński, W. Cheng, E. Hüllermeier. [*Bayes Optimal Multilabel Classification via Probabilistic Classifier Chains.*](https://dl.acm.org/doi/10.5555/3104322.3104359) ICML 2010.
+- K. Dembczyński, W. Waegeman, W. Cheng, E. Hüllermeier. [*An Exact Algorithm for F-Measure Maximization.*](https://proceedings.neurips.cc/paper/2011/hash/71ad16ad2c4d81f348082ff6c4b20768-Abstract.html) NeurIPS 2011.
+- W. Waegeman, K. Dembczyński, A. Jachnik, W. Cheng, E. Hüllermeier. [*On the Bayes-Optimality of F-Measure Maximizers.*](https://jmlr.org/papers/v15/waegeman14a.html) JMLR 2014.
+- D. M. W. Powers. [*Evaluation: From Precision, Recall and F-Measure to ROC, Informedness, Markedness & Correlation.*](https://arxiv.org/abs/2010.16061) 2011.
+- G. Tsoumakas, I. Katakis, I. Vlahavas. [*Mining Multi-label Data.*](https://doi.org/10.1007/978-0-387-09823-4_34) 2010 (MULAN).
 
 ## Acknowledgements
 
