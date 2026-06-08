@@ -14,6 +14,8 @@ import os
 from collections.abc import Callable
 from dataclasses import dataclass
 
+import pandas as pd
+
 from dacaf_mlc.config import BASE_DIR
 from dacaf_mlc.arff_dataset import MultiLabelArffDataset
 from dacaf_mlc.chest_xray_dataset.chest_xray_utils import load_df_features_from_npy
@@ -27,6 +29,27 @@ def _load_arff(spec, folder_path):
         target_at_first=spec.target_at_first,
         n_labels=spec.n_labels,
     )
+
+
+def _load_csv(spec, folder_path):
+    """Load a multi-label CSV at ``<folder_path>/<name>.csv``.
+
+    Label columns are chosen either by explicit name (``spec.label_columns``) or,
+    if none are given, positionally from ``spec.n_labels`` / ``spec.target_at_first``
+    (the same convention as the ARFF loader). The separator is ``spec.csv_sep``.
+    """
+    df = pd.read_csv(os.path.join(folder_path, f"{spec.name}.csv"), sep=spec.csv_sep)
+    if spec.label_columns:
+        label_cols = list(spec.label_columns)
+        Y_df = df[label_cols]
+        X_df = df.drop(columns=label_cols)
+    elif spec.target_at_first:
+        Y_df = df.iloc[:, : spec.n_labels]
+        X_df = df.iloc[:, spec.n_labels :]
+    else:
+        X_df = df.iloc[:, : -spec.n_labels]
+        Y_df = df.iloc[:, -spec.n_labels :]
+    return MultiLabelArffDataset(dataset_name=spec.name, X=X_df, Y=Y_df.astype(int))
 
 
 def _load_nih_features(spec, folder_path):
@@ -51,9 +74,15 @@ class DatasetSpec:
     - ``name``           : registry key and (for ARFF) the ``<name>.arff`` stem.
     - ``n_labels``       : number of label columns ``L``.
     - ``loader``         : ``loader(spec, folder_path) -> MultiLabelArffDataset``.
-    - ``target_at_first``: ARFF only — labels are the leading columns, not trailing.
+    - ``target_at_first``: ARFF/CSV positional split — labels are the leading
+                           columns, not trailing (ignored if ``label_columns`` set).
     - ``in_default_sweep``: include in ``DEFAULT_DATASET_NAMES`` / the no-arg sweep.
     - ``note``           : free-text hint shown in docs (e.g. ``"L=6"``).
+    - ``csv_sep``        : CSV only — column separator (default ``","``).
+    - ``label_columns``  : CSV only — explicit label column names; when set,
+                           features are all the remaining columns and the
+                           positional split is bypassed. Length must equal
+                           ``n_labels``.
     """
 
     name: str
@@ -62,6 +91,15 @@ class DatasetSpec:
     target_at_first: bool = False
     in_default_sweep: bool = True
     note: str = ""
+    csv_sep: str = ","
+    label_columns: tuple = ()
+
+    def __post_init__(self):
+        if self.label_columns and len(self.label_columns) != self.n_labels:
+            raise ValueError(
+                f"Dataset '{self.name}': label_columns has {len(self.label_columns)} "
+                f"names but n_labels is {self.n_labels}; they must match."
+            )
 
 
 # The paper datasets, in sweep order. The chest_xray_nih__* entries require

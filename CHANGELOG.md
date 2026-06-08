@@ -26,8 +26,11 @@ scene, and Water-quality over multiple seeds). The documented public API
   truth for each dataset's label count, file orientation, loader, and
   default-sweep membership, replacing the previously scattered `_LABEL_COUNTS`,
   `DATASET_WHOLE_FILES`, and `DATASET_WHOLE_FILES_TARGET_AT_FIRST` lists.
+- Built-in CSV loader (`_load_csv`) with positional or by-name label columns
+  (`label_columns`) and a configurable separator (`csv_sep`).
 - `docs/EXTENDING.md`: how to add a new evaluation metric, inference target, or
-  dataset, each as a small registry-based change.
+  dataset (ARFF / CSV / custom source), each as a small registry-based change,
+  plus the duck-typed dataloader contract.
 
 ### Changed
 - Vectorized `predict_fmeasure` (~10× faster at L=10), `predict_precision`,

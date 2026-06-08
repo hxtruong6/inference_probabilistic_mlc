@@ -133,7 +133,26 @@ DATASET_SPECS = (
 Then run `dacaf-mlc --dataset mydata --seed 1`. No other file changes — the CLI
 `--dataset` choices and the no-arg sweep both read from the registry.
 
-### A non-ARFF / custom source
+### A CSV dataset
+
+A built-in `_load_csv` ships in `datasets.py`. Drop `datasets/mydata.csv` in
+place and register it; labels can be positional or selected by column name:
+
+```python
+from dacaf_mlc.datasets import _load_csv, DatasetSpec
+
+# positional: last 8 columns are labels (or target_at_first=True for the first 8)
+DatasetSpec("mydata", 8, _load_csv, note="L=8")
+
+# labels by explicit name (features = all other columns); custom separator
+DatasetSpec("mydata", 2, _load_csv,
+            label_columns=("disease_a", "disease_b"), csv_sep=";")
+```
+
+`label_columns` must have length `n_labels` (validated at construction). Label
+columns are cast to `int`; everything else becomes the float feature matrix.
+
+### A non-ARFF / non-CSV custom source
 
 If your data isn't a whole-file ARFF (e.g. pre-extracted feature `.npy`, like
 the ChestX-ray datasets), write a small loader and reference it from the spec.
@@ -154,6 +173,23 @@ The `MultiLabelArffDataset(X=, Y=)` data path infers `L` from `Y` and applies no
 scaling (the pipeline scales per fold to avoid leakage). `_load_nih_features` in
 `datasets.py` is the worked example to copy.
 
+### The dataloader contract
+
+A loader is just `loader(spec, folder_path) -> dataset_handler`. Using
+`MultiLabelArffDataset` is the convenient shortcut, but **not required** — the
+pipeline only depends on this duck-typed interface, so any object providing it
+works:
+
+| Member | Type / shape | Notes |
+|---|---|---|
+| `.dataset_name` | `str` | used as the result CSV key |
+| `.X` | `ndarray (n, d)`, float | **raw / unscaled** — the pipeline applies `StandardScaler` per fold |
+| `.Y` | `ndarray (n, L)`, binary int | multi-label targets |
+| `.get_cross_validation_folds(n_splits, random_state)` | yields `(train_idx, test_idx)` | e.g. `sklearn.model_selection.KFold` |
+
+Return raw features (no scaling) so the pipeline can fit the scaler on the
+training fold only and avoid leakage.
+
 **Test first:** the registry invariants are pinned in
 `tests/test_dataset_registry.py` (label counts, orientation, sweep order, error
 on unknown names) — add your dataset's expected values there.
@@ -168,6 +204,7 @@ on unknown names) — add your dataset's expected values there.
 | New target using existing stats (marginal/pairwise/map) | one `bop_*` fn + 1 line in `metrics_registry.py` | No | small |
 | New target needing a *new* statistic | above **+** `compute_stats` / `InferenceStats` | **Yes** | medium |
 | New ARFF dataset | 1 `DatasetSpec` in `datasets.py` | No | trivial |
+| New CSV dataset | 1 `DatasetSpec` with `_load_csv` | No | trivial |
 | New custom-source dataset | a loader fn + 1 `DatasetSpec` | No | small |
 
 See [`CONVENTIONS.md`](CONVENTIONS.md) for the exact metric definitions and
