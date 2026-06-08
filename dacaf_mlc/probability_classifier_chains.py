@@ -1,9 +1,28 @@
 import warnings
+from dataclasses import dataclass
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 
 from dacaf_mlc.skmultiflow.meta.classifier_chains import ClassifierChain
+
+
+@dataclass
+class InferenceStats:
+    """Probabilistic statistics derived from the joint P(y | x) for a batch.
+
+    Only the fields requested via ``compute_stats(..., needs=...)`` are filled;
+    the rest stay ``None``. ``n_samples`` / ``n_labels`` are always set so that
+    trivial rules (Recall, NPV) need no joint computation at all.
+    """
+
+    n_samples: int
+    n_labels: int
+    map_prediction: "np.ndarray | None" = None   # (N, L) argmax over the joint
+    marginals: "np.ndarray | None" = None          # (N, L) P(y_j = 1 | x)
+    pairwise: "np.ndarray | None" = None           # (N, L, L+1) P(y_j=1, |y|=s | x)
+    p_empty: "np.ndarray | None" = None            # (N, 1) P(|y| = 0 | x)
+    p_full: "np.ndarray | None" = None             # (N, 1) P(|y| = L | x)
 
 
 def joint_probability(y, x, cc, payoff=np.prod):
@@ -39,6 +58,107 @@ def joint_probability(y, x, cc, payoff=np.prod):
     return payoff(p)
 
 
+# ---------------------------------------------------------------------------
+# Bayes-optimal prediction (BOP) rules.
+#
+# Each rule is a PURE function of an InferenceStats object. To support a new
+# metric, add one bop_* function here and one entry in metrics_registry — no
+# changes to the model are required. The `needs` comment on each rule is the
+# minimal statistic set its caller must request from compute_stats().
+# ---------------------------------------------------------------------------
+
+def bop_hamming(stats):  # needs: {"marginal"}
+    """Hamming BOP: threshold each marginal P(y_j=1|x) at 0.5."""
+    return np.where(stats.marginals > 0.5, 1, 0)
+
+
+def bop_subset(stats):  # needs: {"map"}
+    """Subset-0/1 BOP: the joint MAP label vector (argmax over all 2^L)."""
+    return stats.map_prediction
+
+
+def bop_precision(stats):  # needs: {"marginal"}
+    """Precision BOP: predict exactly the single highest-marginal label."""
+    N, L = stats.n_samples, stats.n_labels
+    Y = np.zeros((N, L))
+    Y[np.arange(N), stats.marginals.argmax(axis=1)] = 1
+    return Y
+
+
+def bop_npv(stats):  # needs: set()
+    """NPV BOP: the all-ones vector (trivial; coincides with Recall, paper Cor. 2)."""
+    return np.ones((stats.n_samples, stats.n_labels))
+
+
+def bop_recall(stats):  # needs: set()
+    """Recall BOP: the all-ones vector (FN = 0 → perfect recall)."""
+    return np.ones((stats.n_samples, stats.n_labels))
+
+
+def bop_markedness(stats):  # needs: {"marginal"}
+    """Markedness BOP = argmax expected 0.5*(NPV + Precision) over top-l predictions.
+
+    Paper Proposition 6 / Algorithm 4 (vacuous conventions Fpre(.,0_K)=Fneg(.,1_K)=1):
+        l = 0  : 0.5 * (2 - sum_p/L)
+        0<l<L  : 0.5 * (A_l/l + 1 - (sum_p - A_l)/(L-l))
+        l = L  : 0.5 * (sum_p/L + 1)
+    where sum_p = Σ_j p_j and A_l = sum of the top-l marginals. O(L log L), marginals only.
+    """
+    P = stats.marginals
+    N, L = stats.n_samples, stats.n_labels
+    indices = np.argsort(P, axis=1)[:, ::-1]
+    Y_pred = np.zeros((N, L))
+    for i in range(N):
+        sum_p = float(np.sum(P[i]))
+        E = np.zeros(L + 1)
+        E[0] = 0.5 * (2.0 - sum_p / L)
+        E[L] = 0.5 * (sum_p / L + 1.0)
+        A_l = 0.0
+        for l in range(1, L):
+            A_l += P[i, indices[i, l - 1]]
+            E[l] = 0.5 * (A_l / l + 1.0 - (sum_p - A_l) / (L - l))
+        l_opt = int(np.argmax(E))
+        for k in range(l_opt):
+            Y_pred[i, indices[i, k]] = 1
+    return Y_pred
+
+
+def bop_fmeasure(stats, beta=1):  # needs: {"pairwise"}
+    """F-beta BOP (vectorized); paper Algorithm 1.
+
+    For prediction size l (= k+1) the per-label score is
+        q_{l,label} = (1+β²) Σ_{s=1}^L P(y_label=1, |y|=s) / (β²·s + l);
+    the best size-l prediction is the top-l labels by q_{l,·}, and its expected
+    F-beta is the sum of those top-l q values. The all-zero prediction (expected
+    F-beta = P(|y|=0)) wins iff it beats every nonempty size.
+    """
+    N, L = stats.n_samples, stats.n_labels
+    P_pair_wise = stats.pairwise          # (N, L, L+1): P(y_label=1, |y|=s)
+    E0 = stats.p_empty[:, 0]              # (N,): P(|y|=0)
+
+    s = np.arange(1, L + 1)
+    l = np.arange(1, L + 1)
+    W = (1 + beta**2) / (beta**2 * s[None, :] + l[:, None])  # (L, L): W[l-1, s-1]
+
+    Pe = P_pair_wise[:, :, 1:]                          # (N, L, L) over s = 1..L
+    q = np.einsum("nls,ks->nlk", Pe, W)                # (N, L_label, L_size)
+    q_sorted_desc = np.sort(q, axis=1)[:, ::-1, :]     # labels descending
+    cum = np.cumsum(q_sorted_desc, axis=1)             # (N, L, L_size)
+    rank = np.arange(L)
+    E_main = cum[:, rank, rank]                        # (N, L): top-(k+1) sums
+    E = np.concatenate([E_main, np.zeros((N, 1))], axis=1)  # (N, L+1)
+
+    Y_pred = np.zeros((N, L))
+    choose_empty = E0 > E.max(axis=1)
+    k_opt = E.argmax(axis=1)
+    for i in range(N):
+        if choose_empty[i]:
+            continue
+        order = np.argsort(q[i, :, k_opt[i]])[::-1]    # same tie order as the loop
+        Y_pred[i, order[: k_opt[i] + 1]] = 1
+    return Y_pred
+
+
 class ProbabilisticClassifierChain(ClassifierChain):
     """Probabilistic Classifier Chains (PCC) for multi-label learning.
 
@@ -60,12 +180,6 @@ class ProbabilisticClassifierChain(ClassifierChain):
         if base_estimator is None:
             base_estimator = LogisticRegression()
         super().__init__(base_estimator=base_estimator, order=order, random_state=random_state)
-        self.cache_key: str | None = None
-        self.prediction_cache: dict = {}
-
-    def set_cache_key(self, key: str) -> None:
-        self.cache_key = key
-        self.prediction_cache[key] = None
 
     @staticmethod
     def _binary_matrix(K, L):
@@ -75,51 +189,36 @@ class ProbabilisticClassifierChain(ClassifierChain):
         powers = (1 << np.arange(L - 1, -1, -1)).astype(np.int64)
         return ((np.arange(K, dtype=np.int64)[:, None] & powers[None, :]) > 0).astype(np.int8)
 
-    def predict(self, X, marginal=False, pairwise=False) -> tuple[np.ndarray, np.ndarray, dict]:
-        """Enumerate all 2^L label combinations and compute joint probabilities.
+    def _joint(self, X):
+        """Compute the full joint P(y | x) for a batch via prefix-tree batching.
 
-        Uses prefix-tree batched inference: for each chain level j, all
-        N × 2^j partial label sequences are evaluated with one batched
-        `predict_proba` call (instead of N × 2^L × L per-element calls).
-        Numerically equivalent to brute-force enumeration but ~L × 2^L
-        fewer estimator calls. Verified by `_predict_reference()` test.
+        For each chain level j, all N × 2^j partial label sequences are scored
+        with one batched `predict_proba` call (instead of N × 2^L × L per-element
+        calls). Numerically equivalent to brute-force enumeration but ~L × 2^L
+        fewer estimator calls (verified by `_predict_reference()`).
 
-        Layout convention: at depth L, the k-th (0 ≤ k < 2^L) probability for
-        sample n corresponds to the label vector = binary repr of k with L
-        bits, MSB-first (i.e. y[j] = (k >> (L-1-j)) & 1).
-
-        Results are cached by cache_key so multiple predict_* calls on the
-        same fold reuse the computed probabilities.
+        Layout convention: the k-th (0 ≤ k < 2^L) probability for sample n
+        corresponds to the label vector = binary repr of k with L bits, MSB-first
+        (i.e. y[j] = (k >> (L-1-j)) & 1).
 
         Returns
         -------
-        (Y_pred, P_margin_yi_1, pairwise_dict)
-            Y_pred        : (N, L) — MAP prediction (argmax over joint).
-            P_margin_yi_1 : (N, L) — marginal P(y_j=1 | x).
-            pairwise_dict : 'P_pair_wise' (N, L, L+1), 'P_pair_wise0' (N, 1),
-                            'P_pair_wise1' (N, 1).
+        (joint_p, all_vecs, s_vals)
+            joint_p  : (N, 2^L) joint probability of every label vector.
+            all_vecs : (2^L, L) the corresponding label vectors (float).
+            s_vals   : (2^L,) cardinality |y| of each label vector.
         """
-        if (
-            self.cache_key is not None
-            and self.prediction_cache.get(self.cache_key) is not None
-        ):
-            return self.prediction_cache[self.cache_key]
-
-        N, D = X.shape
+        N, _ = X.shape
         L = self.L
-        K = 1 << L  # 2^L
+        K = 1 << L
 
-        # Sample-major prefix-tree expansion.
-        # At depth j: joint_p has shape (N * 2^j,), sample-major layout.
-        # Sample n's entries occupy positions [n * 2^j : (n+1) * 2^j),
-        # and within that block the entry at index k_partial corresponds to
-        # prefix = binary repr of k_partial with j bits (MSB-first).
+        # Sample-major prefix-tree expansion. At depth j: joint_p has shape
+        # (N * 2^j,); sample n's entries occupy [n*2^j : (n+1)*2^j), and within
+        # that block index k_partial is the prefix = binary repr of k_partial
+        # with j bits (MSB-first).
         joint_p = np.ones(N, dtype=np.float64)
-
         for j in range(L):
-            K_j = 1 << j  # 2^j
-            # Build inputs for predict_proba: (N * K_j, D + j).
-            # Each sample contributes K_j rows (one per partial prefix).
+            K_j = 1 << j
             x_rep = np.repeat(X, K_j, axis=0)  # (N * K_j, D), sample-major
             if j == 0:
                 inputs = x_rep
@@ -130,49 +229,64 @@ class ProbabilisticClassifierChain(ClassifierChain):
 
             proba = self.ensemble[j].predict_proba(inputs)  # (N * K_j, 2)
 
-            # Interleaved expansion: each entry → 2 entries (||0 at even, ||1 at odd).
-            # Preserves sample-major layout: sample n's new block at [n*2^(j+1), (n+1)*2^(j+1)).
+            # Interleaved expansion: each entry → 2 entries (||0 even, ||1 odd),
+            # preserving the sample-major layout.
             new_joint = np.empty(N * K_j * 2, dtype=np.float64)
             new_joint[0::2] = joint_p * proba[:, 0]
             new_joint[1::2] = joint_p * proba[:, 1]
             joint_p = new_joint
 
-        # joint_p shape: (N * 2^L,) sample-major → reshape (N, 2^L).
         joint_p = joint_p.reshape(N, K)
+        all_vecs = self._binary_matrix(K, L).astype(np.float64)  # (K, L) MSB-first
+        s_vals = all_vecs.sum(axis=1).astype(np.int64)           # (K,) cardinality
+        return joint_p, all_vecs, s_vals
 
-        # Build all label vectors once: (K, L) MSB-first binary repr.
-        all_vecs = self._binary_matrix(K, L).astype(np.float64)
-        s_vals = all_vecs.sum(axis=1).astype(np.int64)  # (K,) cardinality of each vec
+    def compute_stats(self, X, needs=("map", "marginal", "pairwise")) -> InferenceStats:
+        """Compute only the probabilistic statistics named in ``needs``.
 
-        # MAP prediction
-        idx_max = np.argmax(joint_p, axis=1)         # (N,)
-        Y_pred = all_vecs[idx_max]                   # (N, L)
+        ``needs`` is any subset of {"map", "marginal", "pairwise"}. The expensive
+        2^L joint is computed once if any of those are requested, then the
+        requested quantities are derived from it. Requesting nothing (e.g. for
+        the trivial Recall / NPV rules) skips the joint entirely.
+        """
+        needs = set(needs)
+        N, _ = X.shape
+        L = self.L
+        stats = InferenceStats(n_samples=N, n_labels=L)
+        if not (needs & {"map", "marginal", "pairwise"}):
+            return stats
 
-        # All-zero vec is at index 0 (binary repr 0...0), all-ones at K-1.
-        P_pair_wise0 = joint_p[:, 0:1].copy()        # (N, 1)
-        P_pair_wise1 = joint_p[:, K - 1:K].copy()    # (N, 1)
+        joint_p, all_vecs, s_vals = self._joint(X)
+        K = all_vecs.shape[0]
 
-        # Always compute marginal AND pairwise (cheap once joint_p is computed)
-        # so that the cached result satisfies any later marginal/pairwise request.
-        # The `marginal` / `pairwise` flags exist for API compatibility only.
-        P_margin_yi_1 = joint_p @ all_vecs           # (N, K) @ (K, L) → (N, L)
-        P_pair_wise = np.zeros((N, L, L + 1))
-        for s in range(L + 1):
-            mask = s_vals == s
-            if mask.any():
-                P_pair_wise[:, :, s] = joint_p[:, mask] @ all_vecs[mask]
+        if "map" in needs:
+            stats.map_prediction = all_vecs[np.argmax(joint_p, axis=1)]  # (N, L)
+        if "marginal" in needs:
+            stats.marginals = joint_p @ all_vecs                         # (N, L)
+        if "pairwise" in needs:
+            P_pair = np.zeros((N, L, L + 1))
+            for s in range(L + 1):
+                mask = s_vals == s
+                if mask.any():
+                    P_pair[:, :, s] = joint_p[:, mask] @ all_vecs[mask]
+            stats.pairwise = P_pair
+            stats.p_empty = joint_p[:, 0:1].copy()       # all-zero vec at index 0
+            stats.p_full = joint_p[:, K - 1:K].copy()    # all-ones vec at index K-1
+        return stats
 
-        result = (
-            Y_pred,
-            P_margin_yi_1,
-            {
-                "P_pair_wise": P_pair_wise,
-                "P_pair_wise0": P_pair_wise0,
-                "P_pair_wise1": P_pair_wise1,
-            },
+    def predict(self, X, marginal=False, pairwise=False) -> tuple[np.ndarray, np.ndarray, dict]:
+        """Backward-compatible wrapper returning the legacy (MAP, marginal, pairwise-dict) tuple.
+
+        Prefer :meth:`compute_stats`, which computes only what a given rule needs.
+        The ``marginal`` / ``pairwise`` flags are retained for API compatibility;
+        this method always returns all three statistics.
+        """
+        s = self.compute_stats(X, needs={"map", "marginal", "pairwise"})
+        return (
+            s.map_prediction,
+            s.marginals,
+            {"P_pair_wise": s.pairwise, "P_pair_wise0": s.p_empty, "P_pair_wise1": s.p_full},
         )
-        self.prediction_cache[self.cache_key] = result
-        return result
 
     def _predict_reference(self, X, marginal=False, pairwise=False):
         """Brute-force reference implementation (slow). For testing only.
@@ -213,95 +327,28 @@ class ProbabilisticClassifierChain(ClassifierChain):
         )
 
     def predict_hamming(self, X):
-        """Bayes-optimal predictor for Hamming Accuracy.
-
-        Thresholds each marginal P(y_j=1|x) at 0.5.
-        """
-        _, P_margin_yi_1, _ = self.predict(X, marginal=True)
-        return np.where(P_margin_yi_1 > 0.5, 1, 0)
+        """Bayes-optimal predictor for Hamming Accuracy (see :func:`bop_hamming`)."""
+        return bop_hamming(self.compute_stats(X, needs={"marginal"}))
 
     def predict_subset(self, X):
-        """Bayes-optimal predictor for Subset Accuracy.
-
-        Returns the joint MAP label vector (argmax over all 2^L combinations).
-        """
-        predictions, _, _ = self.predict(X)
-        return predictions
+        """Bayes-optimal predictor for Subset Accuracy (see :func:`bop_subset`)."""
+        return bop_subset(self.compute_stats(X, needs={"map"}))
 
     def predict_precision(self, X):
-        """Bayes-optimal predictor for Precision.
-
-        Predicts exactly one label: the one with the highest marginal probability.
-        """
-        N = X.shape[0]
-        _, P_margin_yi_1, _ = self.predict(X, marginal=True)
-        Y_pred = np.zeros((N, self.L))
-        Y_pred[np.arange(N), P_margin_yi_1.argmax(axis=1)] = 1
-        return Y_pred
+        """Bayes-optimal predictor for Precision (see :func:`bop_precision`)."""
+        return bop_precision(self.compute_stats(X, needs={"marginal"}))
 
     def predict_npv(self, X):
-        """Bayes-optimal predictor for Negative Predictive Value (NPV).
-
-        Paper Corollary 2 (eq. negative): under the convention NPV(y, 1_K) = 1
-        (predicting all-positive leaves no predicted negatives → vacuously
-        perfect), the all-ones vector 1_K attains the maximum expected NPV and
-        is the BOP whenever it is a valid prediction — which it always is in
-        this setting. Hence the NPV BOP is trivial and coincides with the
-        Recall BOP (this is why the F_neg and F_rec rows are identical in the
-        paper's result tables).
-        """
-        return np.ones((X.shape[0], self.L))
+        """Bayes-optimal predictor for Negative Predictive Value (see :func:`bop_npv`)."""
+        return bop_npv(self.compute_stats(X, needs=set()))
 
     def predict_recall(self, X):
-        """Bayes-optimal predictor for Recall.
-
-        Predicting all labels as positive trivially achieves perfect recall
-        (TP / (TP + FN) = 1 since FN = 0). This is the theoretical optimum
-        when optimising recall alone without a precision constraint.
-        """
-        return np.ones((X.shape[0], self.L))
+        """Bayes-optimal predictor for Recall (see :func:`bop_recall`)."""
+        return bop_recall(self.compute_stats(X, needs=set()))
 
     def predict_markedness(self, X):
-        """Bayes-optimal predictor for Markedness = 0.5 * (NPV + Precision).
-
-        Conventions (match `EvaluationMetrics`):
-            - Precision = 1 if pred=0 and true=0 (vacuous), 0 if pred=0 and true>0.
-            - NPV      = 1 if pred=all-ones and true=all-ones (vacuous), 0 if
-                         pred=all-ones and true has any 0.
-
-        Paper Proposition 6 / Algorithm 4 conventions: Fpre(y, 0_K) = 1 and
-        Fneg(y, 1_K) = 1 (vacuous precision / NPV). For candidate top-l
-        (l ∈ {0,..,L}), expected markedness is:
-            l = 0  : 0.5 * (1 + 1 - sum_p/L)        # NPV = 1 - sum_p/L, Precision = 1 (vacuous)
-            0<l<L  : 0.5 * (A_l/l + 1 - (sum_p - A_l)/(L-l))
-            l = L  : 0.5 * (sum_p/L + 1)            # Precision = sum_p/L, NPV = 1 (vacuous)
-        where sum_p = Σ_j P(y_j=1|x) and A_l = sum of top-l marginals.
-        Only the marginals p_j are needed (cf. Algorithm 4), in O(L log L).
-        """
-        N, _ = X.shape
-        _, P_margin_yi_1, _ = self.predict(X, marginal=True)
-        L = self.L
-
-        indices = np.argsort(P_margin_yi_1, axis=1)[:, ::-1]
-        Y_pred = np.zeros((N, L))
-
-        for i in range(N):
-            sum_p = float(np.sum(P_margin_yi_1[i]))
-
-            E = np.zeros(L + 1)
-            # Boundary cases use the paper's vacuous conventions (Fpre(.,0_K)=1, Fneg(.,1_K)=1).
-            E[0] = 0.5 * (2.0 - sum_p / L)
-            E[L] = 0.5 * (sum_p / L + 1.0)
-
-            A_l = 0.0
-            for l in range(1, L):
-                A_l += P_margin_yi_1[i, indices[i, l - 1]]
-                E[l] = 0.5 * (A_l / l + 1.0 - (sum_p - A_l) / (L - l))
-
-            l_opt = int(np.argmax(E))
-            for k in range(l_opt):
-                Y_pred[i, indices[i, k]] = 1
-        return Y_pred
+        """Bayes-optimal predictor for Markedness (see :func:`bop_markedness`)."""
+        return bop_markedness(self.compute_stats(X, needs={"marginal"}))
 
     def _predict_fmeasure_loop(self, X, beta=1):
         """Reference (pre-vectorization) F-beta BOP. Kept for regression tests."""
@@ -341,48 +388,8 @@ class ProbabilisticClassifierChain(ClassifierChain):
         return Y_pred
 
     def predict_fmeasure(self, X, beta=1):
-        """Bayes-optimal predictor for the F-beta measure (vectorized).
-
-        Numerically equivalent to ``_predict_fmeasure_loop`` but replaces the
-        O(N·L³) Python triple loop with tensor contractions. Paper Algorithm 1:
-        for prediction size l (= k+1) the per-label score is
-            q_{l,label} = (1+β²) Σ_{s=1}^L P(y_label=1, |y|=s) / (β²·s + l),
-        the best size-l prediction is the top-l labels by q_{l,·}, and the
-        expected F-beta of that prediction is the sum of its top-l q values.
-        The all-zero prediction (expected F-beta = P(|y|=0)) wins iff it beats
-        every nonempty size.
-        """
-        N, _ = X.shape
-        L = self.L
-        _, _, pw = self.predict(X, pairwise=True)
-        P_pair_wise = pw["P_pair_wise"]          # (N, L, L+1): P(y_label=1, |y|=s)
-        E0 = pw["P_pair_wise0"][:, 0]            # (N,): P(|y|=0)
-
-        # Weight matrix W[l-1, s-1] = (1+β²) / (β²·s + l), for l, s ∈ {1..L}.
-        s = np.arange(1, L + 1)
-        l = np.arange(1, L + 1)
-        W = (1 + beta**2) / (beta**2 * s[None, :] + l[:, None])  # (L, L)
-
-        # q[n, label, l-1] = Σ_s P(y_label=1,|y|=s) · W[l-1, s-1]   (s from 1..L)
-        Pe = P_pair_wise[:, :, 1:]               # (N, L, L) over s = 1..L
-        q = np.einsum("nls,ks->nlk", Pe, W)      # (N, L_label, L_size)
-
-        # E[n, k] = sum of the top-(k+1) label scores for size l=k+1.
-        q_sorted_desc = np.sort(q, axis=1)[:, ::-1, :]     # sort labels descending
-        cum = np.cumsum(q_sorted_desc, axis=1)             # (N, L, L_size)
-        rank = np.arange(L)
-        E_main = cum[:, rank, rank]                        # (N, L): E_main[:,k]=top-(k+1) sum
-        E = np.concatenate([E_main, np.zeros((N, 1))], axis=1)  # (N, L+1), pad to match loop
-
-        Y_pred = np.zeros((N, L))
-        choose_empty = E0 > E.max(axis=1)
-        k_opt = E.argmax(axis=1)                           # (N,)
-        for i in range(N):
-            if choose_empty[i]:
-                continue
-            order = np.argsort(q[i, :, k_opt[i]])[::-1]     # same tie order as the loop
-            Y_pred[i, order[: k_opt[i] + 1]] = 1
-        return Y_pred
+        """Bayes-optimal predictor for the F-beta measure (see :func:`bop_fmeasure`)."""
+        return bop_fmeasure(self.compute_stats(X, needs={"pairwise"}), beta=beta)
 
 
 class ProbabilisticClassifierChainCustom(ProbabilisticClassifierChain):

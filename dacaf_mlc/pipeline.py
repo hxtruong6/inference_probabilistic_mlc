@@ -8,7 +8,6 @@ exact protocol used in the paper.
 import logging
 import os
 import time
-from uuid import uuid4
 
 from joblib import Parallel, delayed
 from sklearn.preprocessing import StandardScaler
@@ -48,13 +47,10 @@ def calculate_metrics(Y_true, Y_pred_or_scores, metric_funcs):
     return scores
 
 
-def training_model(model, X_train, Y_train, cache_key=None):
-    """Train the model and assign a cache key for prediction reuse."""
-    if cache_key is None:
-        cache_key = uuid4().hex
+def training_model(model, X_train, Y_train):
+    """Fit the model and return it."""
     start = time.time()
     logger.info("Training %s ...", model_display_key(model))
-    model.set_cache_key(cache_key)
     model.fit(X_train, Y_train)
     logger.info("Training time: %.3fs", time.time() - start)
     return model
@@ -114,10 +110,7 @@ def evaluate_kfold(
         m_key = model_display_key(model)
         fold_results[dataset_name][m_key] = {}
 
-        model = training_model(
-            model, X_train, y_train,
-            cache_key=f"{dataset_name}_{m_key}_fold{kfold_index}",
-        )
+        model = training_model(model, X_train, y_train)
         results = evaluate_model(model, X_test, y_test, predict_functions)
 
         for result in results:

@@ -23,7 +23,6 @@ def test_predict_matches_reference(L):
     pcc, X_train = _fit_pcc(L=L, n_samples=30)
     X_test = X_train[:10]
 
-    pcc.set_cache_key("opt")
     Y_opt, M_opt, pw_opt = pcc.predict(X_test, marginal=True, pairwise=True)
     Y_ref, M_ref, pw_ref = pcc._predict_reference(X_test, marginal=True, pairwise=True)
 
@@ -45,7 +44,6 @@ def test_predict_matches_reference(L):
 def test_joint_p_sums_to_one():
     """Sanity: marginal sum + complement should give total probability ≈ 1."""
     pcc, X_train = _fit_pcc(L=4, n_samples=20)
-    pcc.set_cache_key("sum")
     _, _, pw = pcc.predict(X_train[:5], pairwise=True)
     # Σ_s P(|y|=s | x) over s = 0..L should be 1.
     # P(|y|=0) = P_pair_wise0; P(|y|=s>0) = Σ_j P_pair[j, s] / s
