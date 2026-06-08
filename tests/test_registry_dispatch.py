@@ -27,10 +27,10 @@ def _fit(L=5, D=6, n=40, seed=0):
     return pcc, X
 
 
-@pytest.mark.parametrize("pf", PREDICT_FUNCTIONS, ids=lambda pf: pf["name"])
+@pytest.mark.parametrize("pf", PREDICT_FUNCTIONS, ids=lambda pf: pf.name)
 def test_registry_bop_matches_method(pf):
     pcc, X = _fit()
-    stats = pcc.compute_stats(X, needs=pf["needs"])
-    via_registry = pf["bop"](stats)
-    via_method = getattr(pcc, RULE_TO_METHOD[pf["name"]])(X)
+    stats = pcc.compute_stats(X, needs=pf.needs)
+    via_registry = pf.bop(stats)
+    via_method = getattr(pcc, RULE_TO_METHOD[pf.name])(X)
     np.testing.assert_array_equal(via_registry, via_method)

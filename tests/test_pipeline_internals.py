@@ -3,6 +3,7 @@ import numpy as np
 import pytest
 
 from dacaf_mlc.pipeline import calculate_metrics
+from dacaf_mlc.metrics_registry import EvalMetric
 
 
 def test_calculate_metrics_propagates_metric_errors():
@@ -14,6 +15,6 @@ def test_calculate_metrics_propagates_metric_errors():
     def boom(y_true, y_pred):
         raise RuntimeError("metric is broken")
 
-    bad_metric = [{"name": "Boom", "func": boom}]
+    bad_metric = [EvalMetric("Boom", boom)]
     with pytest.raises(RuntimeError, match="metric is broken"):
         calculate_metrics(Y_true, Y_pred, bad_metric)

@@ -39,11 +39,14 @@ def calculate_metrics(Y_true, Y_pred_or_scores, metric_funcs):
     """Calculate metrics. Y_pred_or_scores is binary for standard metrics, continuous for ranking."""
     scores = []
     for metric in metric_funcs:
-        name = metric["name"]
-        func = metric["func"]
-        opts = metric.get("options", {})
-        value = func(Y_true, Y_pred_or_scores, **opts) if opts else func(Y_true, Y_pred_or_scores)
-        scores.append({"Metric Name": name, "Metric Function": func.__name__, "Score": f"{value:.5f}"})
+        value = (
+            metric.func(Y_true, Y_pred_or_scores, **metric.options)
+            if metric.options
+            else metric.func(Y_true, Y_pred_or_scores)
+        )
+        scores.append(
+            {"Metric Name": metric.name, "Metric Function": metric.func.__name__, "Score": f"{value:.5f}"}
+        )
     return scores
 
 
@@ -62,16 +65,16 @@ def evaluate_model(model, X_test, Y_test, predict_funcs):
     The expensive joint statistics are computed once (the union of every rule's
     `needs`) and reused across rules via their pure `bop` functions.
     """
-    needs = set().union(*(pf["needs"] for pf in predict_funcs))
+    needs = set().union(*(pf.needs for pf in predict_funcs))
     start = time.time()
     stats = model.compute_stats(X_test, needs=needs, batch_size=INFERENCE_BATCH_SIZE)
     logger.info("Stats time: %.3fs (needs=%s)", time.time() - start, sorted(needs))
 
     results = []
     for pf in predict_funcs:
-        Y_pred_or_scores = pf["bop"](stats)
-        scores = calculate_metrics(Y_test, Y_pred_or_scores, pf["metrics"])
-        results.append({"predict_name": pf["name"], "score_metrics": scores})
+        Y_pred_or_scores = pf.bop(stats)
+        scores = calculate_metrics(Y_test, Y_pred_or_scores, pf.metrics)
+        results.append({"predict_name": pf.name, "score_metrics": scores})
     return results
 
 
@@ -177,10 +180,10 @@ def run_single(dataset_name, seed, estimator_names, output_dir):
         for model in evaluated_models:
             m_key = model_display_key(model)
             for pf in PREDICT_FUNCTIONS:
-                for mf in pf["metrics"]:
+                for mf in pf.metrics:
                     add_key_if_missing(
-                        dataset_results, dataset_name, m_key, pf["name"], mf["name"],
-                        fold_result[dataset_name][m_key][pf["name"]][mf["name"]],
+                        dataset_results, dataset_name, m_key, pf.name, mf.name,
+                        fold_result[dataset_name][m_key][pf.name][mf.name],
                     )
 
     result_df = save_result_df(dataset_results, output_csv)
