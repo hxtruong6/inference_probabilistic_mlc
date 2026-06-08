@@ -6,15 +6,6 @@ from sklearn.model_selection import KFold
 
 logger = logging.getLogger(__name__)
 
-# Number of labels per (dense) MULAN ARFF used in the paper.
-_LABEL_COUNTS = {
-    "emotions": 6,
-    "scene": 6,
-    "yeast": 14,
-    "Water-quality": 14,
-    "CHD_49": 6,
-}
-
 
 class MultiLabelArffDataset:
     """Class to handle Mulan datasets stored in ARFF files.
@@ -22,6 +13,12 @@ class MultiLabelArffDataset:
     Stores raw (unscaled) feature arrays. Callers are responsible for
     applying StandardScaler per fold AFTER train/test split to avoid
     data leakage.
+
+    Two ways to construct:
+    - From an ARFF file: pass ``path`` and ``n_labels`` (the label count comes
+      from the dataset registry, see ``dacaf_mlc.datasets``).
+    - From in-memory data: pass ``X`` and ``Y`` DataFrames; ``n_labels`` is then
+      inferred from ``Y`` and not required.
     """
 
     def __init__(
@@ -31,6 +28,7 @@ class MultiLabelArffDataset:
         target_at_first=False,
         X=None,
         Y=None,
+        n_labels=None,
     ):
         """Initialize the dataset handler."""
         self.dataset_name = dataset_name
@@ -39,11 +37,15 @@ class MultiLabelArffDataset:
             self.X, self.Y = self._to_numpy(X, Y)
             return
 
+        if n_labels is None:
+            raise ValueError(
+                f"n_labels is required to load ARFF dataset '{dataset_name}'."
+            )
+
         self.path = path
         data = arff.loadarff(self.path)
         df = pd.DataFrame(data[0])
 
-        n_labels = self._get_label_count()
         if target_at_first:
             Y_df = df.iloc[:, :n_labels].astype(int)
             X_df = df.iloc[:, n_labels:]
@@ -59,13 +61,6 @@ class MultiLabelArffDataset:
         Y_np = Y.to_numpy()
         logger.info("Features shape: %s | Labels shape: %s", X_np.shape, Y_np.shape)
         return X_np, Y_np
-
-    def _get_label_count(self):
-        """Return the number of labels for the dataset."""
-        if self.dataset_name not in _LABEL_COUNTS:
-            raise Exception(f"Dataset '{self.dataset_name}' is not supported. "
-                            f"Known datasets: {list(_LABEL_COUNTS)}")
-        return _LABEL_COUNTS[self.dataset_name]
 
     def get_cross_validation_folds(self, n_splits=5, shuffle=True, random_state=None):
         """Yield (train_index, test_index) tuples for k-fold cross-validation.
