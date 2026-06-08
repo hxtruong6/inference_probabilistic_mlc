@@ -5,6 +5,7 @@ The PCC model with an L2 logistic-regression base learner is trained per fold
 and the configured metrics are computed on each rule's output. This is the
 exact protocol used in the paper.
 """
+import logging
 import os
 import time
 from uuid import uuid4
@@ -18,6 +19,8 @@ from dacaf_mlc.datasets import read_datasets_from_folder
 from dacaf_mlc.metrics_registry import PREDICT_FUNCTIONS
 from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChain
 from dacaf_mlc.utils import add_key_if_missing, save_crosstab, save_result_df
+
+logger = logging.getLogger(__name__)
 
 ESTIMATOR_FACTORIES = {
     "lr": lambda seed: LogisticRegression(random_state=seed, max_iter=5_000_000),
@@ -40,11 +43,8 @@ def calculate_metrics(Y_true, Y_pred_or_scores, metric_funcs):
         name = metric["name"]
         func = metric["func"]
         opts = metric.get("options", {})
-        try:
-            value = func(Y_true, Y_pred_or_scores, **opts) if opts else func(Y_true, Y_pred_or_scores)
-            scores.append({"Metric Name": name, "Metric Function": func.__name__, "Score": f"{value:.5f}"})
-        except Exception as e:
-            print(f"Error calculating {name}: {e}")
+        value = func(Y_true, Y_pred_or_scores, **opts) if opts else func(Y_true, Y_pred_or_scores)
+        scores.append({"Metric Name": name, "Metric Function": func.__name__, "Score": f"{value:.5f}"})
     return scores
 
 
@@ -52,16 +52,12 @@ def training_model(model, X_train, Y_train, cache_key=None):
     """Train the model and assign a cache key for prediction reuse."""
     if cache_key is None:
         cache_key = uuid4().hex
-    try:
-        start = time.time()
-        print(f"Training {model_display_key(model)} ...")
-        model.set_cache_key(cache_key)
-        model.fit(X_train, Y_train)
-        print(f"Training time: {time.time() - start:.3f}s")
-        return model
-    except Exception as e:
-        print(f"Error training model: {e}")
-        raise
+    start = time.time()
+    logger.info("Training %s ...", model_display_key(model))
+    model.set_cache_key(cache_key)
+    model.fit(X_train, Y_train)
+    logger.info("Training time: %.3fs", time.time() - start)
+    return model
 
 
 def evaluate_model(model, X_test, Y_test, predict_funcs):
@@ -70,7 +66,7 @@ def evaluate_model(model, X_test, Y_test, predict_funcs):
     for pf in predict_funcs:
         start = time.time()
         Y_pred_or_scores = getattr(model, pf["func"])(X_test)
-        print(f"Predict time: {time.time() - start:.3f}s [{pf['name']}]")
+        logger.info("Predict time: %.3fs [%s]", time.time() - start, pf["name"])
         scores = calculate_metrics(Y_test, Y_pred_or_scores, pf["metrics"])
         results.append({"predict_name": pf["name"], "score_metrics": scores})
     return results
@@ -99,7 +95,7 @@ def evaluate_kfold(
     kfold_index,
 ):
     """Evaluate all models on one k-fold split with proper per-fold scaling."""
-    print(f"\nFold {kfold_index} ...")
+    logger.info("Fold %s ...", kfold_index)
     dataset_name = dataset_handler.dataset_name
 
     X_train_raw = dataset_handler.X[train_index]
@@ -111,7 +107,7 @@ def evaluate_kfold(
     X_train = scaler.fit_transform(X_train_raw)
     X_test = scaler.transform(X_test_raw)
 
-    print(f"X_train: {X_train.shape} | X_test: {X_test.shape}")
+    logger.info("X_train: %s | X_test: %s", X_train.shape, X_test.shape)
 
     fold_results = {dataset_name: {}}
     for model in evaluated_models:
@@ -155,7 +151,7 @@ def run_single(dataset_name, seed, estimator_names, output_dir):
     evaluated_models = prepare_model_to_evaluate(estimator_names=estimator_names, seed=seed)
 
     (dataset_handler,) = list(read_datasets_from_folder(folder_path, [dataset_name]))
-    print(f"\nEvaluating: {dataset_name} (seed={seed}, estimators={estimator_names})")
+    logger.info("Evaluating: %s (seed=%s, estimators=%s)", dataset_name, seed, estimator_names)
     t0 = time.time()
 
     job_results = Parallel(n_jobs=_n_parallel_folds())(
@@ -189,5 +185,5 @@ def run_single(dataset_name, seed, estimator_names, output_dir):
 
     result_df = save_result_df(dataset_results, output_csv)
     save_crosstab(result_df, output_csv)
-    print(f"Dataset evaluation time: {time.time() - t0:.1f}s")
+    logger.info("Dataset evaluation time: %.1fs", time.time() - t0)
     return output_csv

@@ -1,4 +1,8 @@
+import logging
+
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 
 def save_result_df(data, output_csv):
@@ -24,7 +28,7 @@ def save_result_df(data, output_csv):
     result_df = pd.DataFrame(column_name)
 
     result_df.to_csv(output_csv, index=False)
-    print(f"\n✅Evaluation results saved to {output_csv}")
+    logger.info("Evaluation results saved to %s", output_csv)
     return result_df
 
 
@@ -39,7 +43,7 @@ def save_crosstab(df, output_csv, aggfunc="mean"):
         margins=True,
     )
 
-    print(cross_tab)
+    logger.info("Cross-tab:\n%s", cross_tab)
     cross_tab.to_csv(f"{output_csv.split('.csv')[0]}_crosstab.csv")
 
 

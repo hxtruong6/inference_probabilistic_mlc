@@ -7,6 +7,7 @@ DEFAULT_DATASET_NAMES × DEFAULT_SEEDS; with --dataset it runs a single
 Run as ``dacaf-mlc`` (console script) or ``python -m dacaf_mlc.evaluate``.
 """
 import argparse
+import logging
 import os
 
 from dacaf_mlc.config import BASE_DIR, SEED, DEFAULT_SEEDS
@@ -31,6 +32,10 @@ def parse_args():
 
 
 def main():
+    logging.basicConfig(
+        level=os.environ.get("DACAF_LOG_LEVEL", "INFO"),
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
     args = parse_args()
     estimator_names = list(ESTIMATOR_FACTORIES) if args.estimator == "all" else [args.estimator]
 
