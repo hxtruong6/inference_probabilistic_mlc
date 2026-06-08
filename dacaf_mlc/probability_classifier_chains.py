@@ -56,7 +56,9 @@ class ProbabilisticClassifierChain(ClassifierChain):
         Random seed.
     """
 
-    def __init__(self, base_estimator=LogisticRegression(), order=None, random_state=None):
+    def __init__(self, base_estimator=None, order=None, random_state=None):
+        if base_estimator is None:
+            base_estimator = LogisticRegression()
         super().__init__(base_estimator=base_estimator, order=order, random_state=random_state)
         self.cache_key: str | None = None
         self.prediction_cache: dict = {}
