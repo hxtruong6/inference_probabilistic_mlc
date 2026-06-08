@@ -1,6 +1,5 @@
 """Contract for compute_stats: compute only the requested statistics."""
 import numpy as np
-import pytest
 from sklearn.linear_model import LogisticRegression
 
 from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChain
