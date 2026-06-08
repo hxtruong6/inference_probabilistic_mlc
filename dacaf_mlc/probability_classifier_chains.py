@@ -234,10 +234,9 @@ class ProbabilisticClassifierChain(ClassifierChain):
         Predicts exactly one label: the one with the highest marginal probability.
         """
         N = X.shape[0]
-        Y_pred = np.zeros((N, self.L))
         _, P_margin_yi_1, _ = self.predict(X, marginal=True)
-        for n in range(N):
-            Y_pred[n, np.argmax(P_margin_yi_1[n])] = 1
+        Y_pred = np.zeros((N, self.L))
+        Y_pred[np.arange(N), P_margin_yi_1.argmax(axis=1)] = 1
         return Y_pred
 
     def predict_npv(self, X):
