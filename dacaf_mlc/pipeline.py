@@ -57,12 +57,19 @@ def training_model(model, X_train, Y_train):
 
 
 def evaluate_model(model, X_test, Y_test, predict_funcs):
-    """Run all predict_* functions; each pf carries its own metric list."""
+    """Run all inference rules and score each with its metric list.
+
+    The expensive joint statistics are computed once (the union of every rule's
+    `needs`) and reused across rules via their pure `bop` functions.
+    """
+    needs = set().union(*(pf["needs"] for pf in predict_funcs))
+    start = time.time()
+    stats = model.compute_stats(X_test, needs=needs)
+    logger.info("Stats time: %.3fs (needs=%s)", time.time() - start, sorted(needs))
+
     results = []
     for pf in predict_funcs:
-        start = time.time()
-        Y_pred_or_scores = getattr(model, pf["func"])(X_test)
-        logger.info("Predict time: %.3fs [%s]", time.time() - start, pf["name"])
+        Y_pred_or_scores = pf["bop"](stats)
         scores = calculate_metrics(Y_test, Y_pred_or_scores, pf["metrics"])
         results.append({"predict_name": pf["name"], "score_metrics": scores})
     return results
