@@ -243,7 +243,10 @@ class ProbabilisticClassifierChain(ClassifierChain):
         return joint_p, all_vecs, s_vals
 
     def compute_stats(
-        self, X: np.ndarray, needs: "Iterable[str]" = ("map", "marginal", "pairwise")
+        self,
+        X: np.ndarray,
+        needs: "Iterable[str]" = ("map", "marginal", "pairwise"),
+        batch_size: "int | None" = None,
     ) -> InferenceStats:
         """Compute only the probabilistic statistics named in ``needs``.
 
@@ -251,14 +254,36 @@ class ProbabilisticClassifierChain(ClassifierChain):
         2^L joint is computed once if any of those are requested, then the
         requested quantities are derived from it. Requesting nothing (e.g. for
         the trivial Recall / NPV rules) skips the joint entirely.
+
+        ``batch_size`` caps the number of samples held in the 2^L joint at once.
+        Samples are independent, so chunking is numerically identical to a single
+        pass; it bounds peak memory (the joint is (batch_size, 2^L)) for datasets
+        with many samples. ``None`` (default) processes all samples in one batch.
         """
         needs = set(needs)
         N, _ = X.shape
         L = self.L
-        stats = InferenceStats(n_samples=N, n_labels=L)
         if not (needs & {"map", "marginal", "pairwise"}):
-            return stats
+            return InferenceStats(n_samples=N, n_labels=L)
 
+        if batch_size is None or batch_size >= N:
+            return self._compute_stats_batch(X, needs)
+
+        parts = [
+            self._compute_stats_batch(X[i:i + batch_size], needs)
+            for i in range(0, N, batch_size)
+        ]
+        merged = InferenceStats(n_samples=N, n_labels=L)
+        for field in ("map_prediction", "marginals", "pairwise", "p_empty", "p_full"):
+            if getattr(parts[0], field) is not None:
+                setattr(merged, field, np.concatenate([getattr(p, field) for p in parts], axis=0))
+        return merged
+
+    def _compute_stats_batch(self, X, needs) -> InferenceStats:
+        """Compute the requested statistics for one batch (no chunking)."""
+        N, _ = X.shape
+        L = self.L
+        stats = InferenceStats(n_samples=N, n_labels=L)
         joint_p, all_vecs, s_vals = self._joint(X)
         K = all_vecs.shape[0]
 

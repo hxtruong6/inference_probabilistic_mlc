@@ -13,7 +13,7 @@ from joblib import Parallel, delayed
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 
-from dacaf_mlc.config import BASE_DIR, SEED, KFOLD_SPLIT_NUMBER
+from dacaf_mlc.config import BASE_DIR, SEED, KFOLD_SPLIT_NUMBER, INFERENCE_BATCH_SIZE
 from dacaf_mlc.datasets import read_datasets_from_folder
 from dacaf_mlc.metrics_registry import PREDICT_FUNCTIONS
 from dacaf_mlc.probability_classifier_chains import ProbabilisticClassifierChain
@@ -64,7 +64,7 @@ def evaluate_model(model, X_test, Y_test, predict_funcs):
     """
     needs = set().union(*(pf["needs"] for pf in predict_funcs))
     start = time.time()
-    stats = model.compute_stats(X_test, needs=needs)
+    stats = model.compute_stats(X_test, needs=needs, batch_size=INFERENCE_BATCH_SIZE)
     logger.info("Stats time: %.3fs (needs=%s)", time.time() - start, sorted(needs))
 
     results = []
