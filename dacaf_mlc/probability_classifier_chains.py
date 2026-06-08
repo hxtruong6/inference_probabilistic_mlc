@@ -1,3 +1,23 @@
+"""Probabilistic Classifier Chains (PCC) and the DaCaF Bayes-optimal inference rules.
+
+Implements Nguyen et al., *Information Fusion* (2026). A PCC estimates the joint
+``P(y | x)`` over ``L`` binary labels; each ``bop_*`` rule then returns the
+prediction ``ŷ`` that maximises the *expected* value of one target metric — its
+Bayes-optimal prediction (BOP).
+
+The paper's recipe is "divide-and-conquer and fusion" (DaCaF):
+
+* **Divide & Conquer** — the ``2^L`` candidate predictions are partitioned into
+  ``L+1`` groups by cardinality ``|ŷ|``; within a group the optimum is found by
+  sorting labels by a score, and the global optimum is the best across groups.
+* **Fusion** — those scores need marginal / pairwise probabilities, obtained by
+  fusing the chain's per-label classifiers (ancestral sampling) into the joint
+  ``P(y | x)`` — see :meth:`ProbabilisticClassifierChain._joint`.
+
+Per-rule references: Hamming/Subset are standard; F-beta — Algorithm 1;
+Markedness — Proposition 6 / Algorithm 4; NPV/Recall — Corollary 2; Precision —
+Corollary 1. Metric conventions are documented in ``docs/CONVENTIONS.md``.
+"""
 import warnings
 from collections.abc import Iterable
 from dataclasses import dataclass
@@ -217,6 +237,14 @@ class ProbabilisticClassifierChain(ClassifierChain):
     def _joint(self, X):
         """Compute the full joint P(y | x) for a batch via prefix-tree batching.
 
+        A classifier chain factorises the joint by the probability chain rule
+
+            P(y | x) = ∏_{j=0}^{L-1} P(y_j | x, y_0, …, y_{j-1}),
+
+        the j-th factor being the chain's j-th binary classifier. Enumerating all
+        2^L vectors is therefore a depth-L prefix tree: extending each partial
+        prefix y_0..y_{j-1} by y_j multiplies its probability by that factor.
+
         For each chain level j, all N × 2^j partial label sequences are scored
         with one batched `predict_proba` call (instead of N × 2^L × L per-element
         calls). Numerically equivalent to brute-force enumeration but ~L × 2^L
@@ -312,18 +340,22 @@ class ProbabilisticClassifierChain(ClassifierChain):
         K = all_vecs.shape[0]
 
         if "map" in needs:
+            # Subset-0/1 BOP: the single most probable label vector.
             stats.map_prediction = all_vecs[np.argmax(joint_p, axis=1)]  # (N, L)
         if "marginal" in needs:
+            # Marginal p_j = P(y_j=1 | x) = Σ_y P(y | x)·y_j  →  joint_p @ all_vecs.
             stats.marginals = joint_p @ all_vecs                         # (N, L)
         if "pairwise" in needs:
+            # Pairwise P(y_j=1, |y|=s | x) = Σ_{y : |y|=s} P(y | x)·y_j, grouped by
+            # cardinality s (each joint column belongs to exactly one s).
             P_pair = np.zeros((N, L, L + 1))
             for s in range(L + 1):
                 mask = s_vals == s
                 if mask.any():
                     P_pair[:, :, s] = joint_p[:, mask] @ all_vecs[mask]
             stats.pairwise = P_pair
-            stats.p_empty = joint_p[:, 0:1].copy()       # all-zero vec at index 0
-            stats.p_full = joint_p[:, K - 1:K].copy()    # all-ones vec at index K-1
+            stats.p_empty = joint_p[:, 0:1].copy()       # P(|y|=0): all-zero vec at index 0
+            stats.p_full = joint_p[:, K - 1:K].copy()    # P(|y|=L): all-ones vec at index K-1
         return stats
 
     def predict(self, X, marginal=False, pairwise=False) -> tuple[np.ndarray, np.ndarray, dict]:
