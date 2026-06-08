@@ -1,4 +1,5 @@
 import warnings
+from collections.abc import Iterable
 from dataclasses import dataclass
 
 import numpy as np
@@ -67,17 +68,17 @@ def joint_probability(y, x, cc, payoff=np.prod):
 # minimal statistic set its caller must request from compute_stats().
 # ---------------------------------------------------------------------------
 
-def bop_hamming(stats):  # needs: {"marginal"}
+def bop_hamming(stats: InferenceStats) -> np.ndarray:  # needs: {"marginal"}
     """Hamming BOP: threshold each marginal P(y_j=1|x) at 0.5."""
     return np.where(stats.marginals > 0.5, 1, 0)
 
 
-def bop_subset(stats):  # needs: {"map"}
+def bop_subset(stats: InferenceStats) -> np.ndarray:  # needs: {"map"}
     """Subset-0/1 BOP: the joint MAP label vector (argmax over all 2^L)."""
     return stats.map_prediction
 
 
-def bop_precision(stats):  # needs: {"marginal"}
+def bop_precision(stats: InferenceStats) -> np.ndarray:  # needs: {"marginal"}
     """Precision BOP: predict exactly the single highest-marginal label."""
     N, L = stats.n_samples, stats.n_labels
     Y = np.zeros((N, L))
@@ -85,17 +86,17 @@ def bop_precision(stats):  # needs: {"marginal"}
     return Y
 
 
-def bop_npv(stats):  # needs: set()
+def bop_npv(stats: InferenceStats) -> np.ndarray:  # needs: set()
     """NPV BOP: the all-ones vector (trivial; coincides with Recall, paper Cor. 2)."""
     return np.ones((stats.n_samples, stats.n_labels))
 
 
-def bop_recall(stats):  # needs: set()
+def bop_recall(stats: InferenceStats) -> np.ndarray:  # needs: set()
     """Recall BOP: the all-ones vector (FN = 0 → perfect recall)."""
     return np.ones((stats.n_samples, stats.n_labels))
 
 
-def bop_markedness(stats):  # needs: {"marginal"}
+def bop_markedness(stats: InferenceStats) -> np.ndarray:  # needs: {"marginal"}
     """Markedness BOP = argmax expected 0.5*(NPV + Precision) over top-l predictions.
 
     Paper Proposition 6 / Algorithm 4 (vacuous conventions Fpre(.,0_K)=Fneg(.,1_K)=1):
@@ -123,7 +124,7 @@ def bop_markedness(stats):  # needs: {"marginal"}
     return Y_pred
 
 
-def bop_fmeasure(stats, beta=1):  # needs: {"pairwise"}
+def bop_fmeasure(stats: InferenceStats, beta: float = 1) -> np.ndarray:  # needs: {"pairwise"}
     """F-beta BOP (vectorized); paper Algorithm 1.
 
     For prediction size l (= k+1) the per-label score is
@@ -241,7 +242,9 @@ class ProbabilisticClassifierChain(ClassifierChain):
         s_vals = all_vecs.sum(axis=1).astype(np.int64)           # (K,) cardinality
         return joint_p, all_vecs, s_vals
 
-    def compute_stats(self, X, needs=("map", "marginal", "pairwise")) -> InferenceStats:
+    def compute_stats(
+        self, X: np.ndarray, needs: "Iterable[str]" = ("map", "marginal", "pairwise")
+    ) -> InferenceStats:
         """Compute only the probabilistic statistics named in ``needs``.
 
         ``needs`` is any subset of {"map", "marginal", "pairwise"}. The expensive
@@ -326,27 +329,27 @@ class ProbabilisticClassifierChain(ClassifierChain):
             {"P_pair_wise": P_pair_wise, "P_pair_wise0": P_pair_wise0, "P_pair_wise1": P_pair_wise1},
         )
 
-    def predict_hamming(self, X):
+    def predict_hamming(self, X: np.ndarray) -> np.ndarray:
         """Bayes-optimal predictor for Hamming Accuracy (see :func:`bop_hamming`)."""
         return bop_hamming(self.compute_stats(X, needs={"marginal"}))
 
-    def predict_subset(self, X):
+    def predict_subset(self, X: np.ndarray) -> np.ndarray:
         """Bayes-optimal predictor for Subset Accuracy (see :func:`bop_subset`)."""
         return bop_subset(self.compute_stats(X, needs={"map"}))
 
-    def predict_precision(self, X):
+    def predict_precision(self, X: np.ndarray) -> np.ndarray:
         """Bayes-optimal predictor for Precision (see :func:`bop_precision`)."""
         return bop_precision(self.compute_stats(X, needs={"marginal"}))
 
-    def predict_npv(self, X):
+    def predict_npv(self, X: np.ndarray) -> np.ndarray:
         """Bayes-optimal predictor for Negative Predictive Value (see :func:`bop_npv`)."""
         return bop_npv(self.compute_stats(X, needs=set()))
 
-    def predict_recall(self, X):
+    def predict_recall(self, X: np.ndarray) -> np.ndarray:
         """Bayes-optimal predictor for Recall (see :func:`bop_recall`)."""
         return bop_recall(self.compute_stats(X, needs=set()))
 
-    def predict_markedness(self, X):
+    def predict_markedness(self, X: np.ndarray) -> np.ndarray:
         """Bayes-optimal predictor for Markedness (see :func:`bop_markedness`)."""
         return bop_markedness(self.compute_stats(X, needs={"marginal"}))
 
@@ -387,7 +390,7 @@ class ProbabilisticClassifierChain(ClassifierChain):
 
         return Y_pred
 
-    def predict_fmeasure(self, X, beta=1):
+    def predict_fmeasure(self, X: np.ndarray, beta: float = 1) -> np.ndarray:
         """Bayes-optimal predictor for the F-beta measure (see :func:`bop_fmeasure`)."""
         return bop_fmeasure(self.compute_stats(X, needs={"pairwise"}), beta=beta)
 
