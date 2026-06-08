@@ -96,15 +96,8 @@ def bop_recall(stats: InferenceStats) -> np.ndarray:  # needs: set()
     return np.ones((stats.n_samples, stats.n_labels))
 
 
-def bop_markedness(stats: InferenceStats) -> np.ndarray:  # needs: {"marginal"}
-    """Markedness BOP = argmax expected 0.5*(NPV + Precision) over top-l predictions.
-
-    Paper Proposition 6 / Algorithm 4 (vacuous conventions Fpre(.,0_K)=Fneg(.,1_K)=1):
-        l = 0  : 0.5 * (2 - sum_p/L)
-        0<l<L  : 0.5 * (A_l/l + 1 - (sum_p - A_l)/(L-l))
-        l = L  : 0.5 * (sum_p/L + 1)
-    where sum_p = Σ_j p_j and A_l = sum of the top-l marginals. O(L log L), marginals only.
-    """
+def _bop_markedness_loop(stats: InferenceStats) -> np.ndarray:
+    """Reference (pre-vectorization) markedness BOP. Kept for regression tests."""
     P = stats.marginals
     N, L = stats.n_samples, stats.n_labels
     indices = np.argsort(P, axis=1)[:, ::-1]
@@ -121,6 +114,38 @@ def bop_markedness(stats: InferenceStats) -> np.ndarray:  # needs: {"marginal"}
         l_opt = int(np.argmax(E))
         for k in range(l_opt):
             Y_pred[i, indices[i, k]] = 1
+    return Y_pred
+
+
+def bop_markedness(stats: InferenceStats) -> np.ndarray:  # needs: {"marginal"}
+    """Markedness BOP = argmax expected 0.5*(NPV + Precision) over top-l predictions.
+
+    Paper Proposition 6 / Algorithm 4 (vacuous conventions Fpre(.,0_K)=Fneg(.,1_K)=1):
+        l = 0  : 0.5 * (2 - sum_p/L)
+        0<l<L  : 0.5 * (A_l/l + 1 - (sum_p - A_l)/(L-l))
+        l = L  : 0.5 * (sum_p/L + 1)
+    where sum_p = Σ_j p_j and A_l = sum of the top-l marginals. O(L log L), marginals only.
+    Vectorized over samples; equivalent to :func:`_bop_markedness_loop`.
+    """
+    P = stats.marginals
+    N, L = stats.n_samples, stats.n_labels
+    order = np.argsort(P, axis=1)[:, ::-1]                 # (N, L) descending label indices
+    P_desc = np.take_along_axis(P, order, axis=1)          # (N, L) marginals sorted desc
+    sum_p = P.sum(axis=1)                                  # (N,)
+    A = np.cumsum(P_desc, axis=1)                          # (N, L): A[:, l-1] = sum of top-l
+
+    E = np.zeros((N, L + 1))
+    E[:, 0] = 0.5 * (2.0 - sum_p / L)
+    E[:, L] = 0.5 * (sum_p / L + 1.0)
+    if L > 1:
+        ls = np.arange(1, L)                               # l = 1..L-1
+        A_mid = A[:, : L - 1]                              # (N, L-1)
+        E[:, 1:L] = 0.5 * (A_mid / ls + 1.0 - (sum_p[:, None] - A_mid) / (L - ls))
+
+    l_opt = E.argmax(axis=1)                               # (N,)
+    keep = np.arange(L)[None, :] < l_opt[:, None]          # (N, L) top-l_opt in sorted order
+    Y_pred = np.zeros((N, L))
+    np.put_along_axis(Y_pred, order, keep.astype(float), axis=1)
     return Y_pred
 
 
@@ -151,12 +176,11 @@ def bop_fmeasure(stats: InferenceStats, beta: float = 1) -> np.ndarray:  # needs
 
     Y_pred = np.zeros((N, L))
     choose_empty = E0 > E.max(axis=1)
-    k_opt = E.argmax(axis=1)
-    for i in range(N):
-        if choose_empty[i]:
-            continue
-        order = np.argsort(q[i, :, k_opt[i]])[::-1]    # same tie order as the loop
-        Y_pred[i, order[: k_opt[i] + 1]] = 1
+    k_opt = E.argmax(axis=1)                                            # (N,)
+    qk = np.take_along_axis(q, k_opt[:, None, None], axis=2)[:, :, 0]   # (N, L) scores at chosen size
+    order = np.argsort(qk, axis=1)[:, ::-1]                             # (N, L) desc, same tie order
+    keep = (np.arange(L)[None, :] < (k_opt + 1)[:, None]) & (~choose_empty[:, None])
+    np.put_along_axis(Y_pred, order, keep.astype(float), axis=1)
     return Y_pred
 
 
