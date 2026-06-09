@@ -6,7 +6,29 @@ on:
   pull_request:
 
 jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check version consistency across pyproject.toml, .zenodo.json, CITATION.cff
+        run: |
+          python - <<'EOF'
+          import tomllib, json, sys
+          with open("pyproject.toml", "rb") as f:
+              pkg = tomllib.load(f)["project"]["version"]
+          with open(".zenodo.json") as f:
+              zen = json.load(f)["version"]
+          with open("CITATION.cff") as f:
+              cff = next(l.split(":")[1].strip() for l in f if l.startswith("version:"))
+          if pkg == zen == cff:
+              print(f"OK: all files at {pkg}")
+          else:
+              print(f"MISMATCH: pyproject.toml={pkg}  .zenodo.json={zen}  CITATION.cff={cff}")
+              sys.exit(1)
+          EOF
+
   test:
+    needs: version-check
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
