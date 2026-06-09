@@ -4,6 +4,10 @@ title: "Probabilistic multi-label classification via a divide-and-conquer and fu
 version: 1.2.0
 date-released: "2026-06-08"
 doi: "10.5281/zenodo.20572637"
+identifiers:
+  - type: doi
+    value: "10.24433/CO.1580907.v1"
+    description: "Code Ocean reproducible capsule"
 license: MIT
 repository-code: "https://github.com/hxtruong6/inference_probabilistic_mlc"
 url: "https://github.com/hxtruong6/inference_probabilistic_mlc"

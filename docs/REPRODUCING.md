@@ -47,7 +47,7 @@ Aggregated outputs per dataset: `result/result_<dataset>.csv` (long format),
 
 ## Run it online (Code Ocean)
 
-A one-click reproducible capsule is available:
+A one-click reproducible capsule is available (DOI: <https://doi.org/10.24433/CO.1580907.v1>):
 **<https://codeocean.com/capsule/1580907/tree>**. Click **Reproducible Run** to rebuild
 the environment and reproduce the CHD-49 target × evaluation table
 (`result_CHD_49_crosstab.csv`) on CPU in seconds — every diagonal entry is the maximum

@@ -3,7 +3,7 @@
 [![DOI](https://img.shields.io/badge/DOI-10.1016%2Fj.inffus.2026.104517-blue)](https://doi.org/10.1016/j.inffus.2026.104517)
 [![Journal](https://img.shields.io/badge/Information%20Fusion-2026-green)](https://doi.org/10.1016/j.inffus.2026.104517)
 [![Software DOI](https://img.shields.io/badge/Software%20DOI-10.5281%2Fzenodo.20572637-blue)](https://doi.org/10.5281/zenodo.20572637)
-[![Code Ocean](https://img.shields.io/badge/Code%20Ocean-Reproduce-blue?logo=codeocean)](https://codeocean.com/capsule/1580907/tree)
+[![Code Ocean](https://img.shields.io/badge/Code%20Ocean-Reproduce-blue?logo=codeocean)](https://doi.org/10.24433/CO.1580907.v1)
 [![PyPI](https://img.shields.io/pypi/v/dacaf-mlc?logo=pypi&logoColor=white)](https://pypi.org/project/dacaf-mlc/)
 [![Python](https://img.shields.io/pypi/pyversions/dacaf-mlc)](https://pypi.org/project/dacaf-mlc/)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
