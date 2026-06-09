@@ -159,6 +159,10 @@ print("Markedness:", EM.markedness(Y_test, y_mar))
 Every `predict_*` rule returns the prediction that maximises the expected value of its
 target metric (see [`docs/CONVENTIONS.md`](https://github.com/hxtruong6/inference_probabilistic_mlc/blob/main/docs/CONVENTIONS.md) for the exact rules and conventions).
 
+**Extending DaCaF** — adding a new evaluation metric, a new Bayes-optimal target,
+or a new dataset is each a small, registry-based change; see the
+[extension guide](https://github.com/hxtruong6/inference_probabilistic_mlc/blob/main/docs/EXTENDING.md).
+
 ---
 
 ## Reproducing the paper

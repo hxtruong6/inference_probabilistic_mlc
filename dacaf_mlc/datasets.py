@@ -1,39 +1,148 @@
 """Dataset registry and loading.
 
+A single ``DatasetSpec`` registry is the source of truth for every dataset:
+its label count, file orientation, loader, and whether it belongs to the
+default sweep. To add a dataset, append one ``DatasetSpec`` to
+``DATASET_SPECS`` (and, for a new source kind, write a small loader function);
+nothing else needs editing.
+
 Tabular datasets are MULAN ARFF files under ``datasets/``. Image datasets use
 pre-extracted ChestX-ray feature vectors (``.npy``); see
 ``dacaf_mlc/chest_xray_dataset/Readme.md`` to regenerate those.
 """
 import os
+from collections.abc import Callable
+from dataclasses import dataclass
+
+import pandas as pd
 
 from dacaf_mlc.config import BASE_DIR
 from dacaf_mlc.arff_dataset import MultiLabelArffDataset
 from dacaf_mlc.chest_xray_dataset.chest_xray_utils import load_df_features_from_npy
 
-# ARFF datasets shipped as a single whole file (no separate train/test split).
-DATASET_WHOLE_FILES = [
-    "Water-quality",
-    "CHD_49",
-    "emotions",
-    "scene",
-    "yeast",
-]
-# Datasets whose ARFF stores the labels in the FIRST columns rather than the last.
-DATASET_WHOLE_FILES_TARGET_AT_FIRST = ["Water-quality", "CHD_49", "yeast"]
 
-# Paper datasets. The chest_xray_nih__* entries require pre-extracted features at
-# datasets/nih_feature_vectors_{densenet,resnet,resnetae}.npy (see
-# dacaf_mlc/chest_xray_dataset/Readme.md).
-DEFAULT_DATASET_NAMES = [
-    "emotions",                    # L=6
-    "scene",                       # L=6
-    "CHD_49",                      # L=6
-    "Water-quality",               # L=14
-    "yeast",                       # L=14
-    "chest_xray_nih__densenet",    # L=14, N≈112k
-    "chest_xray_nih__resnet",      # L=14, N≈112k
-    "chest_xray_nih__resnetae",    # L=14, N≈112k
-]
+def _load_arff(spec, folder_path):
+    """Load a MULAN ARFF shipped as a single whole file under ``folder_path``."""
+    return MultiLabelArffDataset(
+        dataset_name=spec.name,
+        path=os.path.join(folder_path, f"{spec.name}.arff"),
+        target_at_first=spec.target_at_first,
+        n_labels=spec.n_labels,
+    )
+
+
+def _load_csv(spec, folder_path):
+    """Load a multi-label CSV at ``<folder_path>/<name>.csv``.
+
+    Label columns are chosen either by explicit name (``spec.label_columns``) or,
+    if none are given, positionally from ``spec.n_labels`` / ``spec.target_at_first``
+    (the same convention as the ARFF loader). The separator is ``spec.csv_sep``.
+    """
+    df = pd.read_csv(os.path.join(folder_path, f"{spec.name}.csv"), sep=spec.csv_sep)
+    if spec.label_columns:
+        label_cols = list(spec.label_columns)
+        Y_df = df[label_cols]
+        X_df = df.drop(columns=label_cols)
+    elif spec.target_at_first:
+        Y_df = df.iloc[:, : spec.n_labels]
+        X_df = df.iloc[:, spec.n_labels :]
+    else:
+        X_df = df.iloc[:, : -spec.n_labels]
+        Y_df = df.iloc[:, -spec.n_labels :]
+    return MultiLabelArffDataset(dataset_name=spec.name, X=X_df, Y=Y_df.astype(int))
+
+
+def _load_nih_features(spec, folder_path):
+    """Load pre-extracted ChestX-ray feature vectors (``.npy``).
+
+    The backbone (densenet/resnet/resnetae) is the suffix after ``__`` in the
+    dataset name, e.g. ``chest_xray_nih__densenet``.
+    """
+    feature_type = spec.name.split("__")[-1]
+    df_feats, df_labels = load_df_features_from_npy(
+        features_filename=os.path.join(
+            BASE_DIR, "datasets", f"nih_feature_vectors_{feature_type}.npy"
+        ),
+    )
+    return MultiLabelArffDataset(dataset_name=spec.name, X=df_feats, Y=df_labels)
+
+
+@dataclass(frozen=True)
+class DatasetSpec:
+    """Everything needed to load one dataset.
+
+    - ``name``           : registry key and (for ARFF) the ``<name>.arff`` stem.
+    - ``n_labels``       : number of label columns ``L``.
+    - ``loader``         : ``loader(spec, folder_path) -> MultiLabelArffDataset``.
+    - ``target_at_first``: ARFF/CSV positional split — labels are the leading
+                           columns, not trailing (ignored if ``label_columns`` set).
+    - ``in_default_sweep``: include in ``DEFAULT_DATASET_NAMES`` / the no-arg sweep.
+    - ``note``           : free-text hint shown in docs (e.g. ``"L=6"``).
+    - ``csv_sep``        : CSV only — column separator (default ``","``).
+    - ``label_columns``  : CSV only — explicit label column names; when set,
+                           features are all the remaining columns and the
+                           positional split is bypassed. Length must equal
+                           ``n_labels``.
+    """
+
+    name: str
+    n_labels: int
+    loader: Callable
+    target_at_first: bool = False
+    in_default_sweep: bool = True
+    note: str = ""
+    csv_sep: str = ","
+    label_columns: tuple = ()
+
+    def __post_init__(self):
+        if self.label_columns and len(self.label_columns) != self.n_labels:
+            raise ValueError(
+                f"Dataset '{self.name}': label_columns has {len(self.label_columns)} "
+                f"names but n_labels is {self.n_labels}; they must match."
+            )
+
+
+# The paper datasets, in sweep order. The chest_xray_nih__* entries require
+# pre-extracted features at datasets/nih_feature_vectors_{densenet,resnet,resnetae}.npy
+# (see dacaf_mlc/chest_xray_dataset/Readme.md).
+DATASET_SPECS = (
+    DatasetSpec("emotions", 6, _load_arff, note="L=6"),
+    DatasetSpec("scene", 6, _load_arff, note="L=6"),
+    DatasetSpec("CHD_49", 6, _load_arff, target_at_first=True, note="L=6"),
+    DatasetSpec("Water-quality", 14, _load_arff, target_at_first=True, note="L=14"),
+    DatasetSpec("yeast", 14, _load_arff, target_at_first=True, note="L=14"),
+    DatasetSpec("chest_xray_nih__densenet", 14, _load_nih_features, note="L=14, N≈112k"),
+    DatasetSpec("chest_xray_nih__resnet", 14, _load_nih_features, note="L=14, N≈112k"),
+    DatasetSpec("chest_xray_nih__resnetae", 14, _load_nih_features, note="L=14, N≈112k"),
+)
+
+DATASET_REGISTRY = {spec.name: spec for spec in DATASET_SPECS}
+
+# Names included in the default sweep, in order (used as argparse --dataset
+# choices and by the no-arg full sweep). Mutated in place by register_dataset so
+# importers that hold this list reference see runtime additions.
+DEFAULT_DATASET_NAMES = [spec.name for spec in DATASET_SPECS if spec.in_default_sweep]
+
+
+def register_dataset(spec, override=False):
+    """Register a ``DatasetSpec`` at runtime (no source edit needed).
+
+    Lets a pip-installed user add their own dataset so that
+    ``read_datasets_from_folder`` and ``pipeline.run_single`` can load it by
+    name. If ``spec.in_default_sweep`` is true the name is also appended to
+    ``DEFAULT_DATASET_NAMES``.
+
+    Raises ``ValueError`` if the name is already registered unless
+    ``override=True``. Returns the spec for convenience.
+    """
+    if spec.name in DATASET_REGISTRY and not override:
+        raise ValueError(
+            f"Dataset '{spec.name}' is already registered; pass override=True to replace it."
+        )
+    DATASET_REGISTRY[spec.name] = spec
+    if spec.in_default_sweep and spec.name not in DEFAULT_DATASET_NAMES:
+        DEFAULT_DATASET_NAMES.append(spec.name)
+    return spec
 
 
 def read_datasets_from_folder(folder_path, dataset_names):
@@ -41,20 +150,10 @@ def read_datasets_from_folder(folder_path, dataset_names):
     if not os.path.isdir(folder_path):
         raise ValueError(f"Folder path is not valid: {folder_path}")
 
-    for filename in dataset_names:
-        if "chest_xray_nih" in filename:
-            feature_type = filename.split("__")[-1]
-            df_feats, df_labels = load_df_features_from_npy(
-                features_filename=os.path.join(
-                    BASE_DIR, "datasets", f"nih_feature_vectors_{feature_type}.npy"
-                ),
+    for name in dataset_names:
+        spec = DATASET_REGISTRY.get(name)
+        if spec is None:
+            raise ValueError(
+                f"Dataset '{name}' is not supported. Known datasets: {list(DATASET_REGISTRY)}"
             )
-            yield MultiLabelArffDataset(dataset_name=filename, X=df_feats, Y=df_labels)
-        elif filename in DATASET_WHOLE_FILES:
-            yield MultiLabelArffDataset(
-                dataset_name=filename,
-                path=os.path.join(folder_path, f"{filename}.arff"),
-                target_at_first=(filename in DATASET_WHOLE_FILES_TARGET_AT_FIRST),
-            )
-        else:
-            raise ValueError(f"Dataset '{filename}' is not supported.")
+        yield spec.loader(spec, folder_path)

@@ -22,6 +22,17 @@ scene, and Water-quality over multiple seeds). The documented public API
 - Optional sample-chunking via `batch_size` / the `DACAF_INFERENCE_BATCH_SIZE`
   environment variable, to bound peak memory on large-N datasets. Off by default.
 - Type hints across the public inference API; module/paper-formula documentation.
+- `DatasetSpec` registry (`dacaf_mlc.datasets.DATASET_SPECS`): a single source of
+  truth for each dataset's label count, file orientation, loader, and
+  default-sweep membership, replacing the previously scattered `_LABEL_COUNTS`,
+  `DATASET_WHOLE_FILES`, and `DATASET_WHOLE_FILES_TARGET_AT_FIRST` lists.
+- Built-in CSV loader (`_load_csv`) with positional or by-name label columns
+  (`label_columns`) and a configurable separator (`csv_sep`).
+- `register_dataset(spec, override=False)`: register a `DatasetSpec` at runtime
+  so pip-installed users can load custom datasets without editing the source.
+- `docs/EXTENDING.md`: how to add a new evaluation metric, inference target, or
+  dataset (ARFF / CSV / custom source), each as a small registry-based change,
+  plus the duck-typed dataloader contract.
 
 ### Changed
 - Vectorized `predict_fmeasure` (~10× faster at L=10), `predict_precision`,
@@ -32,6 +43,9 @@ scene, and Water-quality over multiple seeds). The documented public API
 - Logging via the `logging` module instead of `print`; metric errors now
   propagate instead of being silently dropped.
 - Invalid input raises `ValueError` instead of a bare `Exception`.
+- `MultiLabelArffDataset` takes the label count via an explicit `n_labels`
+  argument (supplied by the dataset registry) instead of an internal lookup
+  table; the in-memory `X=`/`Y=` path is unchanged and infers it from `Y`.
 
 ### Removed
 - The undocumented model-held prediction cache (`set_cache_key`,
