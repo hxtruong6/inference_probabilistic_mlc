@@ -10,6 +10,8 @@ import os
 import time
 
 from joblib import Parallel, delayed
+from sklearn.ensemble import RandomForestClassifier, HistGradientBoostingClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 
@@ -23,6 +25,9 @@ logger = logging.getLogger(__name__)
 
 ESTIMATOR_FACTORIES = {
     "lr": lambda seed: LogisticRegression(random_state=seed, max_iter=5_000_000),
+    "rf": lambda seed: RandomForestClassifier(random_state=seed, n_estimators=100),
+    "hgb": lambda seed: HistGradientBoostingClassifier(random_state=seed),
+    "mlp": lambda seed: MLPClassifier(random_state=seed, max_iter=1000, hidden_layer_sizes=(100,)),
 }
 
 
